@@ -1,0 +1,104 @@
+{
+    "menuItems": [
+        {
+            "title": "Dashboard",
+            "icon": "bx bx-home-alt",
+            "route": "{{route('admin.dashboard')}}"
+        },
+        {
+            "title": "Warehouse",
+            "icon": "bx bx-home-alt",
+            "route": "{{route('admin.warehousemanagement.index')}}"
+        },
+        {
+            "title": "Daily Sales",
+            "icon": "bx bx-home-alt",
+            "route": "{{route('admin.dailysales.index')}}"
+        },
+        {
+            "title": "Inventory",
+            "icon": "bx bx-truck",
+            "submenu": [
+                {
+                    "title": "Inventory List",
+                    "icon": "bx bx-radio-circle",
+                    "route": "{{route('admin.inventory.index')}}"
+                },
+                {
+                    "title": "Inventory Unloads",
+                    "icon": "bx bx-radio-circle",
+                    "route": "{{route('admin.inventory.unload')}}"
+                }
+            ]
+        },
+        {
+            "title": "All Vehicles",
+            "icon": "bx bx-truck",
+            "submenu": [
+                {
+                    "title": "All List",
+                    "icon": "bx bx-radio-circle",
+                    "route": "{{route('admin.vehicles.index')}}"
+                },
+                {
+                    "title": "Create New",
+                    "icon": "bx bx-radio-circle",
+                    "route": "{{route('admin.vehicles.create')}}"
+                }
+            ]
+        },
+        {
+            "title": "Miller",
+            "icon": "bx bx-repeat",
+            "submenu": [
+                {
+                    "title": "All List",
+                    "icon": "bx bx-radio-circle",
+                    "route": "{{route('admin.miller.index')}}"
+                },
+                {
+                    "title": "Create New",
+                    "icon": "bx bx-radio-circle",
+                    "route": "{{route('admin.miller.create')}}"
+                }
+            ]
+        },
+        {
+            "title": "Roles",
+            "icon": "bx bx-repeat",
+            "submenu": [
+                {
+                    "title": "All List",
+                    "icon": "bx bx-radio-circle",
+                    "route": "{{route('admin.role.index')}}"
+                },
+                {
+                    "title": "Create New",
+                    "icon": "bx bx-radio-circle",
+                    "route": "{{route('admin.role.create')}}"
+                }
+            ]
+        },
+        {
+            "title": "Settings",
+            "icon": "bx bx-cog",
+            "submenu": [
+                {
+                    "title": "City Management",
+                    "icon": "bx bx-radio-circle",
+                    "route": "{{route('admin.city.index')}}"
+                },
+                {
+                    "title": "SKU Management",
+                    "icon": "bx bx-radio-circle",
+                    "route": "{{route('admin.sku.index')}}"
+                },
+                {
+                    "title": "User Management",
+                    "icon": "bx bx-radio-circle",
+                    "route": "{{route('admin.usermanagement.index')}}"
+                }
+            ]
+        }
+    ]
+}

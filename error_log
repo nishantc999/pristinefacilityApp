@@ -1,0 +1,32 @@
+[20-Mar-2024 12:31:27 UTC] PHP Warning:  require(/home/kbhq/public_html/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/kbhq/public_html/index.php on line 34
+[20-Mar-2024 12:31:27 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/kbhq/public_html/../vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/kbhq/public_html/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home/kbhq/public_html/index.php on line 34
+[21-Mar-2024 09:38:11 UTC] PHP Fatal error:  Cannot use Illuminate\Http\Request as Request because the name is already in use in /home/kbhq/public_html/app/Http/Controllers/API/OrderController.php on line 12
+[22-Mar-2024 12:59:27 Asia/Kolkata] PHP Fatal error:  Cannot use empty array elements in arrays in /home/kbhq/public_html/app/Http/Controllers/API/OrderController.php on line 535
+[22-Mar-2024 12:59:31 Asia/Kolkata] PHP Fatal error:  Cannot use empty array elements in arrays in /home/kbhq/public_html/app/Http/Controllers/API/OrderController.php on line 535
+[22-Mar-2024 12:59:38 Asia/Kolkata] PHP Fatal error:  Cannot use empty array elements in arrays in /home/kbhq/public_html/app/Http/Controllers/API/OrderController.php on line 535
+[28-Mar-2024 05:14:04 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.0.30. in /home/nccfhq/public_html/vendor/composer/platform_check.php on line 24
+[29-Mar-2024 20:04:59 Asia/Kolkata] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 20480 bytes) in /home/nccfhq/public_html/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php on line 601
+[29-Mar-2024 20:04:59 Asia/Kolkata] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 20480 bytes) in /home/nccfhq/public_html/vendor/symfony/error-handler/Error/FatalError.php on line 21
+[29-Mar-2024 20:05:03 Asia/Kolkata] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 20480 bytes) in /home/nccfhq/public_html/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php on line 601
+[29-Mar-2024 20:05:03 Asia/Kolkata] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 20480 bytes) in /home/nccfhq/public_html/vendor/symfony/error-handler/Error/FatalError.php on line 21
+[03-Apr-2024 11:28:44 Asia/Kolkata] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 46866696 bytes) in /home/nccfhq/public_html/vendor/laravel/framework/src/Illuminate/View/Concerns/ManagesLayouts.php on line 102
+[07-Apr-2024 00:59:23 Asia/Kolkata] PHP Fatal error:  Cannot use variable $currentMonthEnd twice in /home/nccfh/public_html/app/Http/Controllers/PickupController.php on line 60
+[08-Apr-2024 14:13:11 Asia/Kolkata] PHP Fatal error:  Cannot use Illuminate\Support\Facades\Validator as Validator because the name is already in use in /home/nccfh/public_html/app/Http/Controllers/WarehouseManagementController.php on line 25
+[09-Apr-2024 06:14:07 UTC] PHP Warning:  POST Content-Length of 13035743 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[09-Apr-2024 06:21:10 UTC] PHP Warning:  POST Content-Length of 13035743 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[10-Apr-2024 09:42:05 UTC] PHP Warning:  POST Content-Length of 11500987 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[10-Apr-2024 09:58:22 UTC] PHP Warning:  POST Content-Length of 8820963 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[10-Apr-2024 10:02:19 UTC] PHP Warning:  POST Content-Length of 9175369 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[10-Apr-2024 10:06:16 UTC] PHP Warning:  POST Content-Length of 9134851 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[10-Apr-2024 10:37:28 UTC] PHP Warning:  POST Content-Length of 9151687 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[10-Apr-2024 11:48:51 UTC] PHP Warning:  POST Content-Length of 11500987 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[10-Apr-2024 12:10:33 UTC] PHP Warning:  POST Content-Length of 10835226 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[10-Apr-2024 12:15:49 UTC] PHP Warning:  POST Content-Length of 10670635 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[10-Apr-2024 12:17:31 UTC] PHP Warning:  POST Content-Length of 10670635 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[11-Apr-2024 07:40:03 UTC] PHP Warning:  POST Content-Length of 9954730 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[11-Apr-2024 07:52:54 UTC] PHP Warning:  POST Content-Length of 9445556 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[11-Apr-2024 07:54:02 UTC] PHP Warning:  POST Content-Length of 9445559 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[11-Apr-2024 08:15:46 UTC] PHP Warning:  POST Content-Length of 9050960 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
