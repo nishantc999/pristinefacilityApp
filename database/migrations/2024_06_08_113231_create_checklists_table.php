@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('checklists', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedBigInteger('project_id');
+            $table->unsignedBigInteger('client_id');
             $table->unsignedBigInteger('site_id');
             $table->unsignedBigInteger('shift_id');
             $table->unsignedBigInteger('area_id');
@@ -22,7 +22,7 @@ return new class extends Migration
             
             // Foreign keys
       
-            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
+            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
             $table->foreign('site_id')->references('id')->on('sites')->onDelete('cascade');
             $table->foreign('shift_id')->references('id')->on('shifts')->onDelete('cascade');
             $table->foreign('area_id')->references('id')->on('areas')->onDelete('cascade');

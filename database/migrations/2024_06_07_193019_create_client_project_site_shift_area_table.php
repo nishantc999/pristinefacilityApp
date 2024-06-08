@@ -14,14 +14,12 @@ return new class extends Migration
         Schema::create('client_project_site_shift_area', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('client_id');
-            $table->unsignedBigInteger('project_id');
             $table->unsignedBigInteger('site_id');
             $table->unsignedBigInteger('shift_id');
             // $table->unsignedBigInteger('area_id');
             
             // Foreign keys
             $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
-            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
             $table->foreign('site_id')->references('id')->on('sites')->onDelete('cascade');
             $table->foreign('shift_id')->references('id')->on('shifts')->onDelete('cascade');
             // $table->foreign('area_id')->references('id')->on('areas')->onDelete('cascade');
