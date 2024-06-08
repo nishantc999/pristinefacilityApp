@@ -68,7 +68,7 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td><a href="{{ route('client.profile', $client->id) }}" >{{ $client->name }}  </a></td>
+                                        <td><a href="{{ route('clients.dashboard', $client->id) }}" >{{ $client->name }}  </a></td>
                                         <td>{{ $client->email }}</td>
                                         <td>{{ $client->detail->mobile_no }}</td>
                                         <td>{{ $client->address }}</td>

@@ -103,12 +103,12 @@ Route::get('/privacy-policy', [PrivacyPolicyController::class, 'privacy_policy']
     Route::get('/clients/profile/{id}', [ClientController::class, 'profile'])->name('client.profile');
 
     // Client Profile
-    Route::get('clients/dashboard', [ClientController::class, 'dashboard'])->name('dashboard');
-    Route::get('clients/business-details', [ClientController::class, 'businessDetails'])->name('business-details');
-    Route::get('clients/shifts', [ClientController::class, 'shifts'])->name('shifts');
-    Route::post('/shifts/store', [ClientController::class, 'storeShift'])->name('shift.store');
-    Route::get('clients/areas', [ClientController::class, 'areas'])->name('areas');
-    Route::get('clients/lines-floors', [ClientController::class, 'linesFloors'])->name('lines-floors');
+    Route::get('clients/dashboard/{id}', [ClientController::class, 'dashboard'])->name('clients.dashboard');
+    Route::get('clients/business-details/{id}', [ClientController::class, 'businessDetails'])->name('business-details');
+    Route::get('clients/shifts/{id}', [ClientController::class, 'shifts'])->name('shifts');
+    Route::post('/shifts/store/{id}', [ClientController::class, 'storeShift'])->name('shift.store');
+    Route::get('clients/areas/{id}', [ClientController::class, 'areas'])->name('areas');
+    Route::get('clients/lines-floors/{id}            ', [ClientController::class, 'linesFloors'])->name('lines-floors');
 });
 
 
