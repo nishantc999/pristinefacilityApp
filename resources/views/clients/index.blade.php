@@ -68,9 +68,9 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>{{ $client->name }}</td>
+                                        <td><a href="{{ route('client.profile', $client->id) }}" >{{ $client->name }}  </a></td>
                                         <td>{{ $client->email }}</td>
-                                        <td>{{ $client->mobile_no }}</td>
+                                        <td>{{ $client->detail->mobile_no }}</td>
                                         <td>{{ $client->address }}</td>
                                         <td>{{ $client->city->name ?? '' }}</td>
                                         <td>{{ $client->state->state_title ??''}}</td>
@@ -88,7 +88,7 @@
                                         <td>
                                             <div class="d-flex order-actions">
                                                 @if (ispermission('client management', 'update'))
-                                                    <a href="{{ route('clientmanagement.edit', $value->id) }}"
+                                                    <a href="{{ route('clientmanagement.edit', $client->id) }}"
                                                         class=""><i class='bx bxs-edit'></i></a>
                                                 @endif
                                                 @if (ispermission('user management', 'delete'))
