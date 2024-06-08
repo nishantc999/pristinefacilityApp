@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->json('permission')->default(json_encode([]));
             $table->boolean('status')->default(1);
+            $table->boolean('role_type')->default(1);//1 for crm, 2 for hierarchy,3 static
+            $table->bigInteger('child_role_id')->default(0);
             $table->timestamps();
         });
     }

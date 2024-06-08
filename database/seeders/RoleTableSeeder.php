@@ -16,30 +16,24 @@ class RoleTableSeeder extends Seeder
      
   
         DB::table('roles')->insert([
-            'name' => 'Client',
-            'id'=>1
+            'name' => 'Project Manager',
+            'id'=>1,
+            'role_type'=>3,
 
         ]);
         DB::table('roles')->insert([
-            'name' => 'Area Manager',
-            'id'=>2
-
-        ]);
-        DB::table('roles')->insert([
-            'name' => 'Site Manager',
-            'id'=>3
+            'name' => 'Site Incharge',
+            'id'=>2,
+            'role_type'=>3,
 
         ]);
         DB::table('roles')->insert([
             'name' => 'Supervisor',
-            'id'=>4
+            'id'=>3,
+            'role_type'=>3,
 
         ]);
-        DB::table('roles')->insert([
-            'name' => 'Employee',
-            'id'=>5
-
-        ]);
+  
       
    
 
