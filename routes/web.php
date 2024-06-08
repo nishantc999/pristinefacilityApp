@@ -11,9 +11,10 @@ use App\Http\Controllers\{
     ShiftController,
     ClientManagementController,
     EmployeeController
- 
+
 
 };
+use App\Http\Controllers\Clients\ClientController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -41,7 +42,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/profile',[DashboardController::class,'profilestore'])->name('profile.store');
      // set global city
 
-  
+
 
     // role route
     Route::resource('role', RoleController::class);
@@ -55,16 +56,16 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('sku', SKUController::class);
     Route::resource('shiftmanagement', ShiftController::class);
-    // client route 
+    // client route
     Route::resource('clientmanagement', ClientManagementController::class);
     Route::get('/client-step-2/{id}',[ClientManagementController::class,'showStep2'])->name('clientmanagement.create_step2');
     Route::post('/client-step-2',[ClientManagementController::class,'postStep2'])->name('clientmanagement.store_step2');
     Route::get('/client-step-2-edit/{id}',[ClientManagementController::class,'step_2_edit'])->name('clientmanagement.step_2_edit');
     Route::patch('/client-step-2-update/{id}',[ClientManagementController::class,'step_2_update'])->name('clientmanagement.step_2_update');
-    
+
     Route::get('/get_district_on_state_id',[ClientManagementController::class,'get_district_on_state_id'])->name('get_district_on_state_id');
     Route::get('/get_city_on_district_id',[ClientManagementController::class,'get_city_on_district_id'])->name('get_city_on_district_id');
-      // employee route 
+      // employee route
     Route::resource('employeemanagement', EmployeeController::class);
     Route::get('/clients/shifts/site',[EmployeeController::class,'getSiteByClientAndShift'])->name('clientmanagement.getSiteByClientAndShift');
     Route::get('/clients/shifts/site/area',[EmployeeController::class,'getAreaSiteWise'])->name('clientmanagement.getAreaSiteWise');
@@ -72,17 +73,23 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 
-   
+
 });
 
 // public route
 
-   
-   
 
 
-Route::get('/privacy-policy', [PrivacyPolicyController::class, 'privacy_policy'])->name('privacy_policy'); 
 
 
+Route::get('/privacy-policy', [PrivacyPolicyController::class, 'privacy_policy'])->name('privacy_policy');
+
+// Route::middleware(['auth', 'can:manage-clients'])->group(function () {
+    Route::middleware(['auth'])->group(function () {
+    Route::get('clients', [ClientController::class, 'index'])->name('clients.index');
+    Route::get('clients/create', [ClientController::class, 'create'])->name('clients.create');
+    Route::post('clients', [ClientController::class, 'store'])->name('clients.store');
+    Route::post('clients/check-username', [ClientController::class, 'checkUsername'])->name('clients.checkUsername');
+});
 
 
