@@ -1,20 +1,22 @@
 <div class="card">
     <div class="card-body">
         <div class="fm-menu">
+
+
             <div class="list-group list-group-flush">
-                <a href="{{ route('dashboard') }}" class="list-group-item py-1">
+                <a href="{{ route('dashboard', $id) }}" class="list-group-item py-1">
                     <i class='bx bx-folder me-2'></i><span>Dashboard</span>
                 </a>
-                <a href="{{ route('business-details') }}" class="list-group-item py-1">
+                <a href="{{ route('business-details', $id) }}" class="list-group-item py-1">
                     <i class='bx bx-devices me-2'></i><span>Business Details</span>
                 </a>
-                <a href="{{ route('shifts') }}" class="list-group-item py-1">
+                <a href="{{ route('shifts', $id) }}" class="list-group-item py-1">
                     <i class='bx bx-analyse me-2'></i><span>Shifts</span>
                 </a>
-                <a href="{{ route('areas') }}" class="list-group-item py-1">
+                <a href="{{ route('areas', $id) }}" class="list-group-item py-1">
                     <i class='bx bx-plug me-2'></i><span>Areas</span>
                 </a>
-                <a href="{{ route('lines-floors') }}" class="list-group-item py-1">
+                <a href="{{ route('lines-floors', $id) }}" class="list-group-item py-1">
                     <i class='bx bx-trash-alt me-2'></i><span>Lines/Floors</span>
                 </a>
             </div>

@@ -84,25 +84,28 @@ class ClientController extends Controller
 
     public function profile($id){
 
-        return view('clients.profile.profile');
+        return view('clients.profile.profile', compact('id'));
     }
 
     // Profile
-    public function dashboard()
+    public function dashboard($id)
     {
-        return view('clients.profile.dashboard');
+        return view('clients.profile.dashboard', compact('id'));
     }
 
     // Business Details Function
-    public function businessDetails()
+    public function businessDetails($id)
     {
-        return view('business-details');
+        return view('business-details', compact('id'));
     }
 
     // Shifts Function
-    public function shifts()
+    public function shifts($id)
     {
-        return view('clients.profile.shifts.shifts');
+        $count = 1;
+        $shifts = Shift::get();
+        // $shifts = Shift::where('client_id', $id)->get();
+        return view('clients.profile.shifts.shifts', compact('shifts','id', 'count'));
     }
     public function storeShift(Request $request)
     {
@@ -128,14 +131,14 @@ class ClientController extends Controller
     }
 
     // Areas Function
-    public function areas()
+    public function areas($id)
     {
-        return view('clients.areas.index');
+        return view('clients.areas.index', compact('id'));
     }
 
     // Lines and Floors Function
-    public function linesFloors()
+    public function linesFloors($id)
     {
-        return view('lines-floors');
+        return view('lines-floors', compact('id'));
     }
 }
