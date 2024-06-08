@@ -60,7 +60,7 @@
 
                                 <select name="role_id" id="role_id" class="form-select"
                                     data-placeholder="Choose Distributor">
-                                    < <option value="">All</option>
+                                  <option value="">All</option>
                                         @foreach ($roles as $role)
                                             <option value="{{ $role->id }}"
                                                 {{ $role->id == $search_feild['role_id'] ? 'selected' : '' }}>
@@ -124,8 +124,6 @@
 
 
 
-            {{-- </div>
-</div>  --}}
 
    
             <div class="card">
@@ -151,6 +149,7 @@
                                     <th>Name</th>
                               
                                     <th>Role</th>
+                                    <th>Username</th>
                                    
                                     <th>Email</th>
                                     <th>Contact No.</th>
@@ -182,8 +181,9 @@
 
 
                                       
-                                        <td>{{ $value->role->name }}</td>
+                                        <td>{{ $value->role->name ??''}}</td>
                                        
+                                        <td>{{ $value->username }}</td>
                                         <td>{{ $value->email }}</td>
                                         <td>{{ $value->mobile_no }}</td>
                                         <td>{{ $value->address }}</td>

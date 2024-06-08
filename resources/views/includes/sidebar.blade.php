@@ -48,7 +48,7 @@
         <hr>
         @endif
         @if (ispermission('role management', 'update') || ispermission('role management', 'show'))
-        <li>
+        {{-- <li>
 
 
             <a href="{{ route('role.index') }}">
@@ -58,6 +58,20 @@
                 </div>
                 <div class="menu-title">Role Management</div>
             </a>
+        </li> --}}
+        <li>
+            <a href="javascript:;" class="has-arrow">
+                <div class="parent-icon"><i class='bx bx-home-alt'></i>
+                </div>
+                <div class="menu-title">Role Management</div>
+            </a>
+            <ul>
+                <li> <a href="{{ route('role.index') }}"><i class='bx bx-radio-circle'></i>CRM Role</a>
+                </li>
+                <li> <a href="{{ route('role.feildexecutive.index') }}"><i class='bx bx-radio-circle'></i>Feild Executive Role</a>
+                </li>
+                
+            </ul>
         </li>
         <hr>
         @endif

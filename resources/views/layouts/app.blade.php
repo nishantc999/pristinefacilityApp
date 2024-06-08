@@ -284,9 +284,9 @@ document.getElementById('mobile_no').addEventListener('input', function(event) {
     <script src="{{ asset('assets/backend/plugins/vectormap/jquery-jvectormap-2.0.2.min.js') }}"></script>
     <script src="{{ asset('assets/backend/plugins/vectormap/jquery-jvectormap-world-mill-en.js') }}"></script>
     <script src="{{ asset('assets/backend/plugins/chartjs/js/chart.js') }}"></script>
-    {{-- <script src="{{ asset('assets/backend/plugins/sparkline-charts/jquery.sparkline.min.js') }}"></script>
-    <script src="{{ asset('assets/backend/plugins/jquery.easy-pie-chart/jquery.easypiechart.min.js') }}"></script> --}}
-    {{-- <script src="{{ asset('assets/backend/js/index.js') }}"></script> --}}
+   <script src="{{ asset('assets/backend/plugins/sparkline-charts/jquery.sparkline.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/plugins/jquery.easy-pie-chart/jquery.easypiechart.min.js') }}"></script> 
+    <script src="{{ asset('assets/backend/js/index.js') }}"></script> 
     <script src="{{ asset('assets/backend/js/index2.js') }}"></script>
 
 

@@ -150,6 +150,9 @@
                                 <canvas id="chart2"></canvas>
                             </div>
                         </div>
+                        {{-- <div class="w_chart chart8 mb-1" data-percent="10">
+                            <span class="w_percent">70</span>
+                          <canvas height="110" width="110"></canvas></div> --}}
                         <table class="table mb-0">
                             <tbody>
                                 <tr>

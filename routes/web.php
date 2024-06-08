@@ -47,10 +47,20 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('role', RoleController::class);
     Route::get('/role-status',[RoleController::class,'status'])->name('role.status');
     Route::get('/get_role_name',[RoleController::class,'get_role_name'])->name('role.get_role_name');
+
+
+// feild executive role
+Route::get('/role-feildexecutive',[RoleController::class,'feildexecutiveIndex'])->name('role.feildexecutive.index');
+Route::get('/role-feildexecutive-create',[RoleController::class,'feildexecutiveCreate'])->name('role.feildexecutive.create');
+Route::get('/role-feildexecutive-edit/{id}',[RoleController::class,'feildexecutiveEdit'])->name('role.feildexecutive.edit');
+Route::post('/role-feildexecutive-create',[RoleController::class,'feildexecutiveStore'])->name('role.feildexecutive.store');
+Route::post('/role-feildexecutive-edit/{id}',[RoleController::class,'feildexecutiveUpdate'])->name('role.feildexecutive.update');
+
+
     // user management route
     Route::resource('usermanagement', UserManagementController::class);
     Route::get('/user-status',[UserManagementController::class,'status'])->name('user.status');
-
+    Route::get('/get-users-by-role/{roleId}',[UserManagementController::class,'getUsersByRole'])->name('get.users.by.role');
     // sku management route
 
     Route::resource('sku', SKUController::class);

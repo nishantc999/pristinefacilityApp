@@ -16,6 +16,7 @@ class FileSeeder extends Seeder
         $this->insertFromFile('state.sql');
         $this->insertFromFile('city.sql');
         $this->insertFromFile('district.sql');
+        
     }
     private function insertFromFile($filename)
     {

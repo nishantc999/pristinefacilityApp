@@ -20,7 +20,8 @@ return new class extends Migration
             $table->json('lines')->default(json_encode([]));
             $table->boolean('is_employee')->default(0);
             $table->unsignedBigInteger('client_id')->nullable();
-            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
+            $table->string('profile')->default('user.png');
+            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade'); //client employee blong to client 
             $table->string('password');
             $table->timestamps();
         });

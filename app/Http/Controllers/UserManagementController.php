@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Roles;
 use App\Models\User;
+use App\Models\State;
+use App\Models\UserDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -53,13 +55,11 @@ class UserManagementController extends Controller
      */
     public function create()
     {
-        $roles = Roles::
-
-            latest()->get();
+        $roles = Roles::latest()->get();
 
         $count = 1;
-
-        return view('usermanagement.create', compact('roles', 'count'));
+        $states=State::orderBy('state_title')->get();
+        return view('usermanagement.create', compact('roles', 'count','states'));
     }
 
     /**
@@ -67,34 +67,60 @@ class UserManagementController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = Validator::make($request->all(), [
+        $role = Roles::find($request->role_id);
+
+        // Set up the validation rules
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'role_id' => ['required', 'not_in:""'], // Ensure role_id not null for any user
+            'username' => ['required', 'string', 'max:255', 'unique:users,username'],
+            'role_id' => ['required', 'exists:roles,id'],
             'password' => ['required', 'string', 'min:8'],
-            'mobile_no' => ['required', 'numeric', 'digits:10'], // mobile no required with 10 digit
-
-        ]);
+            'mobile_no' => ['required', 'numeric', 'digits:10'],
+            'state_id' => ['required', 'exists:state,id'],
+            'city_id' => ['required', 'exists:city,id'],
+            'district_id' => ['required', 'exists:district,id'],
+            'address' => ['required', 'string'],
+        ];
+    
+        // If the role_type is 2, add the user_ids validation rule
+        if ($role && $role->role_type == 2) {
+            $rules['user_ids'] = ['required', 'array', 'min:1'];
+        }
+    
+        // Validate the request
+        $validated = Validator::make($request->all(), $rules);
+    
         if ($validated->fails()) {
             return redirect()->back()->withErrors($validated)->withInput();
         }
-
-        $data = $request->all();
-
-        // this is for distributor
-
-        // this is for fe
-
-        // dd($data);
-        $data['password'] = Hash::make($request->password);
-        User::create($data);
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'username' => $request->username,
+            'role_id' => $request->role_id,
+            'password' => bcrypt($request->password),
+            
+        ]);
+    
+        $user->userDetail()->create([
+            'user_id' => $user->id,
+            'state_id' => $request->state_id,
+            'city_id' => $request->city_id,
+            'district_id' => $request->district_id,
+            'mobile_no' => $request->mobile_no,
+            'address' => $request->address,
+        ]);
+    
+        // If role_type is 2, attach the selected users
+        if ($role && $role->role_type == 2) {
+            $user->users()->attach($request->user_ids);
+        }    
 
         return redirect()->route('usermanagement.index')->with('success', 'User Create Successfully');
     }
 
-    /**
-     * Display the specified resource.
-     */
+   
     public function show(string $id)
     {
         //
@@ -160,5 +186,18 @@ class UserManagementController extends Controller
         $status = $request->status;
         User::whereId($id)->update(['status' => $status]);
     }
+
+
+    public function getUsersByRole($roleId)
+{
+    $role = Roles::findOrFail($roleId);
+    $childRole = $role->childRole;
+    $users = $childRole ? $childRole->users : [];
+
+    return response()->json([
+        'users' => $users,
+        'child_role_name' => $childRole ? $childRole->name : null
+    ]);
+}
 
 }
