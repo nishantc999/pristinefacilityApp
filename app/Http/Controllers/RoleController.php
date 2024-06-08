@@ -18,7 +18,7 @@ class RoleController extends Controller
     }
     public function index()
     {
-        $data = Roles::latest()->get();
+        $data = Roles::where('role_type',1)->latest()->get();
         $count = 1;
         return view('role.index', compact('data', 'count'));
     }
@@ -63,7 +63,7 @@ class RoleController extends Controller
         }
 
       
-        Roles::create(['name' => $request->name, 'permission' => $data]);
+        Roles::create(['name' => $request->name, 'permission' => $data, 'role_type'=>1]);
         return redirect()->route('role.index')->with('success', 'Role Create Successfully');
     }
 
@@ -152,6 +152,60 @@ class RoleController extends Controller
        $role_id= Roles::whereId($id)->value('id');
         return response()->json(['role_id' =>$role_id]);
     }
+
+
+
+    // for hierarchy
+
+    public function feildexecutiveIndex()
+    {
+        $data = Roles::where('role_type',2)->latest()->get();
+        $count=1;
+        return view('role.hierarchy.index', compact('data','count'));
+    }
+
+    public function feildexecutiveCreate()
+    {
+        $roles = Roles::where('role_type',2)->orWhere('id',1)->get();
+        return view('role.hierarchy.create', compact('roles'));
+    }
+
+    public function feildexecutiveStore(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|unique:roles',
+            'child_role_id' => 'nullable|exists:roles,id',
+        ]);
+        $data=$request->all();
+        $data['role_type']=2;
+        if ($data['child_role_id'] == null) {
+            $data['child_role_id'] = 0;
+        }
+        $role = Roles::create($data);
+
+
+        return redirect()->route('role.feildexecutive.index')->with('success', 'Role Created Successfully');
+    }
+
+    public function feildexecutiveEdit($id)
+{
+    $role=Roles::whereId($id)->first();
+    $roles = Roles::where('role_type',2)->orWhere('id',1)->get();
+    return view('roles.edit', compact('role', 'roles'));
+}
+
+public function feildexecutiveUpdate(Request $request, $id)
+{
+    $request->validate([
+        'name' => 'required|unique:roles,name,' . $role->id,
+        'child_role_id' => 'nullable|exists:roles,id',
+    ]);
+
+    $role->update($request->all());
+
+
+    return redirect()->route('role.feildexecutive.index')->with('success', 'Role Updated Successfully');
+}
 
 }
 

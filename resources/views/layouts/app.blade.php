@@ -33,12 +33,15 @@
     <!-- Theme Style CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" crossorigin="anonymous">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" crossorigin="anonymous">
+
 
     <link rel="stylesheet" href="{{ asset('assets/backend/css/dark-theme.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/backend/css/semi-dark.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/backend/css/header-colors.css') }}" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+   <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet" />
    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet" />
     <script src="{{ asset('assets/backend/js/jquery.min.js') }}"></script>
   {{-- date range --}}
@@ -63,6 +66,8 @@
 
 
 
+
+
                 @yield('content')
                 @include('includes.footer')
             @endauth
@@ -79,6 +84,7 @@
     <script>
         $(".datepicker").flatpickr();
     </script>
+
 
     <script>
         function get_district_on_state_id(e) {
@@ -261,6 +267,9 @@ document.getElementById('mobile_no').addEventListener('input', function(event) {
     <script src="{{ asset('assets/backend/plugins/vectormap/jquery-jvectormap-world-mill-en.js') }}"></script>
     <script src="{{ asset('assets/backend/plugins/chartjs/js/chart.js') }}"></script>
     <script src="{{ asset('assets/backend/plugins/sparkline-charts/jquery.sparkline.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/plugins/jquery.easy-pie-chart/jquery.easypiechart.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/js/index.js') }}"></script>
+   <script src="{{ asset('assets/backend/plugins/sparkline-charts/jquery.sparkline.min.js') }}"></script>
     <script src="{{ asset('assets/backend/plugins/jquery.easy-pie-chart/jquery.easypiechart.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/index.js') }}"></script>
     <script src="{{ asset('assets/backend/js/index2.js') }}"></script>

@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->unsignedBigInteger('client_id');
-            $table->unsignedBigInteger('project_id');
         
             $table->json('shift_ids')->default(json_encode([]));
             $table->json('area_ids')->default(json_encode([]));

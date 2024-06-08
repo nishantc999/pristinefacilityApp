@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('areas', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
-            $table->unsignedBigInteger('project_id');
+            $table->unsignedBigInteger('client_id');
             $table->unsignedBigInteger('site_id');
             $table->unsignedBigInteger('checklist_id')->nullable();
             $table->boolean('status')->default(1);

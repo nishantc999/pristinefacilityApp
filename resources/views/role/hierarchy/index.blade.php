@@ -8,7 +8,7 @@
         <div class="page-content">
             <!--breadcrumb-->
             <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-                <div class="breadcrumb-title pe-3">CRM Roles</div>
+                <div class="breadcrumb-title pe-3">Feild Executive Roles</div>
                 <div class="ps-3">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0 p-0">
@@ -42,8 +42,8 @@
                         <input type="text" class="form-control ps-5 radius-30" placeholder="Search Order"> <span class="position-absolute top-50 product-show translate-middle-y"><i class="bx bx-search"></i></span>
                     </div> --}}
                     @if (ispermission('role management','create'))
-                        <div class="ms-auto"><a href="{{ route('role.create') }}"
-                                class="btn btn-primary radius-30 mt-2 mt-lg-0"><i class="bx bxs-plus-square"></i>CRM New
+                        <div class="ms-auto"><a href="{{ route('role.feildexecutive.create') }}"
+                                class="btn btn-primary radius-30 mt-2 mt-lg-0"><i class="bx bxs-plus-square"></i>Feild Executive New
                                 Role</a></div>
                                 @endif
 
@@ -54,7 +54,8 @@
                                 <tr>
                                     <th>ID#</th>
                                     <th>Name</th>
-                                    <th>Permissions</th>
+                                    <th>Child Role</th>
+                                 
 
 
 
@@ -84,28 +85,8 @@
                                             </div>
                                         </td>
                                         <td>{{ $value->name }}</td>
-                                        <td>
-                                            <table >
-                                                <tbody>
-                                                    @if ($value->permission !== null)
-                                                    @foreach ($value->permission as $key => $permissions)
-                                                    <tr>
-                                                        <th>-> {{ $key }}</th>
-                                                    </tr>
-
-
-                                                        @foreach ($permissions as $single)
-                                                        <tr>
-                                                            <td>{{ $single }}</td>
-                                                        </tr>
-
-                                                        @endforeach
-                                                    @endforeach
-                                                        @endif
-                                                </tbody>
-                                            </table>
-
-                                        </td>
+                                        <td>{{ $value->childRole->name??'' }}</td>
+                                        
                                         @if (ispermission('role management','update'))
 
                                         <td>
@@ -125,7 +106,7 @@
                                         <td>
                                             <div class="d-flex order-actions">
                                                 @if (ispermission('role management','update'))
-                                                <a href="{{ route('role.edit', $value->id) }}" class=""><i class='bx bxs-edit'></i></a>
+                                                <a href="{{ route('role.feildexecutive.create', $value->id) }}" class=""><i class='bx bxs-edit'></i></a>
                                             @endif
                                             @if (ispermission('role management','delete'))
 
@@ -153,7 +134,7 @@
         $(document).ready(function() {
             var table = $('#example2').DataTable({
                 lengthChange: true,
-           
+            
                 buttons: ['copy', 'excel', 'pdf', 'print']
             });
 

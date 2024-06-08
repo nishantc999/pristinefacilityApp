@@ -59,4 +59,13 @@ class User extends Authenticatable
     {
         return $this->belongsTo(District::class);
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_user', 'user_id', 'related_user_id');
+    }
+    public function userDetail()
+    {
+        return $this->hasOne(UserDetail::class);
+    }
 }

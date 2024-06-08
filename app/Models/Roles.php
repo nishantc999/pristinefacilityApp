@@ -8,11 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Roles extends Model
 {
     use HasFactory;
-    protected $fillable = [
-        'name',
-        'permission',
-        'status',
-    ];
+    protected $guarded = [];
     protected $casts = [
         'permission' => 'array'
     ];
@@ -20,5 +16,13 @@ class Roles extends Model
     {
         return $this->hasOne(User::class, 'id');
        
+    }
+    public function childRole()
+    {
+        return $this->belongsTo(Roles::class, 'child_role_id');
+    }
+    public function users()
+    {
+        return $this->hasMany(User::class, 'role_id');
     }
 }

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->bigInteger('role_id')->default(0);
             $table->boolean('status')->default(1);
             $table->string('profile')->default('user.png');
-            $table->string('address',500)->nullable();
+        
             $table->rememberToken();
             $table->timestamps();
         });

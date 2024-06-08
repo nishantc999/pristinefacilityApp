@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('shifts', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
-            $table->unsignedBigInteger('project_id');
+            $table->unsignedBigInteger('client_id');
             $table->text('description')->nullable();
             $table->string('start_time')->nullable();
             $table->string('end_time')->nullable();
