@@ -31,13 +31,15 @@
     <link href="{{ asset('assets/backend/css/icons.css') }}" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet" />
     <!-- Theme Style CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" crossorigin="anonymous">
+
 
     <link rel="stylesheet" href="{{ asset('assets/backend/css/dark-theme.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/backend/css/semi-dark.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/backend/css/header-colors.css') }}" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
-    <!--<link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet" />-->
+   <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet" />
     <script src="{{ asset('assets/backend/js/jquery.min.js') }}"></script>
   {{-- date range --}}
       <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
@@ -56,9 +58,9 @@
                 @include('includes.sidebar')
                 @include('includes.header')
 
-                
 
-                
+
+
 
 
                 @yield('content')
@@ -77,7 +79,7 @@
     <script>
         $(".datepicker").flatpickr();
     </script>
- 
+
     <script>
         function get_district_on_state_id(e) {
             id = e.value;
@@ -220,44 +222,18 @@
         }
     </script>
         <script>
-document.getElementById('driver_mobile').addEventListener('keypress', function(event) {
-    // Get the input value
-    let inputValue = event.target.value;
-    
-    // Ensure it's a number key and not a special key like backspace or delete
-    if (!isNaN(Number(event.key))) {
-        // If input length is already 10 and user tries to add more digits, prevent that
-        if (inputValue.length >= 10) {
-            event.preventDefault();
-        }
-      
-    } else {
-        // Prevent non-numeric input
-        event.preventDefault();
-    }
-});
 
-document.getElementById('driver_mobile').addEventListener('input', function(event) {
-    let inputValue = event.target.value;
-    let validationMessage = document.getElementById('validationMessage');
-    
-    if (inputValue.length != 10) {
-        validationMessage.textContent = ''; // Clear previous validation message
-    } else {
-        validationMessage.textContent = 'Please enter exactly 10 digits.';
-    }
-});
 document.getElementById('mobile_no').addEventListener('keypress', function(event) {
     // Get the input value
     let inputValue = event.target.value;
-    
+
     // Ensure it's a number key and not a special key like backspace or delete
     if (!isNaN(Number(event.key))) {
         // If input length is already 10 and user tries to add more digits, prevent that
         if (inputValue.length >= 10) {
             event.preventDefault();
         }
-      
+
     } else {
         // Prevent non-numeric input
         event.preventDefault();
@@ -267,7 +243,7 @@ document.getElementById('mobile_no').addEventListener('keypress', function(event
 document.getElementById('mobile_no').addEventListener('input', function(event) {
     let inputValue = event.target.value;
     let validationMessage = document.getElementById('validationMessage');
-    
+
     if (inputValue.length != 10) {
         validationMessage.textContent = ''; // Clear previous validation message
     } else {
@@ -284,9 +260,12 @@ document.getElementById('mobile_no').addEventListener('input', function(event) {
     <script src="{{ asset('assets/backend/plugins/vectormap/jquery-jvectormap-2.0.2.min.js') }}"></script>
     <script src="{{ asset('assets/backend/plugins/vectormap/jquery-jvectormap-world-mill-en.js') }}"></script>
     <script src="{{ asset('assets/backend/plugins/chartjs/js/chart.js') }}"></script>
+    <script src="{{ asset('assets/backend/plugins/sparkline-charts/jquery.sparkline.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/plugins/jquery.easy-pie-chart/jquery.easypiechart.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/js/index.js') }}"></script>
    <script src="{{ asset('assets/backend/plugins/sparkline-charts/jquery.sparkline.min.js') }}"></script>
-    <script src="{{ asset('assets/backend/plugins/jquery.easy-pie-chart/jquery.easypiechart.min.js') }}"></script> 
-    <script src="{{ asset('assets/backend/js/index.js') }}"></script> 
+    <script src="{{ asset('assets/backend/plugins/jquery.easy-pie-chart/jquery.easypiechart.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/js/index.js') }}"></script>
     <script src="{{ asset('assets/backend/js/index2.js') }}"></script>
 
 
@@ -295,8 +274,8 @@ document.getElementById('mobile_no').addEventListener('input', function(event) {
     <script src="{{ asset('assets/backend/js/app.js') }}"></script>
     <script src="{{ asset('assets/backend/plugins/select2/js/select2-custom.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    
-    
+
+
     {{-- date picker  --}}
     <script src="{{ asset('assets/backend/plugins/datetimepicker/js/legacy.js') }}"></script>
     <script src="{{ asset('assets/backend/plugins/datetimepicker/js/picker.js') }}"></script>

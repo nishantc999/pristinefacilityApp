@@ -100,6 +100,15 @@ Route::get('/privacy-policy', [PrivacyPolicyController::class, 'privacy_policy']
     Route::get('clients/create', [ClientController::class, 'create'])->name('clients.create');
     Route::post('clients', [ClientController::class, 'store'])->name('clients.store');
     Route::post('clients/check-username', [ClientController::class, 'checkUsername'])->name('clients.checkUsername');
+    Route::get('/clients/profile/{id}', [ClientController::class, 'profile'])->name('client.profile');
+
+    // Client Profile
+    Route::get('clients/dashboard', [ClientController::class, 'dashboard'])->name('dashboard');
+    Route::get('clients/business-details', [ClientController::class, 'businessDetails'])->name('business-details');
+    Route::get('clients/shifts', [ClientController::class, 'shifts'])->name('shifts');
+    Route::post('/shifts/store', [ClientController::class, 'storeShift'])->name('shift.store');
+    Route::get('clients/areas', [ClientController::class, 'areas'])->name('areas');
+    Route::get('clients/lines-floors', [ClientController::class, 'linesFloors'])->name('lines-floors');
 });
 
 

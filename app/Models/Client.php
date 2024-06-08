@@ -22,5 +22,9 @@ class Client extends Model
         'email_verified_at' => 'datetime',
         'lines' => 'array',
     ];
- 
+    public function detail()
+    {
+        return $this->hasOne(ClientDetail::class);
+    }
+
 }
