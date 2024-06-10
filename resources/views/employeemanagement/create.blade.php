@@ -70,22 +70,7 @@
                                 </div>
                               
 
-                                <div class="form-group">
-                                    <label for="shift_id">Select Shift:</label>
-                                    <select name="shift_id" id="shift_id"
-                                        class="form-control @error('shift_id') is-invalid @enderror" required>
-                                        <option value="">Select Shift</option>
-                                        @foreach ($shifts as $shift)
-                                            <option value="{{ $shift->id }}">{{ $shift->name }}
-                                                ({{ $shift->start_time->format('H:i') }} -
-                                                {{ $shift->end_time->format('H:i') }})</option>
-                                        @endforeach
-                                    </select>
-
-                                    @error('shift_id')
-                                        <div class="invalid-feedback" style="display: block">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                        
                               
                                 <div class="form-group">
                                     <label for="father_name">Father's Name:</label>
@@ -254,6 +239,22 @@
                                         @enderror
                                     </div>
                                     <div class="form-group">
+                                        <label for="shift_id">Select Shift:</label>
+                                        <select name="shift_id" id="shift_id"
+                                            class="form-control @error('shift_id') is-invalid @enderror" required>
+                                            <option value="">Select Shift</option>
+                                            @foreach ($shifts as $shift)
+                                                <option value="{{ $shift->id }}">{{ $shift->name }}
+                                                    ({{ $shift->start_time->format('H:i') }} -
+                                                    {{ $shift->end_time->format('H:i') }})</option>
+                                            @endforeach
+                                        </select>
+    
+                                        @error('shift_id')
+                                            <div class="invalid-feedback" style="display: block">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
                                         <label for="site_id">Select Site:</label>
                                       
     
@@ -340,15 +341,21 @@
 
                                 <div class="form-group">
                                     <label for="documents">Documents:</label>
-                                    <input type="file" name="documents[adhar_card]" class="form-control mb-2"
+                                    <br>
+                                    <label for="documents">Aadhar card:</label>
+                                    <input type="file" name="aadhar_card" class="form-control mb-2"
                                         accept="image/*,.pdf">
-                                    <input type="file" name="documents[pan_card]" class="form-control mb-2"
+                                    <label for="documents">Pan card:</label>
+                                    <input type="file" name="pan_card" class="form-control mb-2"
                                         accept="image/*,.pdf">
-                                    <input type="file" name="documents[passbook]" class="form-control mb-2"
+                                        <label for="documents">passbook:</label>
+                                    <input type="file" name="passbook" class="form-control mb-2"
                                         accept="image/*,.pdf">
-                                    <input type="file" name="documents[policy_verification]" class="form-control mb-2"
+                                        <label for="documents">Police verification:</label>
+                                    <input type="file" name="police_verification" class="form-control mb-2"
                                         accept="image/*,.pdf">
-                                    <input type="file" name="documents[medical]" class="form-control mb-2"
+                                        <label for="documents">Medical:</label>
+                                    <input type="file" name="medical" class="form-control mb-2"
                                         accept="image/*,.pdf">
                                 </div>
                                 <div class="form-group">

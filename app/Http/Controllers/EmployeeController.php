@@ -9,7 +9,8 @@ use App\Models\{
     User,
     Pivit,
     Site,
-    Area
+    Area,
+    EmployeeDetail
 };
 use Illuminate\Support\Facades\Validator;
 class EmployeeController extends Controller
@@ -61,11 +62,11 @@ class EmployeeController extends Controller
             'family_detail.*.age' => 'required|string|max:255',
             'family_detail.*.sex' => 'required|string|max:255',
             'family_detail.*.relationship' => 'required|string|max:255',       
-            'documents.adhar_card' => 'nullable|file|mimes:jpeg,png,pdf|max:2048',
-            'documents.pan_card' => 'nullable|file|mimes:jpeg,png,pdf|max:2048',
-            'documents.passbook' => 'nullable|file|mimes:jpeg,png,pdf|max:2048',
-            'documents.policy_verification' => 'nullable|file|mimes:jpeg,png,pdf|max:2048',
-            'documents.medical' => 'nullable|file|mimes:jpeg,png,pdf|max:2048',
+            'aadhar_card' => 'nullable|file|mimes:jpeg,png,pdf|max:2048',
+            'pan_card' => 'nullable|file|mimes:jpeg,png,pdf|max:2048',
+            'passbook' => 'nullable|file|mimes:jpeg,png,pdf|max:2048',
+            'police_verification' => 'nullable|file|mimes:jpeg,png,pdf|max:2048',
+            'medical' => 'nullable|file|mimes:jpeg,png,pdf|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -74,20 +75,59 @@ class EmployeeController extends Controller
                              ->withInput();
         }
         $data=$request->all();
-        $uploadedDocuments = [];
-        if(!is_null($request->documents) && is_array($request->documents)){
-            foreach ($request->documents as $documentType => $file) {
-                if ($file) {
-                    $fileName = time() . '_' . $documentType . '.' . $file->getClientOriginalExtension();
-                    $filePath = $file->storeAs('documents', $fileName, 'public');
-                    $uploadedDocuments[$documentType] = $filePath;
-                }
-            }
-        }
+        // $uploadedDocuments = [];
+        // if(!is_null($request->documents) && is_array($request->documents)){
+        //     foreach ($request->documents as $documentType => $file) {
+        //         if ($file) {
+        //             $fileName = time() . '_' . $documentType . '.' . $file->getClientOriginalExtension();
+        //             $filePath = $file->storeAs('documents', $fileName, 'public');
+        //             $uploadedDocuments[$documentType] = $filePath;
+        //         }
+        //     }
+        // }
    
 
-        $data['documents'] = $uploadedDocuments;
-        Employee::create($data);
+        // $data['documents'] = $uploadedDocuments;
+       $employee= Employee::create($data);
+       $employeeDetail->employee_id = $employee->id;
+       $employeeDetail = new EmployeeDetail();
+
+       if ($request->hasFile('aadhar_card')) {
+        $imageName = time() . '.' . $request->profile->extension();
+        $request->profile->move('assets/images/aadhar_card', $imageName);
+        $employeeDetail->aadhar_card = 'aadhar_card/'.$imageName;
+        $employeeDetail->aadhar_card_status = 'approved';
+
+        }
+       if ($request->hasFile('pan_card')) {
+        $imageName = time() . '.' . $request->profile->extension();
+        $request->profile->move('assets/images/pan_card', $imageName);
+        $employeeDetail->pan_card = 'pan_card/'.$imageName;
+        $employeeDetail->pan_card_status = 'approved';
+
+        }
+       if ($request->hasFile('passbook')) {
+        $imageName = time() . '.' . $request->profile->extension();
+        $request->profile->move('assets/images/passbook', $imageName);
+        $employeeDetail->passbook = 'passbook/'.$imageName;
+        $employeeDetail->passbook_status = 'approved';
+
+        }
+       if ($request->hasFile('police_verification')) {
+        $imageName = time() . '.' . $request->profile->extension();
+        $request->profile->move('assets/images/police_verification', $imageName);
+        $employeeDetail->police_verification = 'police_verification/'.$imageName;
+        $employeeDetail->police_verification_status = 'approved';
+
+        }
+       if ($request->hasFile('medical')) {
+        $imageName = time() . '.' . $request->profile->extension();
+        $request->profile->move('assets/images/medical', $imageName);
+        $employeeDetail->medical = 'medical/'.$imageName;
+        $employeeDetail->medical_status = 'approved';
+
+        }
+        $employeeDetail->save();
         return redirect()->route('employeemanagement.index')->with('success', 'Employee created successfully.');
     }
 

@@ -16,10 +16,10 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('email')->nullable();
             $table->string('emp_code')->nullable();
-            $table->integer('site_id')->nullable();
-            $table->integer('client_id')->nullable();
-            $table->integer('area_id')->nullable();
-            $table->integer('shift_id')->nullable();
+            $table->unsignedBigInteger('site_id')->nullable();
+            $table->unsignedBigInteger('client_id')->nullable();
+            $table->unsignedBigInteger('area_id')->nullable();
+            $table->unsignedBigInteger('shift_id')->nullable();
             $table->string('father_name')->nullable();
             $table->string('mother_name')->nullable();
             $table->string('gender')->nullable();

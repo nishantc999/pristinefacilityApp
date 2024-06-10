@@ -23,7 +23,7 @@ class UserManagementController extends Controller
 
         $this->middleware('permission:user management,create')->only(['create', 'store']);
         $this->middleware('permission:user management,delete')->only(['destroy']);
-        $this->middleware('permission:user management,show')->only(['index']);
+        $this->middleware('permission:user management,show')->only(['index','show']);
         $this->middleware('permission:user management,update')->only(['edit', 'update', 'status']);
 
     }
@@ -125,7 +125,8 @@ class UserManagementController extends Controller
    
     public function show(string $id)
     {
-        //
+        $user = User::with(['role', 'userDetail.state', 'userDetail.city', 'userDetail.district', 'relatedUsers'])->findOrFail($id);
+            return view('usermanagement.show', compact('user'));
     }
 
     /**
@@ -143,7 +144,7 @@ class UserManagementController extends Controller
         $states = State::all();
         
         $districts = District::where('state_id',$data->UserDetail->state_id)->get();
-        $cities = City::where('districtid',$data->district_id)->get();
+        $cities = City::where('districtid',$data->UserDetail->district_id)->get();
         if ( $data->role->role_type == 2) {
             $childUsers = User::where('role_id', $data->role->child_role_id)->get();
         } 
@@ -162,20 +163,19 @@ class UserManagementController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
-            'username' => 'required|string|max:255|unique:users,username,' . $id,
+            // 'email' => 'required|string|email|max:255|unique:users,email,' . $id,
+            // 'username' => 'required|string|max:255|unique:users,username,' . $id,
             'role_id' => 'required|exists:roles,id',
             'user_ids' => 'nullable|array',
             'user_ids.*' => 'exists:users,id',
-            'state_id' => 'required|exists:states,id',
-            'city_id' => 'required|exists:cities,id',
-            'district_id' => 'required|exists:districts,id',
+            'state_id' => 'required|exists:state,id',
+            'city_id' => 'required|exists:city,id',
+            'district_id' => 'required|exists:district,id',
         ]);
 
         $user = User::findOrFail($id);
         $user->name = $request->name;
-        $user->email = $request->email;
-        $user->username = $request->username;
+    
         $user->role_id = $request->role_id;
         $user->save();
         $role=Roles::whereId($request->role_id)->first();
@@ -203,7 +203,7 @@ class UserManagementController extends Controller
      */
     public function destroy(string $id)
     {
-        User::whereId($id)->update(['status' => 0]);
+        User::whereId($id)->delete();
         return response()->json(['success' => true, 'message' => 'User deleted successfully']);
     }
     public function status(Request $request)
@@ -218,7 +218,7 @@ class UserManagementController extends Controller
 {
     $role = Roles::findOrFail($roleId);
     $childRole = $role->childRole;
-    $users = $childRole ? $childRole->users : [];
+    $users = $childRole ?  $childRole->users()->with('userDetail')->get(): [];
 
     return response()->json([
         'users' => $users,
