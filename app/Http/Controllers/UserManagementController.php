@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Roles;
 use App\Models\User;
 use App\Models\State;
+use App\Models\District;
+use App\Models\City;
 use App\Models\UserDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -114,7 +116,7 @@ class UserManagementController extends Controller
     
         // If role_type is 2, attach the selected users
         if ($role && $role->role_type == 2) {
-            $user->users()->attach($request->user_ids);
+            $user->relatedUsers()->attach($request->user_ids);
         }    
 
         return redirect()->route('usermanagement.index')->with('success', 'User Create Successfully');
@@ -136,7 +138,20 @@ class UserManagementController extends Controller
         $data = User::whereId($id)->first();
         $count = 1;
 
-        return view('usermanagement.edit', compact('roles', 'count', 'data'));
+
+        $data = User::findOrFail($id);
+        $states = State::all();
+        
+        $districts = District::where('state_id',$data->UserDetail->state_id)->get();
+        $cities = City::where('districtid',$data->district_id)->get();
+        if ( $data->role->role_type == 2) {
+            $childUsers = User::where('role_id', $data->role->child_role_id)->get();
+        } 
+        
+
+        return view('usermanagement.edit', compact('data', 'roles', 'states', 'cities', 'districts', 'childUsers'));
+
+
     }
 
     /**
@@ -145,30 +160,41 @@ class UserManagementController extends Controller
     public function update(Request $request, string $id)
     {
 
-        $validated = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255'],
-            // 'username' => ['required', 'string', 'max:255', 'unique:users'], // Ensure unique user
-            'role_id' => ['required', 'not_in:""'], // Ensure role_id not null for any user
-
-            'city_name' => ['required', 'not_in:""'], // Ensure city name not null for any user because all user register in perticuler city
-
-            'mobile_no' => ['required', 'numeric', 'digits:10'], // mobile no required with 10 digit
-
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
+            'username' => 'required|string|max:255|unique:users,username,' . $id,
+            'role_id' => 'required|exists:roles,id',
+            'user_ids' => 'nullable|array',
+            'user_ids.*' => 'exists:users,id',
+            'state_id' => 'required|exists:states,id',
+            'city_id' => 'required|exists:cities,id',
+            'district_id' => 'required|exists:districts,id',
         ]);
-        if ($validated->fails()) {
-            return redirect()->back()->withErrors($validated)->withInput();
-        }
 
-        $data = $request->all();
-
-        unset($data['_token']);
-        unset($data['_method']);
-        if ($request->password != "" || $request->password != null) {
-            $data['password'] = Hash::make($request->password);
+        $user = User::findOrFail($id);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->username = $request->username;
+        $user->role_id = $request->role_id;
+        $user->save();
+        $role=Roles::whereId($request->role_id)->first();
+        // Sync child users
+        if ($request->has('user_ids') && $role->role_type==2) {
+            $user->relatedUsers()->sync($request->user_ids);
         } else {
-            unset($data['password']);
+            $user->relatedUsers()->detach();
         }
-        User::whereId($id)->update($data);
+
+        // Update user details
+        $user->userDetail()->update([
+            'state_id' => $request->state_id,
+            'city_id' => $request->city_id,
+            'district_id' => $request->district_id,
+        ]);
+
+     
+ 
         return redirect()->route('usermanagement.index')->with('success', 'User Update Successfully');
     }
 

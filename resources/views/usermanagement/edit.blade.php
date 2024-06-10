@@ -50,8 +50,9 @@
                                         required id="role_id">
                                         <option value="">Select Role</option>
                                         @foreach ($roles as $role)
-                                            <option value="{{ $role->id }}"
-                                                {{ $data->role_id == $role->id ? 'selected' : '' }}>{{ $role->name }}</option>
+                                            <option value="{{ $role->id }}" data-type="{{ $role->role_type }}"
+                                                {{ $data->role_id == $role->id ? 'selected' : '' }}>{{ $role->name }}
+                                            </option>
                                         @endforeach
 
                                     </select>
@@ -61,6 +62,26 @@
                                         </div>
                                     @enderror
 
+                                </div>
+
+                                <div id="userIdsContainer"
+                                    style="{{ $data->role->role_type == 2 ? 'display: block;' : 'display: none;' }}">
+                                    <label for="user_ids">Select Users</label>
+                                    <select multiple class="form-control" id="user_ids" name="user_ids[]">
+                                        @foreach ($childUsers as $childUser)
+                                            {{-- <option value="{{ $userItem->id }}" {{ in_array($userItem->id, $data->users()->pluck('id')->toArray()) ? 'selected' : '' }}>{{ $userItem->name }}</option> --}}
+                                            <option value="{{ $childUser->id }}"
+                                                {{ in_array($childUser->id, old('user_ids', $data->relatedUsers->pluck('id')->toArray())) ? 'selected' : '' }}>
+                                                {{ $childUser->name }}</option>
+                                        @endforeach
+
+                                    </select>
+                                    <div id="noUsersMessage" class="text-danger mt-2" style="display: none;"></div>
+                                    @error('user_ids')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                                 <div class="col-md-12">
                                     <label for="name" class="form-label">Name</label>
@@ -74,31 +95,32 @@
                                     @enderror
 
                                 </div>
-                                {{-- <div class="col-md-12">
-                                <label for="username" class="form-label">Username</label>
-                                <input type="username" name="username" class="form-control @error('username') is-invalid @enderror" id="username" value="{{ $data->username }}" placeholder="username" required>
-                                @error('username')
-                                <div class="invalid-feedback" style="display: block">
-                                    {{ $message }}
-                                  </div>
-                            @enderror
-                            </div> --}}
-
-                                {{-- <div class="col-md-12">
-                                <label for="name" class="form-label">Legal Name</label>
-                                <input type="text" class="form-control @error('legal_name') is-invalid @enderror" name="legal_name" id="name" placeholder="Legal Name" value="{{ $data->legal_name }}" required>
-                                @error('legal_name')
-                                <div class="invalid-feedback" style="display: block">
-                                    {{ $message }}
-                                  </div>
-                            @enderror
-
-                            </div> --}}
+                                <div class="col-md-12">
+                                    <label for="username" class="form-label">Username</label>
+                                    <input type="text" class="form-control @error('username') is-invalid @enderror"
+                                        value="{{ $data->username }}" placeholder="username" id="username" readonly
+                                        disabled>
+                                    @error('username')
+                                        <div class="invalid-feedback" style="display: block">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="email" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                        value="{{ $data->email }}" placeholder="email" id="email" readonly disabled>
+                                    @error('email')
+                                        <div class="invalid-feedback" style="display: block">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
                                 <div class="col-md-12">
                                     <label for="mobile_no" class="form-label">Mobile No.</label>
                                     <input type="text" class="form-control @error('mobile_no') is-invalid @enderror"
                                         name="mobile_no" id="mobile" placeholder="Mobile No."
-                                        value="{{ $data->mobile_no }}" required>
+                                        value="{{ $data->userDetail->mobile_no }}" required>
                                     @error('mobile_no')
                                         <div class="invalid-feedback" style="display: block">
                                             {{ $message }}
@@ -109,8 +131,8 @@
                                 <div class="col-md-12">
                                     <label for="mobile_no" class="form-label">Address</label>
                                     <input type="text" class="form-control @error('address') is-invalid @enderror"
-                                        name="address" id="mobile_no" placeholder="address" value="{{ $data->address }}"
-                                        required>
+                                        name="address" id="mobile_no" placeholder="address"
+                                        value="{{ $data->userDetail->address }}" required>
                                     @error('address')
                                         <div class="invalid-feedback" style="display: block">
                                             {{ $message }}
@@ -118,24 +140,60 @@
                                     @enderror
 
                                 </div>
-                                <div class="col-md-12">
-                                    <label for="mobile_no" class="form-label">State</label>
-                                    <input type="text" class="form-control @error('state') is-invalid @enderror"
-                                        name="state" id="mobile_no" placeholder="state" value="{{ $data->state }}"
+
+
+                                <div class="col-md-4">
+                                    <label for="state_id" class="form-label">State</label>
+                                    <select name="state_id" id="state_id" class="form-select"
+                                        data-placeholder="Choose State" onchange="get_district_on_state_id(this)"
                                         required>
-                                    @error('state')
+                                        <option value="">Select</option>
+
+                                        @foreach ($states as $state)
+                                            <option value="{{ $state->id }}"
+                                                {{ $data->userDetail->state_id == $state->id ? 'selected' : '' }}>
+                                                {{ $state->state_title }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('state_id')
                                         <div class="invalid-feedback" style="display: block">
                                             {{ $message }}
                                         </div>
                                     @enderror
 
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="city" class="form-label">City</label>
-                                    <input type="text" class="form-control @error('city_name') is-invalid @enderror"
-                                        name="city_name" id="city_name" placeholder="City Name" required
-                                        value="{{ $data->city_name }}">
-                                    @error('city_name')
+                                <div class="col-md-4">
+                                    <label for="district_id" class="form-label">District</label>
+                                    <select name="district_id" id="district_id" class="form-select"
+                                        data-placeholder="Choose State" onchange="get_city_on_district_id(this)" required>
+                                        <option value="">Select</option>
+                                        @foreach ($districts as $district)
+                                            <option value="{{ $district->id }}"
+                                                {{ $data->userDetail->district_id == $district->id ? 'selected' : '' }}>
+                                                {{ $district->district_title }}</option>
+                                        @endforeach
+
+                                    </select>
+
+                                    @error('district_id')
+                                        <div class="invalid-feedback" style="display: block">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="city_id" class="form-label">City</label>
+                                    <select name="city_id" id="city_id" class="form-select"
+                                        data-placeholder="Choose State" required>
+                                        <option value="">Select</option>
+                                        @foreach ($cities as $city)
+                                            <option value="{{ $city->id }}"
+                                                {{ $data->userDetail->city_id == $city->id ? 'selected' : '' }}>
+                                                {{ $city->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('city_id')
                                         <div class="invalid-feedback" style="display: block">
                                             {{ $message }}
                                         </div>
@@ -147,42 +205,6 @@
 
 
 
-                                {{-- <div class="col-md-12" id="single_warehouse_div">
-                            <label for="warehouse" class="form-label">Select Warehouse</label>
-                            <select class="form-control @error('warehouse') is-invalid @enderror"  value="{{ old('warehouse') }}" id="warehouse"  name="warehouse" required>
-                                <option value="">Select Warehouse</option>
-                               @foreach ($warehouses as $warehouse)
-                                <option value="{{$warehouse->id}}" {{old('warehouse')==$warehouse->id?'selected':''}}>{{$warehouse->name}}</option>
-                               @endforeach
-
-                           </select>
-                            @error('city')
-                            <div class="invalid-feedback" style="display: block">
-                                {{ $message }}
-                              </div>
-                        @enderror
-
-                        </div> --}}
-                           
-                          
-
-                                {{-- <div class="col-md-12" id="distributor_city_div">
-                            <label for="cities" class="form-label">Belongs to Cities</label>
-                            <div class="input-group" role="group" aria-label="City Options">
-                                @foreach ($cities as $city)
-
-
-                                    <button type="button" style="margin-right: 5px;" class="btn btn-outline-primary city-option " data-value="{{ $city->id }}">{{ $city->city_name }}</button>
-                                @endforeach
-                                <input type="hidden" name="distributor_cities" id="selectedCities" >
-                            </div>
-                            @error('distributor_cities')
-                            <div class="invalid-feedback" style="display: block">
-                                {{ $message }}
-                            </div>
-                            @enderror
-                        </div> --}}
-                             
                                 <div class="col-md-12">
                                     <label for="password" class="form-label">Password</label>
                                     <input type="password" class="form-control @error('password') is-invalid @enderror"
@@ -218,172 +240,72 @@
 @endsection
 @push('script')
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            let unitOptions = document.querySelectorAll('.unit-option');
-
-            unitOptions.forEach(function(option) {
-                option.addEventListener('click', function() {
-                    let selectedUnit = option.getAttribute('data-value');
-                    document.getElementById('selectedUnit').value = selectedUnit;
-
-                    // Remove 'active' class from all buttons
-                    unitOptions.forEach(function(btn) {
-                        btn.classList.remove('active');
-                    });
-
-                    // Add 'active' class to the clicked button
-                    option.classList.add('active');
-
-
-
-                });
-            });
+        $('#user_ids').select2({
+            theme: "bootstrap-5",
+            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+            placeholder: $(this).data('placeholder'),
+            closeOnSelect: false,
         });
-    </script>
-
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const cityButtons = document.querySelectorAll('.city-option');
-            const selectedCitiesInput = document.getElementById('selectedCities');
-
-            cityButtons.forEach(function(button) {
-                button.addEventListener('click', function() {
-                    this.classList.toggle('active');
-                    updateSelectedCities();
-                });
-            });
-
-            function updateSelectedCities() {
-                const selectedCities = Array.from(cityButtons)
-                    .filter(button => button.classList.contains('active'))
-                    .map(button => button.dataset.value);
-
-                selectedCitiesInput.value = JSON.stringify(selectedCities);
-            }
-
-            document.getElementById('cityForm').addEventListener('submit', function() {
-                updateSelectedCities();
-            });
-        });
-    </script>
-    <script>
         $(document).ready(function() {
+            $('#role_id').on('change', function() {
+                const selectedRoleId = $(this).val();
+                const roleType = $(this).find('option:selected').data('type');
 
-            $('#legal_name_div').hide();
-            $('#distributor_city_div').hide();
-            $('#distributor_div').hide();
-            $('#warehouse_div').hide();
+                if (roleType == 2) {
+                    $('#userIdsContainer').show();
+                    fetchUsers(selectedRoleId);
+                    $('#user_ids').prop('required', true);
+                } else {
+                    $('#userIdsContainer').hide();
+                    $('#noUsersMessage').hide();
+                    $('#user_ids').prop('required', false);
+                    $('#user_ids_error').hide();
+                }
+            });
 
-            if ($('#role_id').val() != 6) {
-                $('#fe_div').hide();
-            }
-            if ($('#role_id').val() == 1) {
-                $('#distributor_city_div').show();
-                $('#single_city_div').hide();
-
-
-            }
-            if ($('#role_id').val() == 2 || $('#role_id').val() == 1) {
-                $('#legal_name_div').show();
-                $('#single_city_div').hide();
-
-
-            }
-            if ($('#role_id').val() == 3 || $('#role_id').val() == 4 || $('#role_id').val() ==
-                5) { // for admin role id and security
-                $('#distributor_div').show();
-                $('#warehouse_div').show();
-                $('#single_city_div').show();
-            }
-
-            if ($('#role_id').val() == 6) { // for admin role id and security
-                $('#distributor_div').show();
-                $('#warehouse_div').hide();
-                $('#single_city_div').show();
-                $('#fe_div').show();
-            }
-            // for goverment
-            if ($('#role_id').val() == 7 || $('#role_id').val() == 8) {
-                $('#single_city_div').hide();
-            }
-
-
-            $('#role_id').change(function() {
-                var role_id = $(this).val();
-
-                // Make AJAX request
+            function fetchUsers(roleId) {
                 $.ajax({
-                    url: "{{ route('role.get_role_name') }}",
-                    method: 'GET',
-                    data: {
-                        role_id
-                    },
+                    url: '/get-users-by-role/' + roleId,
+                    type: 'GET',
                     success: function(response) {
-                        if (response.role_id == 2 || response.role_id ==
-                            1) { // role id 2 for Miller, 1 for Distributor
-                            $('#legal_name_div').show();
-                            $('#single_city_div').hide();
-                            // $('#legal_name').prop('required', true);
+                        $('#user_ids').empty();
+                        $('#noUsersMessage').hide();
 
-                            if (response.role_id == 1) {
-
-                                $('#distributor_city_div').show();
-                                $('#city').prop('required', false);
-                            } else {
-                                // $('#single_city_div').show();
-                                // $('#city').prop('required', true);
-                                $('#distributor_city_div').hide();
-                            }
-
+                        if (response.users.length > 0) {
+                            $.each(response.users, function(index, user) {
+                                $('#user_ids').append('<option value="' + user.id + '">' + user
+                                    .name + '</option>');
+                            });
                         } else {
-                            $('#legal_name_div').hide();
-                            $('#legal_name').prop('required', false);
-                        }
-                        // if (response.role_id == 6) {
-                        //     $('#fe_div').show();
-                        // } else {
-                        //     $('#fe_div').hide();
-                        // }
-
-
-                        // for admin
-                        if (response.role_id == 3 || response.role_id == 5 || response
-                            .role_id == 4) {
-                            $('#distributor_div').show();
-                            // $('#distributor').prop('required', true);
-                            $('#warehouse_div').show();
-                            $('#single_city_div').show();
-                        } else {
-                            $('#distributor_div').hide();
-                            $('#distributor').prop('required', false);
-                            $('#warehouse_div').hide();
-                        }
-                        if (response.role_id == 6) {
-                            $('#fe_div').show();
-                            $('#distributor_div').show();
-                            // $('#distributor').prop('required', true);
-                            $('#warehouse_div').hide();
-                            $('#single_city_div').show();
-                        } else {
-                            $('#fe_div').hide();
-                        }
-                        if (response.role_id == 7 || response.role_id == 8) {
-                            $('#single_city_div').hide();
+                            $('#noUsersMessage').text('Please create at least 1 user for the role: ' +
+                                response.child_role_name).show();
                         }
                     },
                     error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
+                        console.error(error);
                     }
                 });
+            }
+
+            $('#userForm').on('submit', function(e) {
+                if ($('#role_id').find('option:selected').data('type') == 2 && $('#user_ids').val()
+                    .length == 0) {
+                    e.preventDefault();
+                    $('#user_ids_error').show();
+                } else {
+                    $('#user_ids_error').hide();
+                }
             });
-
-
         });
 
 
-  
+
+        // end
     </script>
+
+ 
+
+
     <script>
         document.getElementById('mobile').addEventListener('keypress', function(event) {
             // Get the input value

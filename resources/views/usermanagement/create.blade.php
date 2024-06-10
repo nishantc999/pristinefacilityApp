@@ -59,11 +59,12 @@
 
                                 </div>
 
-
+                                <input type="hidden" id="role_type" name="role_type" value="{{ old('role_type', $user->role->role_type ?? '') }}">
                                 <div class="col-md-12" id="userIdsContainer" style="display: none;">
                                    
                                     <label for="user_ids" class="form-label">Select Users</label>
-                                    <select multiple class="form-control" id="user_ids" name="user_ids[]">
+                                    <select multiple class="form-control" id="user_ids" name="user_ids[]"data-placeholder="Choose Any">
+										<option></option>
                                         <!-- Options will be dynamically populated using JavaScript -->
                                     </select>
                                     <div id="noUsersMessage" class="text-danger mt-2" style="display: none;"></div>
@@ -260,6 +261,13 @@
 //             });
 //         }
 //     });
+
+$( '#user_ids' ).select2( {
+        theme: "bootstrap-5",
+        width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+        placeholder: $( this ).data( 'placeholder' ),
+        closeOnSelect: false,
+    } );
 $(document).ready(function () {
         $('#role_id').on('change', function () {
             const selectedRoleId = $(this).val();
@@ -384,6 +392,38 @@ $(document).ready(function () {
                 validationMessage.textContent = ''; // Clear previous validation message
             } else {
                 validationMessage.textContent = 'Please enter exactly 10 digits.';
+            }
+        });
+    </script>
+       <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const roleSelect = document.getElementById('role_id');
+            const userIdsContainer = document.getElementById('userIdsContainer');
+            const roleTypeInput = document.getElementById('role_type');
+
+            // Show or hide user IDs container based on role type
+            function toggleUserIdsContainer() {
+                const selectedOption = roleSelect.options[roleSelect.selectedIndex];
+                const roleType = selectedOption.getAttribute('data-type');
+
+                if (roleType == 2) {
+                    userIdsContainer.style.display = 'block';
+                    roleTypeInput.value = roleType;
+                } else {
+                    userIdsContainer.style.display = 'none';
+                    roleTypeInput.value = roleType;
+                }
+            }
+
+            // Initial call to set the state based on current role type
+            toggleUserIdsContainer();
+
+            // Add event listener to toggle container on role change
+            roleSelect.addEventListener('change', toggleUserIdsContainer);
+
+            // Ensure container is visible if role_type is 2 after validation fails
+            if (roleTypeInput.value == 2) {
+                userIdsContainer.style.display = 'block';
             }
         });
     </script>
