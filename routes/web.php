@@ -80,7 +80,7 @@ Route::post('/role-feildexecutive-edit/{id}',[RoleController::class,'feildexecut
     Route::get('/get-shifts/{client_id}', [EmployeeController::class, 'getShifts'])->name('employeemanagement.getshifts');
     Route::get('/clients/shifts/site',[EmployeeController::class,'getSiteByClientAndShift'])->name('clientmanagement.getSiteByClientAndShift');
     Route::get('/employee-status',[EmployeeController::class,'status'])->name('employee.status');
-    
+
     Route::get('/clients/shifts/site/area',[EmployeeController::class,'getAreaSiteWise'])->name('clientmanagement.getAreaSiteWise');
     // Dashboard Routes
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -131,6 +131,25 @@ Route::get('/privacy-policy', [PrivacyPolicyController::class, 'privacy_policy']
 
     Route::delete('/checklist/delete/{id}', [ClientController::class, 'ChecklistDelete'])->name('checklist.delete');
 
+
+    // Lines/Floors/Sites
+
+    Route::get('clients/site/{id}', [ClientController::class, 'site'])->name('site');
+    Route::post('/site/store', [ClientController::class, 'storeSite'])->name('site.store');
+    Route::get('/site/status', [ClientController::class, 'SiteStatus'])->name('site.status');
+    Route::put('/site/update', [ClientController::class, 'SiteUpdate'])->name('site.update');
+    Route::get('/site/{id}/edit', [ClientController::class, 'editSite'])->name('site.edit');
+
+    Route::delete('/site/delete/{id}', [ClientController::class, 'SiteDelete'])->name('site.delete');
+
+    // Employee Asign
+    Route::get('/sites/{siteId}/assign-employees', [ClientController::class, 'showAssignEmployeeForm'])->name('sites.assign-employees.form');
+
+    // Fetch available employees
+    Route::get('/employees/available', [ClientController::class, 'fetchAvailableEmployees'])->name('employees.available');
+
+    // Assign employees to a site
+    Route::post('/sites/assign-employees', [ClientController::class, 'assignEmployees'])->name('sites.assign-employees');
 
 });
 
