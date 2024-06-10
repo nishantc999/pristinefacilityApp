@@ -15,4 +15,18 @@ class EmployeeDetail extends Model
     {
         return $this->belongsTo(Employee::class);
     }
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    public function state()
+    {
+        return $this->belongsTo(State::class);
+    }
+
+    public function district()
+    {
+        return $this->belongsTo(District::class);
+    }
 }

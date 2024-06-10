@@ -10,23 +10,31 @@ use App\Models\{
     Pivit,
     Site,
     Area,
-    EmployeeDetail
+    EmployeeDetail,
+    Client,
+    State,
+    City,
+    District,
 };
+
 use Illuminate\Support\Facades\Validator;
 class EmployeeController extends Controller
 {
     public function index()
     {
-        $employees = Employee::get();
-        return view('employeemanagement.index', compact('employees'));
+        $employees = Employee::latest()->get();
+        
+        $count = 1;
+        return view('employeemanagement.index', compact('employees','count'));
     }
 
     public function create()
     {
-        $shifts = Shift::get();
-        $clients=User::where('role_id',1)->where('status',1)->orderBy('name')->get();
+       
+        $clients=Client::where('is_employee',0)->where('status',1)->orderBy('name')->get();
         $EmpCode=Employee::orderBy('id', 'desc')->value('emp_code')??1000;
-        return view('employeemanagement.create',compact('shifts','clients','EmpCode'));
+        $states = State::get();
+        return view('employeemanagement.create',compact('states','clients','EmpCode'));
     }
 
     public function store(Request $request)
@@ -67,6 +75,9 @@ class EmployeeController extends Controller
             'passbook' => 'nullable|file|mimes:jpeg,png,pdf|max:2048',
             'police_verification' => 'nullable|file|mimes:jpeg,png,pdf|max:2048',
             'medical' => 'nullable|file|mimes:jpeg,png,pdf|max:2048',
+            'state_id' => 'required|exists:state,id',
+            'city_id' => 'required|exists:city,id',
+            'district_id' => 'required|exists:district,id',
         ]);
 
         if ($validator->fails()) {
@@ -74,7 +85,7 @@ class EmployeeController extends Controller
                              ->withErrors($validator)
                              ->withInput();
         }
-        $data=$request->all();
+        // $data=$request->all();
         // $uploadedDocuments = [];
         // if(!is_null($request->documents) && is_array($request->documents)){
         //     foreach ($request->documents as $documentType => $file) {
@@ -88,45 +99,77 @@ class EmployeeController extends Controller
    
 
         // $data['documents'] = $uploadedDocuments;
-       $employee= Employee::create($data);
-       $employeeDetail->employee_id = $employee->id;
-       $employeeDetail = new EmployeeDetail();
 
+        $data=  $request->only([
+            'name',
+            'email',
+            'emp_code',
+            'site_id',
+            'area_id',
+            'shift_id',
+            'client_id',
+            'father_name',
+            'mother_name',
+            'gender',
+            'age',
+            'blood_group',
+            'nominee_name',
+            'registration_status',
+            'dob',
+            'date_of_joining',
+            'mobile_no',
+            'total_experience',
+            'qualification',
+            'designation',
+            'expertise',
+            'salary',
+            'family_detail'
+        ]);
+
+       $employee= Employee::create($data);
+      
+       $employeeDetail = new EmployeeDetail();
+       $employeeDetail->employee_id = $employee->id;
        if ($request->hasFile('aadhar_card')) {
-        $imageName = time() . '.' . $request->profile->extension();
-        $request->profile->move('assets/images/aadhar_card', $imageName);
+        $imageName = time() . uniqid() . '.' . $request->aadhar_card->extension();
+        $request->aadhar_card->move('assets/images/aadhar_card', $imageName);
         $employeeDetail->aadhar_card = 'aadhar_card/'.$imageName;
         $employeeDetail->aadhar_card_status = 'approved';
 
         }
        if ($request->hasFile('pan_card')) {
-        $imageName = time() . '.' . $request->profile->extension();
-        $request->profile->move('assets/images/pan_card', $imageName);
+        $imageName = time() . uniqid() . '.' . $request->pan_card->extension();
+        $request->pan_card->move('assets/images/pan_card', $imageName);
         $employeeDetail->pan_card = 'pan_card/'.$imageName;
         $employeeDetail->pan_card_status = 'approved';
 
         }
        if ($request->hasFile('passbook')) {
-        $imageName = time() . '.' . $request->profile->extension();
-        $request->profile->move('assets/images/passbook', $imageName);
+        $imageName = time() . uniqid() . '.' . $request->passbook->extension();
+        $request->passbook->move('assets/images/passbook', $imageName);
         $employeeDetail->passbook = 'passbook/'.$imageName;
         $employeeDetail->passbook_status = 'approved';
 
         }
        if ($request->hasFile('police_verification')) {
-        $imageName = time() . '.' . $request->profile->extension();
-        $request->profile->move('assets/images/police_verification', $imageName);
+        $imageName = time() . uniqid() . '.' . $request->police_verification->extension();
+        $request->police_verification->move('assets/images/police_verification', $imageName);
         $employeeDetail->police_verification = 'police_verification/'.$imageName;
         $employeeDetail->police_verification_status = 'approved';
 
         }
        if ($request->hasFile('medical')) {
-        $imageName = time() . '.' . $request->profile->extension();
-        $request->profile->move('assets/images/medical', $imageName);
+        $imageName = time() . uniqid() . '.' . $request->medical->extension();
+        $request->medical->move('assets/images/medical', $imageName);
         $employeeDetail->medical = 'medical/'.$imageName;
         $employeeDetail->medical_status = 'approved';
 
         }
+        $employeeDetail->p_address=$request->p_address;
+        $employeeDetail->c_address=$request->c_address;
+        $employeeDetail->state_id=$request->state_id;
+        $employeeDetail->city_id=$request->city_id;
+        $employeeDetail->district_id=$request->district_id;
         $employeeDetail->save();
         return redirect()->route('employeemanagement.index')->with('success', 'Employee created successfully.');
     }
@@ -139,20 +182,26 @@ class EmployeeController extends Controller
     public function edit(string $id)
     {
         $employee=Employee::whereId($id)->first();
-        $shifts=Shift::get();
+ 
        if($employee->client_id!=null){
-        $siteIds = Pivit::where('client_id', $request->client_id)
-        ->where('shift_id', $request->shift_id)
+       
+        $shifts = Shift::where('client_id', $employee->client_id)->get();
+        $siteIds = Pivit::where('client_id', $employee->client_id)
+        ->where('shift_id', $employee->shift_id)
         ->pluck('site_id');
 
         $sites = Site::whereIn('id', $siteIds)->get();  
        }else{
         $sites = [];
+        $shifts = [];
        }
        
         $areas = $employee->site_id ? Area::where('site_id', $employee->site_id)->get() : collect();
-        $clients=User::where('role_id',1)->where('status',1)->orderBy('name')->get();
-        return view('employeemanagement.edit', compact('shifts','clients','employee','sites','areas'));
+        $clients=Client::where('is_employee',0)->where('status',1)->orderBy('name')->get();
+        $states = State::get();
+        $districts = District::where('state_id',$employee->employeeDetail->state_id)->get();
+        $cities = City::where('districtid',$employee->employeeDetail->district_id)->get();
+        return view('employeemanagement.edit', compact('clients','employee','sites','areas','shifts','states','districts','cities'));
     }
 
     public function update(Request $request, string $id)
@@ -232,11 +281,29 @@ class EmployeeController extends Controller
         $employee->delete();
         return redirect()->route('employeemanagement.index')->with('success', 'Employee deleted successfully.');
     }
+
+    public function getShifts($client_id)
+    {
+        $shifts = Shift::where('client_id', $client_id)->get(); // Assuming you have a Shift model
+        
+        $formattedShifts = $shifts->map(function($shift) {
+            return [
+                'id' => $shift->id,
+                'name' => $shift->name,
+                'start_time' => $shift->start_time->format('h:i A'), // Format the start_time
+                'end_time' => $shift->end_time->format('h:i A'), // Format the start_time
+            ];
+        });
+    
+        return response()->json($formattedShifts);
+        
+        // return response()->json($shifts);
+    }
     public function getSiteByClientAndShift(Request $request )
     {
         $clientId= $request->clientId;
         $shiftId= $request->shiftId;
-        $client = User::findOrFail($clientId);
+        $client = Client::findOrFail($clientId);
         $shift = Shift::findOrFail($shiftId);
 
 
@@ -276,5 +343,12 @@ class EmployeeController extends Controller
         } else {
             return response()->json(['message' => 'No site found for this client and shift.'], 404);
         }
+    }
+
+    public function status(Request $request)
+    {
+        $id = $request->id;
+        $status = $request->status;
+        Employee::whereId($id)->update(['status' => $status]);
     }
 }

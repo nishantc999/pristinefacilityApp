@@ -8,7 +8,7 @@
         <div class="page-content">
             <!--breadcrumb-->
             <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-                <div class="breadcrumb-title pe-3">Users</div>
+                <div class="breadcrumb-title pe-3">Employees</div>
                 <div class="ps-3">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0 p-0">
@@ -49,18 +49,18 @@
 
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('usermanagement.index') }}" method="get" id="searchform22">
+                    <form action="{{ route('employeemanagement.index') }}" method="get" id="searchform22">
 
                         <div class="row m-auto justify-content-center my-3">
 
-                            <div class="col-sm-12 col-md-4">
+                            {{-- <div class="col-sm-12 col-md-4">
 
 
                                 <label for="status" class="form-label">Choose Role</label>
 
                                 <select name="role_id" id="role_id" class="form-select"
                                     data-placeholder="Choose Distributor">
-                                    < <option value="">All</option>
+                                  <option value="">All</option>
                                         @foreach ($roles as $role)
                                             <option value="{{ $role->id }}"
                                                 {{ $role->id == $search_feild['role_id'] ? 'selected' : '' }}>
@@ -69,7 +69,7 @@
 
                                 </select>
 
-                            </div>
+                            </div> --}}
                             {{-- 
                             <div class="col-sm-12 col-md-4">
 
@@ -124,8 +124,7 @@
 
 
 
-            {{-- </div>
-</div>  --}}
+
 
    
             <div class="card">
@@ -134,12 +133,12 @@
                         {{-- <div class="position-relative">
                         <input type="text" class="form-control ps-5 radius-30" placeholder="Search Order"> <span class="position-absolute top-50 product-show translate-middle-y"><i class="bx bx-search"></i></span>
                     </div> --}}
-                        @if (ispermission('user management', 'create'))
+                        @if (ispermission('employee management', 'create'))
 
 
-                            <div class="ms-auto"><a href="{{ route('usermanagement.create') }}"
+                            <div class="ms-auto"><a href="{{ route('employeemanagement.create') }}"
                                     class="btn btn-primary radius-30 mt-2 mt-lg-0"><i class="bx bxs-plus-square"></i>New
-                                    User</a></div>
+                                    Employee</a></div>
                         @endif
 
                     </div>
@@ -149,16 +148,15 @@
                                 <tr>
                                     <th>ID#</th>
                                     <th>Name</th>
+                                    <th>Emp. Code</th>
                               
-                                    <th>Role</th>
+                                   
                                    
                                     <th>Email</th>
-                                    <th>Contact No.</th>
-                                    <th>Address</th>
-                                    <th>City</th>
-                                    <th>State</th>
+                                    <th>Mobile No.</th>
+                                 
 
-                                    @if (ispermission('user management', 'update'))
+                                    @if (ispermission('employee management', 'update'))
 
                                         <th>Status</th>
                                     @endif
@@ -166,7 +164,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($data as $value)
+                                @foreach ($employees as $value)
                                     <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
@@ -179,21 +177,21 @@
                                             </div>
                                         </td>
                                         <td>{{ $value->name }}</td>
+                                        <td>{{ $value->emp_code }}</td>
 
 
                                       
-                                        <td>{{ $value->role->name }}</td>
+                                     
                                        
                                         <td>{{ $value->email }}</td>
                                         <td>{{ $value->mobile_no }}</td>
-                                        <td>{{ $value->address }}</td>
-                                        <td>{{ $value->city_name ?? '' }}</td>
-                                        <td>{{ $value->state }}</td>
-                                        @if (ispermission('user management', 'update'))
+                                     
+                                    
+                                        @if (ispermission('employee management', 'update'))
                                             <td>
                                                 <div class="form-check-primary form-check form-switch">
                                                     <input class="form-check-input" type="checkbox"
-                                                        onclick="statuschange(this,'{{ route('user.status') }}')"
+                                                        onclick="statuschange(this,'{{ route('employee.status') }}')"
                                                         data-id="{{ $value->id }}"
                                                         @if ($value->status == 1) checked @endif>
 
@@ -208,13 +206,13 @@
 
                                         <td>
                                             <div class="d-flex order-actions">
-                                                @if (ispermission('user management', 'update'))
-                                                    <a href="{{ route('usermanagement.edit', $value->id) }}"
+                                                @if (ispermission('employee management', 'update'))
+                                                    <a href="{{ route('employeemanagement.edit', $value->id) }}"
                                                         class=""><i class='bx bxs-edit'></i></a>
                                                 @endif
-                                                @if (ispermission('user management', 'delete'))
-                                                    {{--  <a href="javascript:;" class="ms-3" onclick="Deletedata({{$value->id}},'{{route('usermanagement.destroy',$value->id)}}')"
-                                        ><i class='bx bxs-trash text-danger'></i></a> --}}
+                                                @if (ispermission('employee management', 'delete'))
+                                                     <a href="javascript:;" class="ms-3" onclick="Deletedata({{$value->id}},'{{route('employeemanagement.destroy',$value->id)}}')"
+                                        ><i class='bx bxs-trash text-danger'></i></a>
                                                 @endif
                                             </div>
                                         </td>

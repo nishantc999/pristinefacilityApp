@@ -35,6 +35,6 @@ class Employee extends Model
     }
     public function employeeDetail()
     {
-        return $this->hasMany(EmployeeDetail::class);
+        return $this->hasOne(EmployeeDetail::class);
     }
 }

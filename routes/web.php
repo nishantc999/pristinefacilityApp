@@ -77,7 +77,10 @@ Route::post('/role-feildexecutive-edit/{id}',[RoleController::class,'feildexecut
     Route::get('/get_city_on_district_id',[ClientManagementController::class,'get_city_on_district_id'])->name('get_city_on_district_id');
       // employee route
     Route::resource('employeemanagement', EmployeeController::class);
+    Route::get('/get-shifts/{client_id}', [EmployeeController::class, 'getShifts'])->name('employeemanagement.getshifts');
     Route::get('/clients/shifts/site',[EmployeeController::class,'getSiteByClientAndShift'])->name('clientmanagement.getSiteByClientAndShift');
+    Route::get('/employee-status',[EmployeeController::class,'status'])->name('employee.status');
+    
     Route::get('/clients/shifts/site/area',[EmployeeController::class,'getAreaSiteWise'])->name('clientmanagement.getAreaSiteWise');
     // Dashboard Routes
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

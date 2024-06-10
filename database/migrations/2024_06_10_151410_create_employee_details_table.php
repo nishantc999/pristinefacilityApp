@@ -22,9 +22,14 @@ return new class extends Migration
             $table->string('passbook')->nullable();
             $table->enum('passbook_status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->string('police_verification')->nullable();
-            $table->enum('ppolice_verification_status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->enum('police_verification_status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->string('medical')->nullable();
             $table->enum('medical_status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->bigInteger('city_id')->nullable();
+            $table->bigInteger('district_id')->nullable();
+            $table->bigInteger('state_id')->nullable();
+            $table->string('p_address',700)->nullable();
+            $table->string('c_address',700)->nullable();
             $table->timestamps();
         });
     }

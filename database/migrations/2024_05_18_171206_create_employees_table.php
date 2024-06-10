@@ -29,9 +29,7 @@ return new class extends Migration
             $table->boolean('registration_status')->default(0);
             $table->string('dob')->nullable();
             $table->string('date_of_joining')->nullable();
-            $table->string('mobile_no')->nullable();
-            $table->string('p_address',700)->nullable();
-            $table->string('c_address',700)->nullable();
+            $table->string('mobile_no')->nullable();    
             $table->string('total_experience')->nullable();
             $table->string('qualification')->nullable();
             $table->string('designation')->nullable();
@@ -40,7 +38,7 @@ return new class extends Migration
             $table->decimal('salary', 8, 2);
             $table->boolean('status')->default(1);
             $table->json('family_detail')->default(json_encode([]));
-            $table->json('documents')->default(json_encode([]));
+            // $table->json('documents')->default(json_encode([]));
             $table->timestamps();
         });
     }
