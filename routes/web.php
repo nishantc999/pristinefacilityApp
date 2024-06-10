@@ -80,6 +80,8 @@ Route::post('/role-feildexecutive-edit/{id}',[RoleController::class,'feildexecut
     Route::get('/get-shifts/{client_id}', [EmployeeController::class, 'getShifts'])->name('employeemanagement.getshifts');
     Route::get('/clients/shifts/site',[EmployeeController::class,'getSiteByClientAndShift'])->name('clientmanagement.getSiteByClientAndShift');
     Route::get('/employee-status',[EmployeeController::class,'status'])->name('employee.status');
+    Route::post('/employee-documents/approve', [EmployeeController::class,'approveDocument'])->name('employee.document.approve');
+    Route::post('/employee-documents/reject', [EmployeeController::class,'rejectDocument'])->name('employee.document.reject');
 
     Route::get('/clients/shifts/site/area',[EmployeeController::class,'getAreaSiteWise'])->name('clientmanagement.getAreaSiteWise');
     // Dashboard Routes

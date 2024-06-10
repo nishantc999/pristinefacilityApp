@@ -155,44 +155,41 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <h5 class="d-flex align-items-center mb-3">Documents</h5>
-                                            <p>Web Design</p>
-                                            <div class="progress mb-3" style="height: 5px">
-                                                <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
+                                         
                                             <div class="card-body">
                                                 <h5 class="card-title">aadhar_card</h5>
-                                                <p><a href="{{ asset('assets/images/' . $employee->employeeDetail->$aadhar_card) }}" target="_blank">View Document</a></p>
+                                                <p><a href="{{ asset('assets/images/' . $employee->employeeDetail->aadhar_card) }}" target="_blank">View Document</a></p>
                                                 <p>Status: {{ $employee->employeeDetail->aadhar_card_status }}</p>
-                                                <button class="btn btn-success approve-document" data-document="{{ $document }}" data-id="{{ $employee->employeeDetail->employee_id }}">Approve</button>
-                                                <button class="btn btn-danger reject-document" data-document="{{ $document }}" data-id="{{ $employee->employeeDetail->employee_id }}">Reject</button>
+                                                <button class="btn btn-success approve-document" data-document="aadhar_card_status" data-id="{{ $employee->employeeDetail->employee_id }}">Approve</button>
+                                                <button class="btn btn-danger reject-document" data-document="aadhar_card_status" data-id="{{ $employee->employeeDetail->employee_id }}">Reject</button>
                                             </div>
                                             <div class="card-body">
                                                 <h5 class="card-title">', pan_card</h5>
-                                                <p><a href="{{ asset('assets/images/' . $employee->employeeDetail->$document) }}" target="_blank">View Document</a></p>
-                                                <p>Status: {{ $employee->employeeDetail->{$document . '_status'} }}</p>
-                                                <button class="btn btn-success approve-document" data-document="{{ $document }}" data-id="{{ $employee->employeeDetail->employee_id }}">Approve</button>
-                                                <button class="btn btn-danger reject-document" data-document="{{ $document }}" data-id="{{ $employee->employeeDetail->employee_id }}">Reject</button>
+                                                <p><a href="{{ asset('assets/images/' . $employee->employeeDetail->pan_card) }}" target="_blank">View Document</a></p>
+                                                <p>Status: {{ $employee->employeeDetail->pan_card_status}}</p>
+                                                <button class="btn btn-success approve-document" data-document="pan_card_status" data-id="{{ $employee->employeeDetail->employee_id }}">Approve</button>
+                                                <button class="btn btn-danger reject-document" data-document="pan_card_status" data-id="{{ $employee->employeeDetail->employee_id }}">Reject</button>
                                             </div>
                                             <div class="card-body">
                                                 <h5 class="card-title">passbook</h5>
-                                                <p><a href="{{ asset('assets/images/' . $employee->employeeDetail->$document) }}" target="_blank">View Document</a></p>
-                                                <p>Status: {{ $employee->employeeDetail->{$document . '_status'} }}</p>
-                                                <button class="btn btn-success approve-document" data-document="{{ $document }}" data-id="{{ $employee->employeeDetail->employee_id }}">Approve</button>
-                                                <button class="btn btn-danger reject-document" data-document="{{ $document }}" data-id="{{ $employee->employeeDetail->employee_id }}">Reject</button>
+                                                <p><a href="{{ asset('assets/images/' . $employee->employeeDetail->passbook) }}" target="_blank">View Document</a></p>
+                                                <p>Status: {{ $employee->employeeDetail->passbook_status }}</p>
+                                                <button class="btn btn-success approve-document" data-document="passbook_status" data-id="{{ $employee->employeeDetail->employee_id }}">Approve</button>
+                                                <button class="btn btn-danger reject-document" data-document="passbook_status" data-id="{{ $employee->employeeDetail->employee_id }}">Reject</button>
                                             </div>
                                             <div class="card-body">
                                                 <h5 class="card-title">police_verification</h5>
-                                                <p><a href="{{ asset('assets/images/' . $employee->employeeDetail->$document) }}" target="_blank">View Document</a></p>
-                                                <p>Status: {{ $employee->employeeDetail->{$document . '_status'} }}</p>
-                                                <button class="btn btn-success approve-document" data-document="{{ $document }}" data-id="{{ $employee->employeeDetail->employee_id }}">Approve</button>
-                                                <button class="btn btn-danger reject-document" data-document="{{ $document }}" data-id="{{ $employee->employeeDetail->employee_id }}">Reject</button>
+                                                <p><a href="{{ asset('assets/images/' . $employee->employeeDetail->police_verification) }}" target="_blank">View Document</a></p>
+                                                <p>Status: {{ $employee->employeeDetail->police_verification_status  }}</p>
+                                                <button class="btn btn-success approve-document" data-document="police_verification_status" data-id="{{ $employee->employeeDetail->employee_id }}">Approve</button>
+                                                <button class="btn btn-danger reject-document" data-document="police_verification_status" data-id="{{ $employee->employeeDetail->employee_id }}">Reject</button>
                                             </div>
                                             <div class="card-body">
                                                 <h5 class="card-title">medical</h5>
-                                                <p><a href="{{ asset('assets/images/' . $employee->employeeDetail->$document) }}" target="_blank">View Document</a></p>
-                                                <p>Status: {{ $employee->employeeDetail->{$document . '_status'} }}</p>
-                                                <button class="btn btn-success approve-document" data-document="{{ $document }}" data-id="{{ $employee->employeeDetail->employee_id }}">Approve</button>
-                                                <button class="btn btn-danger reject-document" data-document="{{ $document }}" data-id="{{ $employee->employeeDetail->employee_id }}">Reject</button>
+                                                <p><a href="{{ asset('assets/images/' . $employee->employeeDetail->medical) }}" target="_blank">View Document</a></p>
+                                                <p>Status: {{ $employee->employeeDetail->medical_status }}</p>
+                                                <button class="btn btn-success approve-document" data-document="medical_status" data-id="{{ $employee->employeeDetail->employee_id }}">Approve</button>
+                                                <button class="btn btn-danger reject-document" data-document="medical_status" data-id="{{ $employee->employeeDetail->employee_id }}">Reject</button>
                                             </div>
                                         </div>
                                     </div>
@@ -221,5 +218,50 @@
             table.buttons().container()
                 .appendTo('#example2_wrapper .col-md-6:eq(0)');
         });
+
+        $(document).ready(function() {
+    $('.approve-document, .reject-document').click(function() {
+        const button = $(this);
+        const action = button.hasClass('approve-document') ? 'approve' : 'reject';
+        const document = button.data('document');
+        const id = button.data('id');
+
+        Swal.fire({
+            title: `Are you sure you want to ${action} this document?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: `Yes, ${action} it!`,
+            cancelButtonText: 'No, cancel!',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `/employee-documents/${action}`,
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        document: document,
+                        id: id
+                    },
+                    success: function(response) {
+                        Swal.fire(
+                            'Success!',
+                            `The document has been ${action}d.`,
+                            'success'
+                        ).then(() => {
+                            location.reload();
+                        });
+                    },
+                    error: function(response) {
+                        Swal.fire(
+                            'Error!',
+                            'There was an error processing your request.',
+                            'error'
+                        );
+                    }
+                });
+            }
+        });
+    });
+});
     </script>
 @endpush

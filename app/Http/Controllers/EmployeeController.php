@@ -422,4 +422,28 @@ class EmployeeController extends Controller
         $status = $request->status;
         Employee::whereId($id)->update(['status' => $status]);
     }
+
+    public function approveDocument(Request $request)
+{
+    $document = $request->input('document');
+    $id = $request->input('id');
+    
+    $employeeDetail = EmployeeDetail::where('employee_id', $id)->firstOrFail();
+    $employeeDetail->$document  = 'approved';
+    $employeeDetail->save();
+
+    return response()->json(['message' => 'Document approved successfully']);
+}
+
+public function rejectDocument(Request $request)
+{
+    $document = $request->input('document');
+    $id = $request->input('id');
+    
+    $employeeDetail = EmployeeDetail::where('employee_id', $id)->firstOrFail();
+    $employeeDetail->$document = 'rejected';
+    $employeeDetail->save();
+
+    return response()->json(['message' => 'Document rejected successfully']);
+}
 }
