@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\State;
 use App\Models\ClientDetail;
 use App\Models\Shift;
+use App\Models\Site;
 use App\Models\Variables;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -312,5 +313,48 @@ public function ChecklistUpdate(Request $request)
         return response()->json(['success' => true, 'message' => 'Checklist deleted successfully']);
     }
 
+    // site/floors/lines
 
+
+    public function site($id){
+
+        $count = 1;
+        $sites = Site::where('client_id', $id)->with(['shifts', 'areas'])->get();
+
+        $areas = Area::where('client_id', $id)->get();
+        $shifts = Shift::where('client_id', $id)->get();
+
+        return view('clients.profile.lines.index', compact('id','count', 'shifts', 'areas','sites'));
+    }
+
+    public function storeSite(Request $request){
+        // dd($request);
+            // Accessing the request parameters
+            $requestData = $request->all();
+
+            // Extracting relevant data
+            $siteName = $requestData['name'];
+            $client_id = $requestData['client_id'];
+
+            // Create a new site
+            $site = new Site();
+            $site->name = $siteName;
+            $site->client_id = $client_id;
+            $site->save();
+
+            // Attach shifts and their areas to the site
+
+           foreach ($requestData['shifts'] as $shiftId) {
+            // Accessing areas for the current shift
+            $shiftAreasKey = 'shift_' . $shiftId . '_areas';
+            $areas = $requestData[$shiftAreasKey];
+
+
+            // Attach areas to the shift
+            foreach ($areas as $areaId) {
+                $site->shifts()->attach($shiftId, ['client_id' => $client_id, 'area_id' => $areaId]);
+            }
+        }
+            return redirect()->route('site', ['id' => $client_id]);
+    }
 }

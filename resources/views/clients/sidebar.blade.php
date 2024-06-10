@@ -22,7 +22,7 @@
                 <a href="{{ route('checklist', $id) }}" class="list-group-item py-1">
                     <i class='bx bx-plug me-2'></i><span>Checklists</span>
                 </a>
-                <a href="{{ route('lines-floors', $id) }}" class="list-group-item py-1">
+                <a href="{{ route('site', $id) }}" class="list-group-item py-1">
                     <i class='bx bx-trash-alt me-2'></i><span>Lines/Floors</span>
                 </a>
             </div>
