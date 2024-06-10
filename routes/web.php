@@ -11,9 +11,10 @@ use App\Http\Controllers\{
     ShiftController,
     ClientManagementController,
     EmployeeController
- 
+
 
 };
+use App\Http\Controllers\Clients\ClientController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -41,7 +42,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/profile',[DashboardController::class,'profilestore'])->name('profile.store');
      // set global city
 
-  
+
 
     // role route
     Route::resource('role', RoleController::class);
@@ -65,16 +66,16 @@ Route::post('/role-feildexecutive-edit/{id}',[RoleController::class,'feildexecut
 
     Route::resource('sku', SKUController::class);
     Route::resource('shiftmanagement', ShiftController::class);
-    // client route 
+    // client route
     Route::resource('clientmanagement', ClientManagementController::class);
     Route::get('/client-step-2/{id}',[ClientManagementController::class,'showStep2'])->name('clientmanagement.create_step2');
     Route::post('/client-step-2',[ClientManagementController::class,'postStep2'])->name('clientmanagement.store_step2');
     Route::get('/client-step-2-edit/{id}',[ClientManagementController::class,'step_2_edit'])->name('clientmanagement.step_2_edit');
     Route::patch('/client-step-2-update/{id}',[ClientManagementController::class,'step_2_update'])->name('clientmanagement.step_2_update');
-    
+
     Route::get('/get_district_on_state_id',[ClientManagementController::class,'get_district_on_state_id'])->name('get_district_on_state_id');
     Route::get('/get_city_on_district_id',[ClientManagementController::class,'get_city_on_district_id'])->name('get_city_on_district_id');
-      // employee route 
+      // employee route
     Route::resource('employeemanagement', EmployeeController::class);
     Route::get('/clients/shifts/site',[EmployeeController::class,'getSiteByClientAndShift'])->name('clientmanagement.getSiteByClientAndShift');
     Route::get('/clients/shifts/site/area',[EmployeeController::class,'getAreaSiteWise'])->name('clientmanagement.getAreaSiteWise');
@@ -82,17 +83,52 @@ Route::post('/role-feildexecutive-edit/{id}',[RoleController::class,'feildexecut
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 
-   
+
 });
 
 // public route
 
-   
-   
 
 
-Route::get('/privacy-policy', [PrivacyPolicyController::class, 'privacy_policy'])->name('privacy_policy'); 
 
 
+Route::get('/privacy-policy', [PrivacyPolicyController::class, 'privacy_policy'])->name('privacy_policy');
+
+// Route::middleware(['auth', 'can:manage-clients'])->group(function () {
+    Route::middleware(['auth'])->group(function () {
+    Route::get('clients', [ClientController::class, 'index'])->name('clients.index');
+    Route::get('clients/create', [ClientController::class, 'create'])->name('clients.create');
+    Route::post('clients', [ClientController::class, 'store'])->name('clients.store');
+    Route::post('clients/check-username', [ClientController::class, 'checkUsername'])->name('clients.checkUsername');
+    Route::get('/clients/profile/{id}', [ClientController::class, 'profile'])->name('client.profile');
+
+    // Client Profile
+    Route::get('clients/dashboard/{id}', [ClientController::class, 'dashboard'])->name('clients.dashboard');
+    Route::get('clients/business-details/{id}', [ClientController::class, 'businessDetails'])->name('business-details');
+    Route::get('clients/shifts/{id}', [ClientController::class, 'shifts'])->name('shifts');
+    Route::post('/shifts/store', [ClientController::class, 'storeShift'])->name('shift.store');
+    Route::get('clients/areas/{id}', [ClientController::class, 'areas'])->name('areas');
+    Route::post('/areas/store', [ClientController::class, 'storeArea'])->name('area.store');
+    Route::get('/areas/status', [ClientController::class, 'Areastatus'])->name('area.status');
+    Route::delete('/areas/delete/{id}', [ClientController::class, 'AreaDelete'])->name('area.delete');
+    Route::get('clients/lines-floors/{id}            ', [ClientController::class, 'linesFloors'])->name('lines-floors');
+
+    // Checklists Variables
+    Route::get('clients/variables/{id}', [ClientController::class, 'variables'])->name('variables');
+    Route::post('/variables/store', [ClientController::class, 'storeVariables'])->name('variable.store');
+    Route::get('/variables/status', [ClientController::class, 'VariableStatus'])->name('variable.status');
+    Route::delete('/variables/delete/{id}', [ClientController::class, 'VariablesDelete'])->name('variable.delete');
+
+    // Checklist
+    Route::get('clients/checklist/{id}', [ClientController::class, 'checklist'])->name('checklist');
+    Route::post('/checklist/store', [ClientController::class, 'storeChecklist'])->name('checklist.store');
+    Route::get('/checklist/status', [ClientController::class, 'ChecklistStatus'])->name('checklist.status');
+    Route::put('/checklist/update', [ClientController::class, 'ChecklistUpdate'])->name('checklist.update');
+    Route::get('/checklists/{id}/edit', [ClientController::class, 'editChecklist'])->name('checklist.edit');
+
+    Route::delete('/checklist/delete/{id}', [ClientController::class, 'ChecklistDelete'])->name('checklist.delete');
+
+
+});
 
 

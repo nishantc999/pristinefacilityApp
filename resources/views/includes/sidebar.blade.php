@@ -35,11 +35,7 @@
         @endif
         @if (ispermission('client management', 'update') || ispermission('client management', 'show'))
         <li>
-
-
-            <a href="{{ route('clientmanagement.index') }}">
-
-
+            <a href="{{ route('clients.index') }}">
                 <div class="parent-icon"><i class='bx bx-home-alt'></i>
                 </div>
                 <div class="menu-title">Client Management</div>
@@ -91,7 +87,7 @@
         </li>
         <hr>
         @endif
-        @if (ispermission('shift management', 'update') || ispermission('shift management', 'show'))  
+        @if (ispermission('shift management', 'update') || ispermission('shift management', 'show'))
         <li>
 
 
@@ -106,8 +102,8 @@
         <hr>
         @endif
         {{-- Manager & Admin & Distributer Sidebar --}}
-          
-         
+
+
 
 
 

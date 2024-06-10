@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Site extends Model
 {
     use HasFactory;
+    public function checklists()
+    {
+        return $this->hasMany(Checklist::class);
+    }
 }

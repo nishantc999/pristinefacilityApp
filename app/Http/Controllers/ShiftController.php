@@ -26,10 +26,10 @@ class ShiftController extends Controller
     public function index(Request $request)
     {
 
-       
+
         $data = Shift::latest()->get();
 
-      
+
         $count = 1;
         return view('shiftmanagement.index', compact('data', 'count'));
 
@@ -61,8 +61,8 @@ class ShiftController extends Controller
         ]);
 
 
-      
-        
+
+
         if ($validated->fails()) {
             return redirect()->back()->withErrors($validated)->withInput();
         }
@@ -92,7 +92,7 @@ class ShiftController extends Controller
      */
     public function edit(string $id)
     {
- 
+
 
         $data = Shift::whereId($id)->first();
         $count = 1;
@@ -124,13 +124,9 @@ class ShiftController extends Controller
 
         unset($data['_token']);
         unset($data['_method']);
-        // if ($request->password != "" || $request->password != null) {
-        //     $data['password'] = Hash::make($request->password);
-        // } else {
-        //     unset($data['password']);
-        // }
+        $clientId = $request->client_id;
         Shift::whereId($id)->update($data);
-        return redirect()->route('shiftmanagement.index')->with('success', 'User Update Successfully');
+        return redirect()->route('shifts', ['id' => $clientId]);
     }
 
     /**
