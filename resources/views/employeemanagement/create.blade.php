@@ -50,7 +50,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="form-group">
+                                <div class="col-md-6">
                                     <label for="name">Name:</label>
                                     <input type="text" name="name"
                                         class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}"
@@ -59,7 +59,7 @@
                                         <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="form-group">
+                                <div class="col-md-6">
                                     <label for="email">Email:</label>
                                     <input type="email" name="email"
                                         class="form-control @error('email') is-invalid @enderror"
@@ -72,7 +72,7 @@
 
                         
                               
-                                <div class="form-group">
+                                <div class="col-md-6">
                                     <label for="father_name">Father's Name:</label>
                                     <input type="text" name="father_name"
                                         class="form-control @error('father_name') is-invalid @enderror"
@@ -81,7 +81,7 @@
                                         <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="form-group">
+                                <div class="col-md-6">
                                     <label for="mother_name">Mother's Name:</label>
                                     <input type="text" name="mother_name"
                                         class="form-control @error('mother_name') is-invalid @enderror"
@@ -90,7 +90,7 @@
                                         <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="form-group">
+                                <div class="col-md-6">
                                     <label for="gender">Gender:</label>
                                    
                                         <select name="gender" id="gender"
@@ -104,7 +104,7 @@
                                         <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="form-group">
+                                <div class="col-md-6">
                                     <label for="age">Age:</label>
                                     <input type="text" name="age"
                                         class="form-control @error('age') is-invalid @enderror"
@@ -133,7 +133,7 @@
                                 </div>
 
                               
-                                <div class="form-group">
+                                <div class="col-md-6">
                                     <label for="dob">Date of Birth:</label>
                                     <input type="text" name="dob"
                                         class="form-control datepicker @error('dob') is-invalid @enderror"
@@ -143,7 +143,7 @@
                                         <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="form-group">
+                                <div class="col-md-6">
                                     <label for="date_of_joining">Date of Joining:</label>
                                     <input type="text" name="date_of_joining"
                                         class="form-control datepicker @error('date_of_joining') is-invalid @enderror"
@@ -223,7 +223,7 @@
                                         @enderror
 
                                 </div>
-                                <div class="form-group">
+                                <div class="col-md-6">
                                     <label for="total_experience">Total Experience:</label>
                                     <input type="text" name="total_experience"
                                         class="form-control @error('total_experience') is-invalid @enderror"
@@ -232,7 +232,7 @@
                                         <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="form-group">
+                                <div class="col-md-6">
                                     <label for="qualification">Qualification:</label>
                                     <input type="text" name="qualification"
                                         class="form-control @error('qualification') is-invalid @enderror"
@@ -241,7 +241,7 @@
                                         <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="form-group">
+                                <div class="col-md-6">
                                     <label for="designation">Designation:</label>
                                     <input type="text" name="designation"
                                         class="form-control @error('designation') is-invalid @enderror"
@@ -250,7 +250,7 @@
                                         <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="form-group">
+                                <div class="col-md-6">
                                     <label for="expertise">Expertise:</label>
                                     <input type="text" name="expertise"
                                         class="form-control @error('expertise') is-invalid @enderror"
@@ -259,7 +259,7 @@
                                         <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="form-group">
+                                <div class="col-md-12">
                                     <label for="salary">Salary:</label>
                                     <input type="number" step="0.01" name="salary"
                                         class="form-control @error('salary') is-invalid @enderror"

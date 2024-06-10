@@ -154,6 +154,7 @@
                                    
                                     <th>Email</th>
                                     <th>Mobile No.</th>
+                                    <th>View</th>
                                  
 
                                     @if (ispermission('employee management', 'update'))
@@ -185,7 +186,7 @@
                                        
                                         <td>{{ $value->email }}</td>
                                         <td>{{ $value->mobile_no }}</td>
-                                     
+                                        <td><a href="{{route('employeemanagement.show',$value->id)}}" class="btn btn-primary btn-sm radius-30 px-4">View Details</a></td>
                                     
                                         @if (ispermission('employee management', 'update'))
                                             <td>
@@ -201,7 +202,7 @@
 
 
 
-                                        {{-- <td><button type="button" class="btn btn-primary btn-sm radius-30 px-4">View Details</button></td> --}}
+                                       
 
 
                                         <td>

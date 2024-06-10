@@ -45,19 +45,19 @@
                                 {{ method_field('PATCH') }}
                                 <div class="form-group">
                                     <label for="emp_code">Employee Code:</label>
-                                    <input type="text" name="emp_code" class="form-control @error('emp_code') is-invalid @enderror" value="{{ old('emp_code', $employee->emp_code) }}" placeholder="Enter Employee Code" readonly>
+                                    <input type="text" name="emp_code" class="form-control @error('emp_code') is-invalid @enderror" value="{{ old('emp_code', $employee->emp_code) }}" placeholder="Enter Employee Code" readonly disabled>
                                     @error('emp_code')
                                         <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="form-group">
+                                <div class="col-md-6">
                                     <label for="name">Name:</label>
                                     <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $employee->name) }}" placeholder="Enter Name">
                                     @error('name')
                                         <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="form-group">
+                                <div class="col-md-6">
                                     <label for="email">Email:</label>
                                     <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', $employee->email) }}" placeholder="Enter Email">
                                     @error('email')
@@ -66,28 +66,28 @@
                                 </div>
                              
                         
-                                <div class="form-group">
+                                <div class="col-md-6">
                                     <label for="father_name">Father's Name:</label>
                                     <input type="text" name="father_name" class="form-control @error('father_name') is-invalid @enderror" value="{{ old('father_name', $employee->father_name) }}" placeholder="Enter Father's Name">
                                     @error('father_name')
                                         <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="form-group">
+                                <div class="col-md-6">
                                     <label for="mother_name">Mother's Name:</label>
                                     <input type="text" name="mother_name" class="form-control @error('mother_name') is-invalid @enderror" value="{{ old('mother_name', $employee->mother_name) }}" placeholder="Enter Mother's Name">
                                     @error('mother_name')
                                         <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="form-group">
+                                <div class="col-md-6">
                                     <label for="gender">Gender:</label>
                                     <input type="text" name="gender" class="form-control @error('gender') is-invalid @enderror" value="{{ old('gender', $employee->gender) }}" placeholder="Enter Gender">
                                     @error('gender')
                                         <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="form-group">
+                                <div class="col-md-6">
                                     <label for="age">Age:</label>
                                     <input type="text" name="age" class="form-control @error('age') is-invalid @enderror" value="{{ old('age', $employee->age) }}" placeholder="Enter Age">
                                     @error('age')
@@ -115,14 +115,14 @@
                                         <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                     @enderror
                                 </div> --}}
-                                <div class="form-group">
+                                <div class="col-md-6">
                                     <label for="dob">Date of Birth:</label>
                                     <input type="text" name="dob" class="form-control datepicker @error('dob') is-invalid @enderror" value="{{ old('dob', $employee->dob) }}" placeholder="Enter Date of Birth">
                                     @error('dob')
                                         <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="form-group">
+                                <div class="col-md-6">
                                     <label for="date_of_joining">Date of Joining:</label>
                                     <input type="text" name="date_of_joining" class="form-control datepicker @error('date_of_joining') is-invalid @enderror" value="{{ old('date_of_joining', $employee->date_of_joining) }}" placeholder="Enter Date of Joining">
                                     @error('date_of_joining')
@@ -138,14 +138,14 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="p_address">Permanent Address:</label>
-                                    <textarea name="p_address" class="form-control @error('p_address') is-invalid @enderror" rows="3" placeholder="Enter Permanent Address">{{ old('p_address', $employee->p_address) }}</textarea>
+                                    <textarea name="p_address" class="form-control @error('p_address') is-invalid @enderror" rows="3" placeholder="Enter Permanent Address">{{ old('p_address', $employee->employeeDetail->p_address) }}</textarea>
                                     @error('p_address')
                                         <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="form-group">
                                     <label for="c_address">Current Address:</label>
-                                    <textarea name="c_address" class="form-control @error('c_address') is-invalid @enderror" rows="3" placeholder="Enter Alternate Address">{{ old('c_address', $employee->c_address) }}</textarea>
+                                    <textarea name="c_address" class="form-control @error('c_address') is-invalid @enderror" rows="3" placeholder="Enter Alternate Address">{{ old('c_address', $employee->employeeDetail->c_address) }}</textarea>
                                     @error('c_address')
                                         <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                     @enderror
@@ -209,35 +209,35 @@
 
                                 </div>
                            
-                                <div class="form-group">
+                                <div class="col-md-6">
                                     <label for="total_experience">Total Experience:</label>
                                     <input type="text" name="total_experience" class="form-control @error('total_experience') is-invalid @enderror" value="{{ old('total_experience', $employee->total_experience) }}" placeholder="Enter Total Experience">
                                     @error('total_experience')
                                         <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="form-group">
+                                <div class="col-md-6">
                                     <label for="qualification">Qualification:</label>
                                     <input type="text" name="qualification" class="form-control @error('qualification') is-invalid @enderror" value="{{ old('qualification', $employee->qualification) }}" placeholder="Enter Qualification">
                                     @error('qualification')
                                         <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="form-group">
+                                <div class="col-md-6">
                                     <label for="designation">Designation:</label>
                                     <input type="text" name="designation" class="form-control @error('designation') is-invalid @enderror" value="{{ old('designation', $employee->designation) }}" placeholder="Enter Designation">
                                     @error('designation')
                                         <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="form-group">
+                                <div class="col-md-6">
                                     <label for="expertise">Expertise:</label>
                                     <input type="text" name="expertise" class="form-control @error('expertise') is-invalid @enderror" value="{{ old('expertise', $employee->expertise) }}" placeholder="Enter Expertise">
                                     @error('expertise')
                                         <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="form-group">
+                                <div class="col-md-12">
                                     <label for="salary">Salary:</label>
                                     <input type="number" step="0.01" name="salary" class="form-control @error('salary') is-invalid @enderror" value="{{ old('salary', $employee->salary) }}" placeholder="Enter Salary">
                                     @error('salary')

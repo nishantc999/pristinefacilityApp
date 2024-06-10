@@ -16,7 +16,7 @@ use App\Models\{
     City,
     District,
 };
-
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 class EmployeeController extends Controller
 {
@@ -56,7 +56,7 @@ class EmployeeController extends Controller
             'registration_status' => 'nullable|boolean',
             'dob' => 'required|date',
             'date_of_joining' => 'required|date',
-            'mobile_no' => 'nullable|string|max:255',
+            'mobile_no' => 'nullable|string|max:255|unique:employees,mobile_no',
             'p_address' => 'required|string|max:700',
             'c_address' => 'required|string|max:700',
             'total_experience' => 'nullable|string|max:255',
@@ -174,8 +174,9 @@ class EmployeeController extends Controller
         return redirect()->route('employeemanagement.index')->with('success', 'Employee created successfully.');
     }
 
-    public function show(Employee $employee)
+    public function show($id)
     {
+        $employee=Employee::whereId($id)->first();
         return view('employeemanagement.show', compact('employee'));
     }
 
@@ -209,7 +210,7 @@ class EmployeeController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|email',
-            'emp_code' => 'nullable|string|max:255',
+            // 'emp_code' => 'nullable|string|max:255',
             'site_id' => 'nullable|integer',
             'area_id' => 'nullable|integer',
             'shift_id' => 'nullable|integer',
@@ -223,7 +224,7 @@ class EmployeeController extends Controller
             'registration_status' => 'nullable|boolean',
             'dob' => 'required|date',
             'date_of_joining' => 'required|date',
-            'mobile_no' => 'nullable|string|max:255',
+            'mobile_no' => ['nullable','string','max:255',Rule::unique('employees')->ignore($id),],
             'p_address' => 'required|string|max:700',
             'c_address' => 'required|string|max:700',
             'total_experience' => 'nullable|string|max:255',
@@ -237,11 +238,14 @@ class EmployeeController extends Controller
             'family_detail.*.age' => 'required|string|max:255',
             'family_detail.*.sex' => 'required|string|max:255',
             'family_detail.*.relationship' => 'required|string|max:255',       
-            'documents.adhar_card' => 'nullable|file|mimes:jpeg,png,pdf|max:2048',
-            'documents.pan_card' => 'nullable|file|mimes:jpeg,png,pdf|max:2048',
-            'documents.passbook' => 'nullable|file|mimes:jpeg,png,pdf|max:2048',
-            'documents.policy_verification' => 'nullable|file|mimes:jpeg,png,pdf|max:2048',
-            'documents.medical' => 'nullable|file|mimes:jpeg,png,pdf|max:2048',
+            'aadhar_card' => 'nullable|file|mimes:jpeg,png,pdf|max:2048',
+            'pan_card' => 'nullable|file|mimes:jpeg,png,pdf|max:2048',
+            'passbook' => 'nullable|file|mimes:jpeg,png,pdf|max:2048',
+            'police_verification' => 'nullable|file|mimes:jpeg,png,pdf|max:2048',
+            'medical' => 'nullable|file|mimes:jpeg,png,pdf|max:2048',
+            'state_id' => 'required|exists:state,id',
+            'city_id' => 'required|exists:city,id',
+            'district_id' => 'required|exists:district,id',
         ]);
 
         if ($validator->fails()) {
@@ -249,30 +253,97 @@ class EmployeeController extends Controller
         }
 
         $employee = Employee::whereId($id)->first();
-        $data=$request->all();
+        $employeeDetail = EmployeeDetail::where('employee_id', $employee->id)->first();
+        $data=  $request->only([
+            'name',
+            'email',
+            // 'emp_code',
+            'site_id',
+            'area_id',
+            'shift_id',
+            'client_id',
+            'father_name',
+            'mother_name',
+            'gender',
+            'age',
+            'blood_group',
+            'nominee_name',
+            'registration_status',
+            'dob',
+            'date_of_joining',
+            'mobile_no',
+            'total_experience',
+            'qualification',
+            'designation',
+            'expertise',
+            'salary',
+            'family_detail'
+        ]);
 
     // Handle document uploads
-    $uploadedDocuments = [];
-    if(!is_null($request->documents) && is_array($request->documents)){
-        foreach ($request->documents as $documentType => $file) {
-            if ($file) {
-                $fileName = time() . '_' . $documentType . '.' . $file->getClientOriginalExtension();
-                $filePath = $file->storeAs('documents', $fileName, 'public');
-                $uploadedDocuments[$documentType] = $filePath;
-            }
-        }
-    }else{
-        unset($data['documents']);
-    }
+    // $uploadedDocuments = [];
+    // if(!is_null($request->documents) && is_array($request->documents)){
+    //     foreach ($request->documents as $documentType => $file) {
+    //         if ($file) {
+    //             $fileName = time() . '_' . $documentType . '.' . $file->getClientOriginalExtension();
+    //             $filePath = $file->storeAs('documents', $fileName, 'public');
+    //             $uploadedDocuments[$documentType] = $filePath;
+    //         }
+    //     }
+    // }else{
+    //     unset($data['documents']);
+    // }
  
     // Merge uploaded documents with existing documents
     
 
 
 
-    $data['documents'] = array_merge($employee->documents ?? [], $uploadedDocuments);
+    // $data['documents'] = array_merge($employee->documents ?? [], $uploadedDocuments);
  
     Employee::whereId($id)->update($data);
+    if ($request->hasFile('aadhar_card')) {
+        $imageName = time() . uniqid() . '.' . $request->aadhar_card->extension();
+        $request->aadhar_card->move('assets/images/aadhar_card', $imageName);
+        $employeeDetail->aadhar_card = 'aadhar_card/'.$imageName;
+        $employeeDetail->aadhar_card_status = 'approved';
+
+        }
+       if ($request->hasFile('pan_card')) {
+        $imageName = time() . uniqid() . '.' . $request->pan_card->extension();
+        $request->pan_card->move('assets/images/pan_card', $imageName);
+        $employeeDetail->pan_card = 'pan_card/'.$imageName;
+        $employeeDetail->pan_card_status = 'approved';
+
+        }
+       if ($request->hasFile('passbook')) {
+        $imageName = time() . uniqid() . '.' . $request->passbook->extension();
+        $request->passbook->move('assets/images/passbook', $imageName);
+        $employeeDetail->passbook = 'passbook/'.$imageName;
+        $employeeDetail->passbook_status = 'approved';
+
+        }
+       if ($request->hasFile('police_verification')) {
+        $imageName = time() . uniqid() . '.' . $request->police_verification->extension();
+        $request->police_verification->move('assets/images/police_verification', $imageName);
+        $employeeDetail->police_verification = 'police_verification/'.$imageName;
+        $employeeDetail->police_verification_status = 'approved';
+
+        }
+       if ($request->hasFile('medical')) {
+        $imageName = time() . uniqid() . '.' . $request->medical->extension();
+        $request->medical->move('assets/images/medical', $imageName);
+        $employeeDetail->medical = 'medical/'.$imageName;
+        $employeeDetail->medical_status = 'approved';
+
+        }
+        $employeeDetail->p_address=$request->p_address;
+        $employeeDetail->c_address=$request->c_address;
+        $employeeDetail->state_id=$request->state_id;
+        $employeeDetail->city_id=$request->city_id;
+        $employeeDetail->district_id=$request->district_id;
+        $employeeDetail->save();
+
         return redirect()->route('employeemanagement.index')->with('success', 'Employee updated successfully.');
     }
 
