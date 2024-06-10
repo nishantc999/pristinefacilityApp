@@ -37,7 +37,7 @@
                                                     <span class="badge bg-primary">{{ $shift->name }}</span>
                                                 @endforeach
                                             </td>
-                                            <td><button class="btn btn-info">Assign Employee</button></td>
+                                            <td><button class="btn btn-info" onclick="openAssignEmployeeModal({{ $site->id }})">Assign Employee</button></td>
                                             <td>
                                                 <div class="form-check-primary form-check form-switch">
                                                     <input class="form-check-input" type="checkbox"
@@ -184,7 +184,33 @@
                             </div>
                         </div>
                     </div>
-
+<!-- Add this modal popup -->
+<div class="modal fade" id="assignEmployeeModal" tabindex="-1" aria-labelledby="assignEmployeeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="assignEmployeeModalLabel">Assign Employee</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="assignEmployeeForm">
+                    <div class="mb-3">
+                        <label for="multiple-select-field" class="form-label">Basic multiple select</label>
+                        <select class="form-select" name="employees[]" id="multiple-select-field" data-placeholder="Choose anything" multiple>
+                        {{-- <select multiple class="form-control" id="employeeSelect"> --}}
+                            <!-- Options will be added dynamically using JavaScript -->
+                        </select>
+                    </div>
+                    <input type="hidden" name="site_id" id="siteIdInput">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="submitAssignEmployeeForm()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
                 </div>
             </div>
         </div>
@@ -225,5 +251,74 @@
                 });
             }
         </script>
+<script>
+    function openAssignEmployeeModal(siteId) {
+        // Set the site ID in the hidden input field
+        document.getElementById('siteIdInput').value = siteId;
 
+        // Fetch employees from the server and populate the multi-select input
+        fetchEmployees();
+
+        // Open the modal popup
+        $('#assignEmployeeModal').modal('show');
+    }
+
+    async function fetchEmployees() {
+        try {
+            const response = await fetch('/employees/available');
+            const data = await response.json();
+
+            const employeeSelect = document.getElementById('multiple-select-field');
+            employeeSelect.innerHTML = '';
+
+            data.forEach(employee => {
+                const option = document.createElement('option');
+                option.value = employee.id;
+                option.text = employee.name;
+                employeeSelect.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Error fetching employees:', error);
+        }
+    }
+
+    function submitAssignEmployeeForm() {
+    const form = document.getElementById('assignEmployeeForm');
+    const formData = new FormData(form);
+
+    // Retrieve selected employee IDs from the multiple select field
+    const selectedEmployeeIds = Array.from(formData.getAll('multiple-select-field'));
+
+    // Log the selected employee IDs to the console
+    console.log('Selected Employee IDs:', selectedEmployeeIds);
+
+    // Get the CSRF token value from the meta tag
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    // Append the CSRF token to the FormData object
+    formData.append('_token', csrfToken);
+
+    // Log the form data for debugging
+    for (let pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+    }
+
+    fetch('/sites/assign-employees', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Assign employees success:', data);
+        $('#assignEmployeeModal').modal('hide');
+    })
+    .catch(error => {
+        console.error('Assign employees error:', error);
+    });
+}
+
+
+
+
+</script>
     @endpush

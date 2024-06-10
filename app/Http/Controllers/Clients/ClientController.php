@@ -10,8 +10,10 @@ use App\Models\Client;
 use App\Models\User;
 use App\Models\State;
 use App\Models\ClientDetail;
+use App\Models\Employee;
 use App\Models\Shift;
 use App\Models\Site;
+use App\Models\SiteShiftAreawithClient;
 use App\Models\Variables;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -357,4 +359,51 @@ public function ChecklistUpdate(Request $request)
         }
             return redirect()->route('site', ['id' => $client_id]);
     }
+
+    public function fetchAvailableEmployees()
+    {
+        $availableEmployees = Employee::where('occupied', 0)->get();
+        return response()->json($availableEmployees);
+    }
+
+    public function assignEmployees(Request $request)
+    {
+        try {
+            $siteId = $request->input('site_id');
+            $employeeIds = $request->input('employees');
+
+            // Check if $employeeIds is null or empty
+            if (!is_array($employeeIds) || count($employeeIds) === 0) {
+                return response()->json(['error' => 'No employees selected.'], 400);
+            }
+            $details = SiteShiftAreawithClient::where('site_id', $siteId)->first();
+            // Fetch client_id, shift_id, and area_id from the pivot table site_shift_area
+            $employees = Employee::whereIn('id', $employeeIds)->get();
+
+            // Check if $employees is null or empty
+            if ($employees->isEmpty()) {
+                return response()->json(['error' => 'No valid employees found for the specified site.'], 400);
+            }
+
+            // Update the site ID for the selected employees
+            foreach ($employees as $employee) {
+                $employee->site_id = $siteId;
+                $employee->client_id = $details->client_id;
+                $employee->shift_id = $details->shift_id;
+                $employee->area_id = $details->area_id;
+                $employee->occupied = 1;
+                $employee->save();
+            }
+
+            return response()->json(['message' => 'Employees assigned successfully']);
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            \Log::error('Error assigning employees: ' . $e->getMessage());
+
+            // Return an error response
+            return response()->json(['error' => 'An error occurred while assigning employees.'], 500);
+        }
+    }
+
+
 }
