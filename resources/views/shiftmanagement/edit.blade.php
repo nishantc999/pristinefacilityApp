@@ -40,7 +40,7 @@
 
                             {{ csrf_field() }}
                             {{ method_field('PATCH') }}
-                       
+
 
                               <div class="col-md-6">
                                 <label for="label" class="form-label">Shift name</label>
@@ -60,7 +60,7 @@
                                   </div>
                             @enderror
                             </div>
-                           
+
                                 <div class="col-md-6">
                                     <div>
                                         <label class="form-label">Start Time</label>
@@ -117,7 +117,7 @@
                             <div class="col-md-12">
                                 <label class="form-label">Shift Type</label>
                                 <div class="btn-group-toggle d-flex" data-toggle="buttons">
-                              
+
                                     <label class="btn btn-primary">
                                         <input type="radio" name="shift_hr" value="12" {{ $data->shift_hr==12? 'checked' : '' }}> 12 Hr.
                                     </label><br>
@@ -131,7 +131,7 @@
                                   </div>
                             @enderror
                             </div>
-                            
+                            <input type="hidden" name="client_id" value="{{ $data->client_id }}">
                             <div class="col-md-12">
                                 <div class="d-md-flex d-grid align-items-center gap-3">
                                     <button type="submit" class="btn btn-primary px-4">Submit</button>

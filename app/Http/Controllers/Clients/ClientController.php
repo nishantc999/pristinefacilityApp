@@ -3,14 +3,17 @@
 namespace App\Http\Controllers\Clients;
 
 use App\Http\Controllers\Controller;
+use App\Models\Area;
+use App\Models\Checklist;
 use Illuminate\Http\Request;
 use App\Models\Client;
 use App\Models\User;
 use App\Models\State;
 use App\Models\ClientDetail;
 use App\Models\Shift;
-
+use App\Models\Variables;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class ClientController extends Controller
 {
@@ -111,6 +114,7 @@ class ClientController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'client_id' => 'required|exists:clients,id',
             'description' => 'required|string|max:255',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i',
@@ -118,22 +122,54 @@ class ClientController extends Controller
             'shift_hr' => 'required|in:8,12',
         ]);
 
-        $shift = new Shift();
-        $shift->name = $request->name;
-        $shift->description = $request->description;
-        $shift->start_time = $request->start_time;
-        $shift->end_time = $request->end_time;
-        $shift->weekdays = implode(',', $request->weekday); // store as comma-separated values
-        $shift->shift_hr = $request->shift_hr;
-        $shift->save();
 
-        return redirect()->route('shifts')->with('success', 'Shift created successfully.');
+
+        $data = $request->all();
+        Shift::create($data);
+
+        $clientId = $request->client_id;
+
+    // Redirect to the shifts route with the client_id as parameter
+    return redirect()->route('shifts', ['id' => $clientId]);
     }
 
     // Areas Function
     public function areas($id)
     {
-        return view('clients.areas.index', compact('id'));
+        $count = 1;
+        $areas = Area::where('client_id', $id)->get();
+        return view('clients.profile.areas.index', compact('id','count', 'areas'));
+    }
+    public function Areastatus(Request $request)
+    {
+        $id = $request->id;
+        $status = $request->status;
+        Area::whereId($id)->update(['status' => $status]);
+    }
+
+    public function storeArea(Request $request){
+        $request->validate([
+            'name' => 'required|string|unique:areas,name|max:255',
+            'client_id' => 'required|exists:clients,id',
+
+        ]);
+
+
+
+            $data = $request->all();
+            Area::create($data);
+
+            $clientId = $request->client_id;
+
+        // Redirect to the shifts route with the client_id as parameter
+        return redirect()->route('areas', ['id' => $clientId]);
+    }
+
+    public function AreaDelete($id){
+
+            Area::whereId($id)->delete();
+            return response()->json(['success' => true, 'message' => 'Area deleted successfully']);
+
     }
 
     // Lines and Floors Function
@@ -141,4 +177,140 @@ class ClientController extends Controller
     {
         return view('lines-floors', compact('id'));
     }
+
+
+    // Checklists Variable
+
+    public function variables($id){
+
+        $count = 1;
+        $variables = Variables::where('client_id', $id)->get();
+        return view('clients.profile.variables.index', compact('id', 'variables', 'count'));
+    }
+
+    public function storeVariables(Request $request){
+        $request->validate([
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('variables')->where(function ($query) use ($request) {
+                    return $query->where('client_id', $request->client_id);
+                })
+            ],
+            'description' => 'string|max:255',
+            'client_id' => 'required|exists:clients,id',
+
+        ]);
+
+            $data = $request->all();
+            Variables::create($data);
+
+            $clientId = $request->client_id;
+
+        // Redirect to the shifts route with the client_id as parameter
+        return redirect()->route('variables', ['id' => $clientId]);
+    }
+
+    public function VariableStatus(Request $request){
+        $id = $request->id;
+        $status = $request->status;
+        Variables::whereId($id)->update(['status' => $status]);
+    }
+
+    public function VariablesDelete($id){
+        Variables::whereId($id)->delete();
+        return response()->json(['success' => true, 'message' => 'Variable deleted successfully']);
+    }
+
+
+    // Checklist
+    public function checklist($id){
+
+        $count = 1;
+        $checklists = Checklist::where('client_id', $id)->with(['shift', 'area','site'])->get();
+
+        $areas = Area::where('client_id', $id)->get();
+        $shifts = Shift::where('client_id', $id)->get();
+        $variables = Variables::where('client_id', $id)->get();
+        return view('clients.profile.checklists.index', compact('id', 'checklists', 'count', 'areas', 'variables',  'shifts'));
+    }
+
+    public function storeChecklist(Request $request){
+        $request->validate([
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('checklists')->where(function ($query) use ($request) {
+                    return $query->where('client_id', $request->client_id);
+                })
+            ],
+            'client_id' => 'required|exists:clients,id',
+            'area_id' => 'required|exists:areas,id',
+            'variables' => 'array',
+            'variables.*' => 'exists:variables,id',
+        ]);
+
+        foreach ($request->shifts as $shift) {
+            Checklist::create([
+                'name' => $request->name,
+                'area_id' => $request->area_id,
+                'variables' => json_encode($request->variables),
+                'client_id' => $request->client_id,
+                'shift_id' => $shift,
+            ]);
+        }
+
+            $clientId = $request->client_id;
+
+        // Redirect to the shifts route with the client_id as parameter
+        return redirect()->route('checklist', ['id' => $clientId]);
+    }
+
+    public function ChecklistStatus(Request $request){
+        $id = $request->id;
+        $status = $request->status;
+        Checklist::whereId($id)->update(['status' => $status]);
+    }
+    public function editChecklist($id)
+{
+    $checklist = Checklist::findOrFail($id);
+    $checklist->variables = json_decode($checklist->variables);
+
+    return response()->json($checklist);
+}
+public function ChecklistUpdate(Request $request)
+{
+    $request->validate([
+        'name' => [
+            'required',
+            'string',
+            'max:255',
+            // Rule::unique('checklists')->where(function ($query) use ($request) {
+            //     return $query->where('client_id', $request->client_id);
+            // })
+        ],
+        'area_id' => 'required|exists:areas,id',
+        'variables' => 'array',
+        'variables.*' => 'exists:variables,id',
+        'client_id' => 'required|exists:clients,id',
+    ]);
+
+    $checklist = Checklist::findOrFail($request->checklist_id);
+    $checklist->update([
+        'name' => $request->name,
+        'area_id' => $request->area_id,
+        'variables' => json_encode($request->variables),
+    ]);
+    $clientId = $request->client_id;
+    return redirect()->route('checklist', ['id' => $clientId]);
+}
+
+    public function ChecklistDelete($id){
+        Checklist::whereId($id)->delete();
+        return response()->json(['success' => true, 'message' => 'Checklist deleted successfully']);
+    }
+
+
 }

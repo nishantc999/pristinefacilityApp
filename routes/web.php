@@ -106,9 +106,29 @@ Route::get('/privacy-policy', [PrivacyPolicyController::class, 'privacy_policy']
     Route::get('clients/dashboard/{id}', [ClientController::class, 'dashboard'])->name('clients.dashboard');
     Route::get('clients/business-details/{id}', [ClientController::class, 'businessDetails'])->name('business-details');
     Route::get('clients/shifts/{id}', [ClientController::class, 'shifts'])->name('shifts');
-    Route::post('/shifts/store/{id}', [ClientController::class, 'storeShift'])->name('shift.store');
+    Route::post('/shifts/store', [ClientController::class, 'storeShift'])->name('shift.store');
     Route::get('clients/areas/{id}', [ClientController::class, 'areas'])->name('areas');
+    Route::post('/areas/store', [ClientController::class, 'storeArea'])->name('area.store');
+    Route::get('/areas/status', [ClientController::class, 'Areastatus'])->name('area.status');
+    Route::delete('/areas/delete/{id}', [ClientController::class, 'AreaDelete'])->name('area.delete');
     Route::get('clients/lines-floors/{id}            ', [ClientController::class, 'linesFloors'])->name('lines-floors');
+
+    // Checklists Variables
+    Route::get('clients/variables/{id}', [ClientController::class, 'variables'])->name('variables');
+    Route::post('/variables/store', [ClientController::class, 'storeVariables'])->name('variable.store');
+    Route::get('/variables/status', [ClientController::class, 'VariableStatus'])->name('variable.status');
+    Route::delete('/variables/delete/{id}', [ClientController::class, 'VariablesDelete'])->name('variable.delete');
+
+    // Checklist
+    Route::get('clients/checklist/{id}', [ClientController::class, 'checklist'])->name('checklist');
+    Route::post('/checklist/store', [ClientController::class, 'storeChecklist'])->name('checklist.store');
+    Route::get('/checklist/status', [ClientController::class, 'ChecklistStatus'])->name('checklist.status');
+    Route::put('/checklist/update', [ClientController::class, 'ChecklistUpdate'])->name('checklist.update');
+    Route::get('/checklists/{id}/edit', [ClientController::class, 'editChecklist'])->name('checklist.edit');
+
+    Route::delete('/checklist/delete/{id}', [ClientController::class, 'ChecklistDelete'])->name('checklist.delete');
+
+
 });
 
 

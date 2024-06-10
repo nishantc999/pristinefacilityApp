@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('areas', function (Blueprint $table) {
             $table->foreign('site_id')->references('id')->on('sites')->onDelete('cascade');
             $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
-         
+
         });
     }
 
@@ -24,11 +24,16 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('areas', function (Blueprint $table) {
-            $table->dropForeign(['site_id']);
-            $table->dropColumn('site_id');
-            $table->dropForeign(['client_id']);
-            $table->dropColumn('client_id');
-       
+            // Drop foreign key constraints
+            if (Schema::hasColumn('areas', 'site_id')) {
+                $table->dropForeign(['site_id']);
+                $table->dropColumn('site_id');
+            }
+
+            if (Schema::hasColumn('areas', 'client_id')) {
+                $table->dropForeign(['client_id']);
+                $table->dropColumn('client_id');
+            }
         });
     }
 };

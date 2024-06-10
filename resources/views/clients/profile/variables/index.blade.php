@@ -14,19 +14,20 @@
                         </div>
                         <div class="card-body">
                             <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal"
-                            data-bs-target="#addAreaModal">Add New Area</button>
+                            data-bs-target="#addAreaModal">Add New Variable</button>
                             <div class="table-responsive">
                                 <table class="table mb-0" id="example2">
                                     <thead class="table-light">
                                         <tr>
                                             <th>ID#</th>
                                             <th>Name</th>
+                                            <th>Description</th>
                                             <td>Status</th>
                                             <td>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($areas as $area)
+                                        @foreach ($variables as $variable)
                                             <tr>
                                                 <td>
                                                     <div class="d-flex align-items-center">
@@ -38,17 +39,18 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td>{{ $area->name }}</td>
+                                                <td>{{ $variable->name }}</td>
+                                                <td>{{ $variable->description }}</td>
                                                 <td>
                                                     <div class="form-check-primary form-check form-switch">
                                                         <input class="form-check-input" type="checkbox"
-                                                            onclick="statuschange(this,'{{ route('area.status') }}')"
-                                                            data-id="{{ $area->id }}"
-                                                            @if ($area->status == 1) checked @endif>
+                                                            onclick="statuschange(this,'{{ route('variable.status') }}')"
+                                                            data-id="{{ $variable->id }}"
+                                                            @if ($variable->status == 1) checked @endif>
 
                                                     </div>
                                                 </td>
-                                                <td><a href="javascript:;" class="ms-3" onclick="Deletedata({{$area->id}},'{{route('area.delete',$area->id)}}')" ><i class='bx bxs-trash text-danger'></i></a></td>
+                                                <td><a href="javascript:;" class="ms-3" onclick="Deletedata({{$variable->id}},'{{route('variable.delete',$variable->id)}}')" ><i class='bx bxs-trash text-danger'></i></a></td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -59,56 +61,33 @@
 
                     </div>
 
-                        {{-- <div class="card">
-                            <div class="card-header px-4 py-3">
-                                <h5 class="mb-0">Add New Shift</h5>
-                            </div>
-                            <div class="card-body p-4">
-                                <form class="row " method="POST" action="{{ route('area.store') }}"
-                                    enctype="multipart/form-data">
 
-
-                                    @csrf
-
-
-                                    <div class="col-md-6">
-                                        <label for="label" class="form-label">Area Name</label>
-                                        <input type="text" name="name"
-                                            class="form-control @error('name') is-invalid @enderror" id="name"
-                                            value="{{ old('name') }}" placeholder="Shift Name" required>
-                                        @error('name')
-                                            <div class="invalid-feedback" style="display: block">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                    </div>
-
-                                    <input type="hidden" name="client_id" value="{{ $id }}" />
-                                    <div class="col-md-12 mt-3">
-                                        <div class="d-md-flex d-grid align-items-center gap-3">
-                                            <button type="submit" class="btn btn-primary px-4">Submit</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-
-                        </div> --}}
                         <div class="modal fade" id="addAreaModal" tabindex="-1" aria-labelledby="addAreaModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="addAreaModalLabel">Add New Area</h5>
+                                        <h5 class="modal-title" id="addAreaModalLabel">Add New Checklist Variable</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         <!-- Add your form here -->
-                                        <form class="row" method="POST" action="{{ route('area.store') }}" enctype="multipart/form-data">
+                                        <form class="row" method="POST" action="{{ route('variable.store') }}" enctype="multipart/form-data">
                                             @csrf
-                                            <div class="col-md-6">
-                                                <label for="name" class="form-label">Area Name</label>
+                                            <div class="col-md-12">
+                                                <label for="name" class="form-label">Variable Name</label>
                                                 <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
                                                     id="name" value="{{ old('name') }}" placeholder="Area Name" required>
                                                 @error('name')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label for="description" class="form-label">Variable Description</label>
+                                                <input type="text" name="description" class="form-control @error('description') is-invalid @enderror"
+                                                    id="description" value="{{ old('description') }}" placeholder="Description" >
+                                                @error('description')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
                                                 </div>
