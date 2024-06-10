@@ -153,9 +153,10 @@
                                    
                                     <th>Email</th>
                                     <th>Contact No.</th>
-                                    <th>Address</th>
+                                    
                                     <th>City</th>
                                     <th>State</th>
+                                    <th>Profile</th>
 
                                     @if (ispermission('user management', 'update'))
 
@@ -185,10 +186,11 @@
                                        
                                         <td>{{ $value->username }}</td>
                                         <td>{{ $value->email }}</td>
-                                        <td>{{ $value->mobile_no }}</td>
-                                        <td>{{ $value->address }}</td>
-                                        <td>{{ $value->city_name ?? '' }}</td>
-                                        <td>{{ $value->state }}</td>
+                                        <td>{{ $value->userDetail->mobile_no }}</td>
+                                        
+                                        <td>{{ $value->userDetail->city->name ?? '' }}</td>
+                                        <td>{{ $value->userDetail->state->state_title }}</td>
+                                        <td><button type="button" class="btn btn-primary btn-sm radius-30 px-4">View</button></td>
                                         @if (ispermission('user management', 'update'))
                                             <td>
                                                 <div class="form-check-primary form-check form-switch">
@@ -203,7 +205,7 @@
 
 
 
-                                        {{-- <td><button type="button" class="btn btn-primary btn-sm radius-30 px-4">View Details</button></td> --}}
+                                       
 
 
                                         <td>

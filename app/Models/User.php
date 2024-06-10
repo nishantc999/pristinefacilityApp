@@ -45,22 +45,9 @@ class User extends Authenticatable
     }
  
 
-    public function city()
-    {
-        return $this->belongsTo(City::class);
-    }
 
-    public function state()
-    {
-        return $this->belongsTo(State::class);
-    }
 
-    public function district()
-    {
-        return $this->belongsTo(District::class);
-    }
-
-    public function users()
+    public function relatedUsers()
     {
         return $this->belongsToMany(User::class, 'user_user', 'user_id', 'related_user_id');
     }
