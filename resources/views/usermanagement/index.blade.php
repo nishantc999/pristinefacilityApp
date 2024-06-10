@@ -152,7 +152,7 @@
                                     <th>Username</th>
                                    
                                     <th>Email</th>
-                                    <th>Contact No.</th>
+                                    <th>Mobile No.</th>
                                     
                                     <th>City</th>
                                     <th>State</th>
@@ -190,7 +190,7 @@
                                         
                                         <td>{{ $value->userDetail->city->name ?? '' }}</td>
                                         <td>{{ $value->userDetail->state->state_title }}</td>
-                                        <td><button type="button" class="btn btn-primary btn-sm radius-30 px-4">View</button></td>
+                                        <td><a href="{{route('usermanagement.show',$value->id)}}" class="btn btn-primary btn-sm radius-30 px-4">View</a></td>
                                         @if (ispermission('user management', 'update'))
                                             <td>
                                                 <div class="form-check-primary form-check form-switch">
@@ -215,8 +215,8 @@
                                                         class=""><i class='bx bxs-edit'></i></a>
                                                 @endif
                                                 @if (ispermission('user management', 'delete'))
-                                                    {{--  <a href="javascript:;" class="ms-3" onclick="Deletedata({{$value->id}},'{{route('usermanagement.destroy',$value->id)}}')"
-                                        ><i class='bx bxs-trash text-danger'></i></a> --}}
+                                                     <a href="javascript:;" class="ms-3" onclick="Deletedata({{$value->id}},'{{route('usermanagement.destroy',$value->id)}}')"
+                                        ><i class='bx bxs-trash text-danger'></i></a>
                                                 @endif
                                             </div>
                                         </td>

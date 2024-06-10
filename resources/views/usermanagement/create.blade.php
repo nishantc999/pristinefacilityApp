@@ -63,7 +63,7 @@
                                 <div class="col-md-12" id="userIdsContainer" style="display: none;">
                                    
                                     <label for="user_ids" class="form-label">Select Users</label>
-                                    <select multiple class="form-control" id="user_ids" name="user_ids[]"data-placeholder="Choose Any">
+                                    <select multiple class="form-control @error('user_ids') is-invalid @enderror" id="user_ids" name="user_ids[]"data-placeholder="Choose Any">
 										<option></option>
                                         <!-- Options will be dynamically populated using JavaScript -->
                                     </select>
@@ -71,6 +71,11 @@
                                     <span class="invalid-feedback" role="alert" id="user_ids_error" style="display: none;">
                                         <strong>Please select at least one user.</strong>
                                     </span>
+                                    @error('user_ids')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
                                 </div>
 
 
@@ -268,7 +273,7 @@ $( '#user_ids' ).select2( {
         placeholder: $( this ).data( 'placeholder' ),
         closeOnSelect: false,
     } );
-$(document).ready(function () {
+        $(document).ready(function () {
         $('#role_id').on('change', function () {
             const selectedRoleId = $(this).val();
             const roleType = $(this).find('option:selected').data('type');
@@ -292,10 +297,10 @@ $(document).ready(function () {
                 success: function (response) {
                     $('#user_ids').empty();
                     $('#noUsersMessage').hide();
-
+               
                     if (response.users.length > 0) {
                         $.each(response.users, function (index, user) {
-                            $('#user_ids').append('<option value="' + user.id + '">' + user.name + '</option>');
+                            $('#user_ids').append('<option value="' + user.id + '">' + user.name + ' /Mobile No.: '+user.user_detail.mobile_no +'</option>');
                         });
                     } else {
                         $('#noUsersMessage').text('Please create at least 1 user for the role: ' + response.child_role_name).show();
@@ -306,7 +311,16 @@ $(document).ready(function () {
                 }
             });
         }
-
+        @if (old('role_id'))
+            const oldRoleId = {{ old('role_id') }};
+            const roleSelect = $('#role_id');
+            const oldRoleType = roleSelect.find('option:selected').data('type');
+   
+            if (oldRoleType == 2) {
+                fetchUsers(oldRoleId);
+                userContainer.show();
+            }
+        @endif
         $('#userForm').on('submit', function (e) {
             if ($('#role_id').find('option:selected').data('type') == 2 && $('#user_ids').val().length == 0) {
                 e.preventDefault();

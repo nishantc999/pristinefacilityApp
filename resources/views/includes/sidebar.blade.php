@@ -43,6 +43,16 @@
         </li>
         <hr>
         @endif
+        @if (ispermission('employee management', 'update') || ispermission('employee management', 'show'))
+        <li>
+            <a href="{{ route('employeemanagement.index') }}">
+                <div class="parent-icon"><i class='bx bx-home-alt'></i>
+                </div>
+                <div class="menu-title">Employee Management</div>
+            </a>
+        </li>
+        <hr>
+        @endif
         @if (ispermission('role management', 'update') || ispermission('role management', 'show'))
         {{-- <li>
 

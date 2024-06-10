@@ -70,22 +70,7 @@
                                 </div>
                               
 
-                                <div class="form-group">
-                                    <label for="shift_id">Select Shift:</label>
-                                    <select name="shift_id" id="shift_id"
-                                        class="form-control @error('shift_id') is-invalid @enderror" required>
-                                        <option value="">Select Shift</option>
-                                        @foreach ($shifts as $shift)
-                                            <option value="{{ $shift->id }}">{{ $shift->name }}
-                                                ({{ $shift->start_time->format('H:i') }} -
-                                                {{ $shift->end_time->format('H:i') }})</option>
-                                        @endforeach
-                                    </select>
-
-                                    @error('shift_id')
-                                        <div class="invalid-feedback" style="display: block">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                        
                               
                                 <div class="form-group">
                                     <label for="father_name">Father's Name:</label>
@@ -150,17 +135,18 @@
                               
                                 <div class="form-group">
                                     <label for="dob">Date of Birth:</label>
-                                    <input type="date" name="dob"
-                                        class="form-control @error('dob') is-invalid @enderror"
+                                    <input type="text" name="dob"
+                                        class="form-control datepicker @error('dob') is-invalid @enderror"
                                         value="{{ old('dob') }}" placeholder="Enter Date of Birth" required>
+                                       
                                     @error('dob')
                                         <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="form-group">
                                     <label for="date_of_joining">Date of Joining:</label>
-                                    <input type="date" name="date_of_joining"
-                                        class="form-control @error('date_of_joining') is-invalid @enderror"
+                                    <input type="text" name="date_of_joining"
+                                        class="form-control datepicker @error('date_of_joining') is-invalid @enderror"
                                         value="{{ old('date_of_joining') }}" placeholder="Enter Date of Joining" required>
                                     @error('date_of_joining')
                                         <div class="invalid-feedback" style="display: block">{{ $message }}</div>
@@ -190,6 +176,52 @@
                                     @error('c_address')
                                         <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                     @enderror
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="state_id" class="form-label">State</label>
+                                    <select name="state_id" id="state_id" class="form-select"
+                                        data-placeholder="Choose State" onchange="get_district_on_state_id(this)" required>
+                                        <option value="">Select</option>
+
+                                        @foreach ($states as $state)
+                                            <option value="{{ $state->id }}">
+                                                {{ $state->state_title }}</option>
+                                        @endforeach
+                                    </select>
+                                        @error('state_id')
+                                            <div class="invalid-feedback" style="display: block">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="district_id" class="form-label">District</label>
+                                    <select name="district_id" id="district_id" class="form-select"
+                                        data-placeholder="Choose State" onchange="get_city_on_district_id(this)" required>
+                                        <option value="">Select</option>
+
+                                    </select>
+
+                                        @error('district_id')
+                                            <div class="invalid-feedback" style="display: block">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="city_id" class="form-label">City</label>
+                                    <select name="city_id" id="city_id" class="form-select"
+                                        data-placeholder="Choose State" required>
+                                        <option value="">Select</option>
+                                    </select>
+                                        @error('city_id')
+                                            <div class="invalid-feedback" style="display: block">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+
                                 </div>
                                 <div class="form-group">
                                     <label for="total_experience">Total Experience:</label>
@@ -242,7 +274,7 @@
                                         <label for="shift_id">Select Client:</label>
                                         <select name="client_id" id="client_id"
                                             class="form-control @error('client_id') is-invalid @enderror" 
-                                            onchange="get_shift_wise_site(this)">
+                                            >
                                             <option value="">Select Client</option>
                                             @foreach ($clients as $shift)
                                                 <option value="{{ $shift->id }}">{{ $shift->name }}</option>
@@ -250,6 +282,22 @@
                                         </select>
     
                                         @error('client_id')
+                                            <div class="invalid-feedback" style="display: block">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="shift_id">Select Shift:</label>
+                                        <select name="shift_id" id="shift_id"
+                                            class="form-control @error('shift_id') is-invalid @enderror" onchange="get_shift_wise_site(this)">
+                                            <option value="">Select Shift</option>
+                                            {{-- @foreach ($shifts as $shift)
+                                                <option value="{{ $shift->id }}">{{ $shift->name }}
+                                                    ({{ $shift->start_time->format('H:i') }} -
+                                                    {{ $shift->end_time->format('H:i') }})</option>
+                                            @endforeach --}}
+                                        </select>
+    
+                                        @error('shift_id')
                                             <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -294,9 +342,9 @@
                                                 </div>
                                             @enderror
 
-                                            <input type="date" name="family_detail[0][dob]"
-                                                class="form-control mb-2 @error('family_detail.0.dob') is-invalid @enderror"
-                                                value="{{ old('family_detail.0.dob') }}" required>
+                                            <input type="text" name="family_detail[0][dob]"
+                                                class="form-control datepicker mb-2 @error('family_detail.0.dob') is-invalid @enderror"
+                                                value="{{ old('family_detail.0.dob') }}" placeholder="Enter Date of Birth" required>
                                             @error('family_detail.0.dob')
                                                 <div class="invalid-feedback" style="display: block">{{ $message }}
                                                 </div>
@@ -340,15 +388,21 @@
 
                                 <div class="form-group">
                                     <label for="documents">Documents:</label>
-                                    <input type="file" name="documents[adhar_card]" class="form-control mb-2"
+                                    <br>
+                                    <label for="documents">Aadhar card:</label>
+                                    <input type="file" name="aadhar_card" class="form-control mb-2"
                                         accept="image/*,.pdf">
-                                    <input type="file" name="documents[pan_card]" class="form-control mb-2"
+                                    <label for="documents">Pan card:</label>
+                                    <input type="file" name="pan_card" class="form-control mb-2"
                                         accept="image/*,.pdf">
-                                    <input type="file" name="documents[passbook]" class="form-control mb-2"
+                                        <label for="documents">passbook:</label>
+                                    <input type="file" name="passbook" class="form-control mb-2"
                                         accept="image/*,.pdf">
-                                    <input type="file" name="documents[policy_verification]" class="form-control mb-2"
+                                        <label for="documents">Police verification:</label>
+                                    <input type="file" name="police_verification" class="form-control mb-2"
                                         accept="image/*,.pdf">
-                                    <input type="file" name="documents[medical]" class="form-control mb-2"
+                                        <label for="documents">Medical:</label>
+                                    <input type="file" name="medical" class="form-control mb-2"
                                         accept="image/*,.pdf">
                                 </div>
                                 <div class="form-group">
@@ -399,10 +453,38 @@
 @endsection
 @push('script')
     <script>
+    $( '#client_id' ).select2( {
+        theme: "bootstrap-5",
+        width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+        placeholder: $( this ).data( 'placeholder' ),
+    } );
+$(document).ready(function() {
+        $('#client_id').on('change', function() {
+            var clientId = $(this).val();
+            if (clientId) {
+                $.ajax({
+                    url: '/get-shifts/' + clientId,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#shift_id').empty();
+                        $('#shift_id').append('<option value="">Select Shift</option>');
+                        $.each(data, function(key, value) {
+                            $('#shift_id').append('<option value="' + value.id + '">' + value.name + ' ('+value.start_time +' - '+value.end_time+')'+'</option>');
+                        });
+                    }
+                });
+            } else {
+                $('#shift_id').empty();
+                $('#shift_id').append('<option value="">Select Shift</option>');
+            }
+        });
+    });
         function get_shift_wise_site(e) {
-            id = e.value;
+            // id = e.value;
           
             var shiftId = $('#shift_id').val();
+            var id = $('#client_id').val();
             if (id != null) {
                 $.ajax({
                     type: "get",
@@ -470,7 +552,7 @@
 
                 newEntry.innerHTML = `
                 <input type="text" name="family_detail[${familyDetailIndex}][name]" class="form-control mb-2" placeholder="Enter Name" required>
-                <input type="date" name="family_detail[${familyDetailIndex}][dob]" class="form-control mb-2" required>
+                <input type="text" name="family_detail[${familyDetailIndex}][dob]" class="form-control mb-2 datepicker" placeholder="Enter Date of Birth" required>
                 <input type="text" name="family_detail[${familyDetailIndex}][age]" class="form-control mb-2" placeholder="Enter Age" required>
                 <input type="text" name="family_detail[${familyDetailIndex}][sex]" class="form-control mb-2" placeholder="Enter Sex" required>
                 <input type="text" name="family_detail[${familyDetailIndex}][relationship]" class="form-control mb-2" placeholder="Enter Relationship" required>
@@ -478,7 +560,7 @@
             `;
 
                 container.appendChild(newEntry);
-
+                flatpickr(newEntry.querySelector('.datepicker'));
                 newEntry.querySelector('.remove-family-detail').addEventListener('click', function() {
                     newEntry.remove();
                 });

@@ -16,10 +16,10 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('email')->nullable();
             $table->string('emp_code')->nullable();
-            $table->integer('site_id')->nullable();
-            $table->integer('client_id')->nullable();
-            $table->integer('area_id')->nullable();
-            $table->integer('shift_id')->nullable();
+            $table->unsignedBigInteger('site_id')->nullable();
+            $table->unsignedBigInteger('client_id')->nullable();
+            $table->unsignedBigInteger('area_id')->nullable();
+            $table->unsignedBigInteger('shift_id')->nullable();
             $table->string('father_name')->nullable();
             $table->string('mother_name')->nullable();
             $table->string('gender')->nullable();
@@ -29,9 +29,7 @@ return new class extends Migration
             $table->boolean('registration_status')->default(0);
             $table->string('dob')->nullable();
             $table->string('date_of_joining')->nullable();
-            $table->string('mobile_no')->nullable();
-            $table->string('p_address',700)->nullable();
-            $table->string('c_address',700)->nullable();
+            $table->string('mobile_no')->nullable();    
             $table->string('total_experience')->nullable();
             $table->string('qualification')->nullable();
             $table->string('designation')->nullable();
@@ -40,7 +38,7 @@ return new class extends Migration
             $table->decimal('salary', 8, 2);
             $table->boolean('status')->default(1);
             $table->json('family_detail')->default(json_encode([]));
-            $table->json('documents')->default(json_encode([]));
+            // $table->json('documents')->default(json_encode([]));
             $table->timestamps();
         });
     }

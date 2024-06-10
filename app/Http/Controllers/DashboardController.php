@@ -54,7 +54,7 @@ class DashboardController extends Controller
 
         if ($request->hasFile('profile')) {
             $imageName = time() . '.' . $request->profile->extension();
-            $request->profile->move('assets/slip', $imageName);
+            $request->profile->move('assets/images/profile', $imageName);
             $user->profile = $imageName;
             // $imageName = uniqid() . '_' . time() . '.' . $request->file('profile')->getClientOriginalExtension();
             // $request->file('profile')->storeAs('uploads', $imageName, 'public');
