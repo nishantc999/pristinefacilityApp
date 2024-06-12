@@ -11,10 +11,10 @@ class RoleController extends Controller
 {
     public function __construct()
     {
-         $this->middleware('permission:role management,create')->only(['create','store']);
+         $this->middleware('permission:role management,create')->only(['create','store','feildexecutiveStore','feildexecutiveCreate']);
          $this->middleware('permission:role management,delete')->only(['destroy']);
-         $this->middleware('permission:role management,show')->only(['index']);
-         $this->middleware('permission:role management,update')->only(['edit','update','status']);
+         $this->middleware('permission:role management,show')->only(['index','feildexecutiveIndex']);
+         $this->middleware('permission:role management,update')->only(['edit','update','status','feildexecutiveEdit','feildexecutiveUpdate']);
     }
     public function index()
     {
@@ -135,7 +135,7 @@ class RoleController extends Controller
         if($user){
             return response()->json(['success' => false,'message'=>'You cannot delete the role because it is assigned to a user']);
         }else{
-            Roles::whereId($id)->delete();
+            Roles::whereId($id)->whereNot('id',1)->whereNot('id',2)->whereNot('id',3)->delete();
             return response()->json(['success' => true, 'message' => 'Role deleted successfully']);
         }
     }

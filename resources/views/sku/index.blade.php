@@ -48,8 +48,8 @@
                     </div> --}}
 
                     <div class="ms-auto">
-                        <a href="{{route('sku.create')}}" class="btn btn-primary radius-30 mt-2 mt-lg-0"><i class="bx bxs-plus-square"></i>Add New Row SKU</a>
-                        {{-- <a href="{{route('sku.finished.create')}}" class="btn btn-primary radius-30 mt-2 mt-lg-0"><i class="bx bxs-plus-square"></i>Add New Finished SKU</a> --}}
+                        <a href="{{route('sku.create')}}" class="btn btn-primary radius-30 mt-2 mt-lg-0"><i class="bx bxs-plus-square"></i>Add New SKU</a>
+                        
                     </div>
 
 
@@ -92,10 +92,13 @@
                                 {{-- <td><button type="button" class="btn btn-primary btn-sm radius-30 px-4">View Details</button></td> --}}
                                 <td>
                                     <div class="d-flex order-actions">
-
+                                        @if (ispermission('sku management', 'update'))
                                         <a href="{{route('sku.edit',$value->id)}}" class=""><i class='bx bxs-edit'></i></a>
-                                        <button  onclick="Delete({{ $value->id }})" class="btn btn-danger ms-3 rounded border-0" ><i class='bx bxs-trash '></i>
-                                        </button>
+                                        @endif
+                                        @if (ispermission('sku management', 'delete'))
+                                        <a href="javascript:;" class="ms-3" onclick="Deletedata({{$value->id}},'{{route('sku.destroy',$value->id)}}')"
+                                            ><i class='bx bxs-trash text-danger'></i></a>
+                                        @endif
 
                                     </div>
                                 </td>

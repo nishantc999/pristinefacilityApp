@@ -122,12 +122,21 @@
                                         <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="form-group">
+                                <div class="col-md-6">
                                     <label for="nominee_name">Nominee Name:</label>
                                     <input type="text" name="nominee_name"
                                         class="form-control @error('nominee_name') is-invalid @enderror"
                                         value="{{ old('nominee_name') }}" placeholder="Enter Nominee Name">
                                     @error('nominee_name')
+                                        <div class="invalid-feedback" style="display: block">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="nominee_relation">Relationship With Nominee:</label>
+                                    <input type="text" name="nominee_relation"
+                                        class="form-control @error('nominee_relation') is-invalid @enderror"
+                                        value="{{ old('nominee_relation') }}" placeholder="Enter Relationship With Nominee">
+                                    @error('nominee_relation')
                                         <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -273,8 +282,7 @@
                                     <div class="form-group">
                                         <label for="shift_id">Select Client:</label>
                                         <select name="client_id" id="client_id"
-                                            class="form-control @error('client_id') is-invalid @enderror" 
-                                            >
+                                            class="form-control @error('client_id') is-invalid @enderror" >
                                             <option value="">Select Client</option>
                                             @foreach ($clients as $shift)
                                                 <option value="{{ $shift->id }}">{{ $shift->name }}</option>

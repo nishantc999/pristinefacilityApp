@@ -53,6 +53,7 @@ class EmployeeController extends Controller
             'age' => 'nullable|string|max:255',
             'blood_group' => 'nullable|string|max:255',
             'nominee_name' => 'nullable|string|max:255',
+            'nominee_relation' => 'nullable|string|max:255',
             'registration_status' => 'nullable|boolean',
             'dob' => 'required|date',
             'date_of_joining' => 'required|date',
@@ -123,7 +124,8 @@ class EmployeeController extends Controller
             'designation',
             'expertise',
             'salary',
-            'family_detail'
+            'family_detail',
+            'nominee_relation'
         ]);
 
        $employee= Employee::create($data);
@@ -221,6 +223,7 @@ class EmployeeController extends Controller
             'age' => 'nullable|string|max:255',
             'blood_group' => 'nullable|string|max:255',
             'nominee_name' => 'nullable|string|max:255',
+            'nominee_relation' => 'nullable|string|max:255',
             'registration_status' => 'nullable|boolean',
             'dob' => 'required|date',
             'date_of_joining' => 'required|date',
@@ -277,7 +280,8 @@ class EmployeeController extends Controller
             'designation',
             'expertise',
             'salary',
-            'family_detail'
+            'family_detail',
+            'nominee_relation',
         ]);
 
     // Handle document uploads
@@ -347,9 +351,9 @@ class EmployeeController extends Controller
         return redirect()->route('employeemanagement.index')->with('success', 'Employee updated successfully.');
     }
 
-    public function destroy(Employee $employee)
+    public function destroy(string $id)
     {
-        $employee->delete();
+        Employee::whereId($id)->delete();
         return redirect()->route('employeemanagement.index')->with('success', 'Employee deleted successfully.');
     }
 

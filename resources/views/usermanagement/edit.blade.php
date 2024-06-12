@@ -144,7 +144,7 @@
 
                                 <div class="col-md-4">
                                     <label for="state_id" class="form-label">State</label>
-                                    <select name="state_id" id="state_id" class="form-select"
+                                    <select name="state_id" id="state_id" class="form-select @error('state_id') is-invalid @enderror"
                                         data-placeholder="Choose State" onchange="get_district_on_state_id(this)"
                                         required>
                                         <option value="">Select</option>
@@ -164,7 +164,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label for="district_id" class="form-label">District</label>
-                                    <select name="district_id" id="district_id" class="form-select"
+                                    <select name="district_id" id="district_id" class="form-select @error('district_id') is-invalid @enderror"
                                         data-placeholder="Choose State" onchange="get_city_on_district_id(this)" required>
                                         <option value="">Select</option>
                                         @foreach ($districts as $district)
@@ -184,7 +184,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label for="city_id" class="form-label">City</label>
-                                    <select name="city_id" id="city_id" class="form-select"
+                                    <select name="city_id" id="city_id" class="form-select @error('city_id') is-invalid @enderror"
                                         data-placeholder="Choose State" required>
                                         <option value="">Select</option>
                                         @foreach ($cities as $city)
@@ -200,8 +200,64 @@
                                     @enderror
 
                                 </div>
-
-
+                                <div class="card" id="workassignment" 
+                                @if ($data->role_id==2 || $data->role_id==3)
+                                    style="display: flex;"
+                                    @else
+                                    style="display: none;"
+                                @endif
+                                >
+                                    <div class="card-body">
+                                       <h5>Assign Work (optional)</h5>
+                                <div class="row g-2">
+                                    <div class="col-md-4">
+                                        <label for="client_id">Client</label>
+                                        <select name="client_id" id="client_id"
+                                            class="form-control @error('client_id') is-invalid @enderror">
+                                            <option value="">Select Client</option>
+                                            @foreach ($clients as $client)
+                                                <option value="{{ $client->id }}" {{$assignment &&  $assignment->client_id == $client->id ? 'selected' : '' }}>{{ $client->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('client_id')
+                                            <div class="invalid-feedback" style="display: block">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="site_id">Site</label>
+                                        <select name="site_id" id="site_id"
+                                            class="form-control @error('site_id') is-invalid @enderror">
+                                            <option value="">Select Site</option>
+                                            @foreach ($sites as $site)
+                                            <option value="{{ $site->id }}" {{ $assignment && $assignment->site_id == $site->id ? 'selected' : '' }}>{{ $site->name }}</option>
+                                        @endforeach
+                                        </select>
+                                        @error('site_id')
+                                            <div class="invalid-feedback" style="display: block">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="shift_id">Shift</label>
+                                        <select name="shift_id" id="shift_id"
+                                            class="form-control @error('shift_id') is-invalid @enderror">
+                                            <option value="">Select Shift</option>
+                                            @foreach ($shifts as $shift)
+                                            <option value="{{ $shift->id }}" {{$assignment && $assignment->shift_id == $shift->id ? 'selected' : '' }}>{{ $shift->name }}</option>
+                                        @endforeach
+                                        </select>
+                                        @error('shift_id')
+                                            <div class="invalid-feedback" style="display: block">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                </div>
+                                </div>
 
 
 
@@ -298,9 +354,78 @@
             });
         });
 
+        var roleSelect1 = document.getElementById('role_id');
 
+// Add change event listener to the role select element
+roleSelect1.addEventListener('change', function() {
+    // Get the selected role ID
+    var selectedRoleId = this.value;
+
+    // Check if the selected role ID is 2 or 3
+    if (selectedRoleId == 2 || selectedRoleId == 3) {
+        // Show the additional input field for displaying ID
+        document.getElementById('workassignment').style.display = 'flex';
+
+    } else {
+        // Hide the additional input field for displaying ID
+        document.getElementById('workassignment').style.display = 'none';
+    }
+});
+@if (old('role_id'))
+    const oldRoleId = {{ old('role_id') }};
+    const roleSelect = $('#role_id');
+
+
+    if (oldRoleId == 2 || oldRoleId == 3) {
+        document.getElementById('workassignment').style.display = 'flex';
+    }
+@endif
 
         // end
+
+        $(document).ready(function() {
+            $('#client_id').change(function() {
+                var clientId = $(this).val();
+                if (clientId) {
+                    $.ajax({
+                        url: '/assignments/sites/' + clientId,
+                        type: 'GET',
+                        success: function(data) {
+                            $('#site_id').empty().append(
+                                '<option value="">Select Site</option>');
+                            $.each(data, function(key, value) {
+                                $('#site_id').append('<option value="' + value.id +
+                                    '">' + value.name + '</option>');
+                            });
+                        }
+                    });
+                } else {
+                    $('#site_id').empty().append('<option value="">Select Site</option>');
+                    $('#shift_id').empty().append('<option value="">Select Shift</option>');
+                }
+            });
+
+            $('#site_id').change(function() {
+                var siteId = $(this).val();
+                if (siteId) {
+                    $.ajax({
+                        url: '/assignments/shifts/' + siteId,
+                        type: 'GET',
+                        success: function(data) {
+                            $('#shift_id').empty().append(
+                                '<option value="">Select Shift</option>');
+                            $.each(data, function(key, value) {
+                                $('#shift_id').append('<option value="' + value.id +
+                                    '">' + value.name + ' (' + value.start_time +
+                                    ' - ' + value.end_time + ')</option>');
+                            });
+                        }
+                    });
+                } else {
+                    $('#shift_id').empty().append('<option value="">Select Shift</option>');
+                }
+            });
+        });
     </script>
 
  

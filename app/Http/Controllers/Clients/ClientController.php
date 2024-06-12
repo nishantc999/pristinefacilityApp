@@ -109,8 +109,8 @@ class ClientController extends Controller
     public function shifts($id)
     {
         $count = 1;
-        $shifts = Shift::get();
-        // $shifts = Shift::where('client_id', $id)->get();
+        // $shifts = Shift::get();
+        $shifts = Shift::where('client_id', $id)->get();
         return view('clients.profile.shifts.shifts', compact('shifts','id', 'count'));
     }
     public function storeShift(Request $request)

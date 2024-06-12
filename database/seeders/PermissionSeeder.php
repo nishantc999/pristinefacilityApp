@@ -48,6 +48,11 @@ class PermissionSeeder extends Seeder
             'feature_name' => $value,
 
         ]);
+        DB::table('permissions')->insert([
+            'module_name' => 'work assignment',
+            'feature_name' => $value,
+
+        ]);
    
 
       }

@@ -46,7 +46,8 @@
                                         <option value="">Select Role</option>
                                         @foreach ($roles as $role)
                                             <option value="{{ $role->id }}"
-                                                {{ old('role_id') == $role->id ? 'selected' : '' }} data-type="{{ $role->role_type }}">{{ $role->name }}
+                                                {{ old('role_id') == $role->id ? 'selected' : '' }}
+                                                data-type="{{ $role->role_type }}">{{ $role->name }}
                                             </option>
                                         @endforeach
 
@@ -59,22 +60,25 @@
 
                                 </div>
 
-                                <input type="hidden" id="role_type" name="role_type" value="{{ old('role_type', $user->role->role_type ?? '') }}">
+                                <input type="hidden" id="role_type" name="role_type"
+                                    value="{{ old('role_type', $user->role->role_type ?? '') }}">
                                 <div class="col-md-12" id="userIdsContainer" style="display: none;">
-                                   
+
                                     <label for="user_ids" class="form-label">Select Users</label>
-                                    <select multiple class="form-control @error('user_ids') is-invalid @enderror" id="user_ids" name="user_ids[]"data-placeholder="Choose Any">
-										<option></option>
+                                    <select multiple class="form-control @error('user_ids') is-invalid @enderror"
+                                        id="user_ids" name="user_ids[]"data-placeholder="Choose Any">
+                                        <option></option>
                                         <!-- Options will be dynamically populated using JavaScript -->
                                     </select>
                                     <div id="noUsersMessage" class="text-danger mt-2" style="display: none;"></div>
-                                    <span class="invalid-feedback" role="alert" id="user_ids_error" style="display: none;">
+                                    <span class="invalid-feedback" role="alert" id="user_ids_error"
+                                        style="display: none;">
                                         <strong>Please select at least one user.</strong>
                                     </span>
                                     @error('user_ids')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
                                     @enderror
                                 </div>
 
@@ -131,8 +135,8 @@
                                 <div class="col-md-12">
                                     <label for="mobile_no" class="form-label">Address</label>
                                     <input type="text" class="form-control @error('address') is-invalid @enderror"
-                                        name="address" id="mobile_no" placeholder="address" value="{{ old('address') }}"
-                                        required>
+                                        name="address" id="mobile_no" placeholder="address"
+                                        value="{{ old('address') }}" required>
                                     @error('address')
                                         <div class="invalid-feedback" style="display: block">
                                             {{ $message }}
@@ -142,8 +146,10 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label for="state_id" class="form-label">State</label>
-                                    <select name="state_id" id="state_id" class="form-select"
-                                        data-placeholder="Choose State" onchange="get_district_on_state_id(this)" required>
+                                    <select name="state_id" id="state_id"
+                                        class="form-select @error('state_id') is-invalid @enderror"
+                                        data-placeholder="Choose State" onchange="get_district_on_state_id(this)"
+                                        required>
                                         <option value="">Select</option>
 
                                         @foreach ($states as $state)
@@ -151,46 +157,92 @@
                                                 {{ $state->state_title }}</option>
                                         @endforeach
                                     </select>
-                                        @error('state_id')
-                                            <div class="invalid-feedback" style="display: block">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
+                                    @error('state_id')
+                                        <div class="invalid-feedback" style="display: block">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
 
                                 </div>
                                 <div class="col-md-4">
                                     <label for="district_id" class="form-label">District</label>
-                                    <select name="district_id" id="district_id" class="form-select"
+                                    <select name="district_id" id="district_id"
+                                        class="form-select @error('district_id') is-invalid @enderror"
                                         data-placeholder="Choose State" onchange="get_city_on_district_id(this)" required>
                                         <option value="">Select</option>
 
                                     </select>
 
-                                        @error('district_id')
-                                            <div class="invalid-feedback" style="display: block">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
+                                    @error('district_id')
+                                        <div class="invalid-feedback" style="display: block">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
 
                                 </div>
                                 <div class="col-md-4">
                                     <label for="city_id" class="form-label">City</label>
-                                    <select name="city_id" id="city_id" class="form-select"
+                                    <select name="city_id" id="city_id"
+                                        class="form-select @error('city_id') is-invalid @enderror"
                                         data-placeholder="Choose State" required>
                                         <option value="">Select</option>
                                     </select>
-                                        @error('city_id')
+                                    @error('city_id')
+                                        <div class="invalid-feedback" style="display: block">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+
+                                </div>
+                                <div class="card" id="workassignment" style="display: none;">
+                                    <div class="card-body">
+                                       <h5>Assign Work (optional)</h5>
+                                <div class="row g-2">
+                                    <div class="col-md-4">
+                                        <label for="client_id">Client</label>
+                                        <select name="client_id" id="client_id"
+                                            class="form-control @error('client_id') is-invalid @enderror">
+                                            <option value="">Select Client</option>
+                                            @foreach ($clients as $client)
+                                                <option value="{{ $client->id }}">{{ $client->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('client_id')
                                             <div class="invalid-feedback" style="display: block">
                                                 {{ $message }}
                                             </div>
                                         @enderror
-
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="site_id">Site</label>
+                                        <select name="site_id" id="site_id"
+                                            class="form-control @error('site_id') is-invalid @enderror">
+                                            <option value="">Select Site</option>
+                                        </select>
+                                        @error('site_id')
+                                            <div class="invalid-feedback" style="display: block">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="shift_id">Shift</label>
+                                        <select name="shift_id" id="shift_id"
+                                            class="form-control @error('shift_id') is-invalid @enderror">
+                                            <option value="">Select Shift</option>
+                                        </select>
+                                        @error('shift_id')
+                                            <div class="invalid-feedback" style="display: block">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                </div>
                                 </div>
 
 
 
-
-                                
                                 <div class="col-md-12">
                                     <label for="password" class="form-label">Password</label>
                                     <input type="password" class="form-control @error('password') is-invalid @enderror"
@@ -229,111 +281,186 @@
 @endsection
 @push('script')
     <script>
+        // $(document).ready(function () {
+        //         $('#role_id').on('change', function () {
+        //             const selectedRoleId = $(this).val();
+        //             const roleType = $(this).find('option:selected').data('type');
 
-// $(document).ready(function () {
-//         $('#role_id').on('change', function () {
-//             const selectedRoleId = $(this).val();
-//             const roleType = $(this).find('option:selected').data('type');
+        //             if (roleType == 2) {
+        //                 $('#userIdsContainer').show();
+        //                 fetchUsers(selectedRoleId);
+        //             } else {
+        //                 $('#userIdsContainer').hide();
+        //                 $('#noUsersMessage').hide();
+        //             }
+        //         });
 
-//             if (roleType == 2) {
-//                 $('#userIdsContainer').show();
-//                 fetchUsers(selectedRoleId);
-//             } else {
-//                 $('#userIdsContainer').hide();
-//                 $('#noUsersMessage').hide();
-//             }
-//         });
+        //         function fetchUsers(roleId) {
+        //             $.ajax({
+        //                 url: '/get-users-by-role/' + roleId,
+        //                 type: 'GET',
+        //                 success: function (response) {
+        //                     $('#user_ids').empty();
+        //                     $('#noUsersMessage').hide();
 
-//         function fetchUsers(roleId) {
-//             $.ajax({
-//                 url: '/get-users-by-role/' + roleId,
-//                 type: 'GET',
-//                 success: function (response) {
-//                     $('#user_ids').empty();
-//                     $('#noUsersMessage').hide();
+        //                     if (response.users.length > 0) {
+        //                         $.each(response.users, function (index, user) {
+        //                             $('#user_ids').append('<option value="' + user.id + '">' + user.name + '</option>');
+        //                         });
+        //                     } else {
+        //                         $('#noUsersMessage').text('Please create at least 1 user for the role: ' + response.child_role_name).show();
+        //                     }
+        //                 },
+        //                 error: function (xhr, status, error) {
+        //                     console.error(error);
+        //                 }
+        //             });
+        //         }
+        //     });
 
-//                     if (response.users.length > 0) {
-//                         $.each(response.users, function (index, user) {
-//                             $('#user_ids').append('<option value="' + user.id + '">' + user.name + '</option>');
-//                         });
-//                     } else {
-//                         $('#noUsersMessage').text('Please create at least 1 user for the role: ' + response.child_role_name).show();
-//                     }
-//                 },
-//                 error: function (xhr, status, error) {
-//                     console.error(error);
-//                 }
-//             });
-//         }
-//     });
-
-$( '#user_ids' ).select2( {
-        theme: "bootstrap-5",
-        width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
-        placeholder: $( this ).data( 'placeholder' ),
-        closeOnSelect: false,
-    } );
-        $(document).ready(function () {
-        $('#role_id').on('change', function () {
-            const selectedRoleId = $(this).val();
-            const roleType = $(this).find('option:selected').data('type');
-
-            if (roleType == 2) {
-                $('#userIdsContainer').show();
-                fetchUsers(selectedRoleId);
-                $('#user_ids').prop('required', true);
-            } else {
-                $('#userIdsContainer').hide();
-                $('#noUsersMessage').hide();
-                $('#user_ids').prop('required', false);
-                $('#user_ids_error').hide();
-            }
+        $('#user_ids').select2({
+            theme: "bootstrap-5",
+            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+            placeholder: $(this).data('placeholder'),
+            closeOnSelect: false,
         });
+        $(document).ready(function() {
+            $('#role_id').on('change', function() {
+                const selectedRoleId = $(this).val();
+                const roleType = $(this).find('option:selected').data('type');
 
-        function fetchUsers(roleId) {
-            $.ajax({
-                url: '/get-users-by-role/' + roleId,
-                type: 'GET',
-                success: function (response) {
-                    $('#user_ids').empty();
+                if (roleType == 2) {
+                    $('#userIdsContainer').show();
+                    fetchUsers(selectedRoleId);
+                    $('#user_ids').prop('required', true);
+                } else {
+                    $('#userIdsContainer').hide();
                     $('#noUsersMessage').hide();
-               
-                    if (response.users.length > 0) {
-                        $.each(response.users, function (index, user) {
-                            $('#user_ids').append('<option value="' + user.id + '">' + user.name + ' /Mobile No.: '+user.user_detail.mobile_no +'</option>');
-                        });
-                    } else {
-                        $('#noUsersMessage').text('Please create at least 1 user for the role: ' + response.child_role_name).show();
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error(error);
+                    $('#user_ids').prop('required', false);
+                    $('#user_ids_error').hide();
                 }
             });
-        }
+
+            function fetchUsers(roleId) {
+                $.ajax({
+                    url: '/get-users-by-role/' + roleId,
+                    type: 'GET',
+                    success: function(response) {
+                        $('#user_ids').empty();
+                        $('#noUsersMessage').hide();
+
+                        if (response.users.length > 0) {
+                            $.each(response.users, function(index, user) {
+                                $('#user_ids').append('<option value="' + user.id + '">' + user
+                                    .name + ' /Mobile No.: ' + user.user_detail.mobile_no +
+                                    '</option>');
+                            });
+                        } else {
+                            $('#noUsersMessage').text('Please create at least 1 user for the role: ' +
+                                response.child_role_name).show();
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            }
+            @if (old('role_id'))
+                const oldRoleId = {{ old('role_id') }};
+                const roleSelect = $('#role_id');
+                const oldRoleType = roleSelect.find('option:selected').data('type');
+
+                if (oldRoleType == 2) {
+                    fetchUsers(oldRoleId);
+                    userContainer.show();
+                }
+            @endif
+            $('#userForm').on('submit', function(e) {
+                if ($('#role_id').find('option:selected').data('type') == 2 && $('#user_ids').val()
+                    .length == 0) {
+                    e.preventDefault();
+                    $('#user_ids_error').show();
+                } else {
+                    $('#user_ids_error').hide();
+                }
+            });
+        });
+
+
+        var roleSelect1 = document.getElementById('role_id');
+
+        // Add change event listener to the role select element
+        roleSelect1.addEventListener('change', function() {
+            // Get the selected role ID
+            var selectedRoleId = this.value;
+
+            // Check if the selected role ID is 2 or 3
+            if (selectedRoleId == 2 || selectedRoleId == 3) {
+                // Show the additional input field for displaying ID
+                document.getElementById('workassignment').style.display = 'flex';
+
+            } else {
+                // Hide the additional input field for displaying ID
+                document.getElementById('workassignment').style.display = 'none';
+            }
+        });
         @if (old('role_id'))
             const oldRoleId = {{ old('role_id') }};
             const roleSelect = $('#role_id');
-            const oldRoleType = roleSelect.find('option:selected').data('type');
-   
-            if (oldRoleType == 2) {
-                fetchUsers(oldRoleId);
-                userContainer.show();
+
+
+            if (oldRoleId == 2 || oldRoleId == 3) {
+                document.getElementById('workassignment').style.display = 'flex';
             }
         @endif
-        $('#userForm').on('submit', function (e) {
-            if ($('#role_id').find('option:selected').data('type') == 2 && $('#user_ids').val().length == 0) {
-                e.preventDefault();
-                $('#user_ids_error').show();
-            } else {
-                $('#user_ids_error').hide();
-            }
+
+        // end
+
+        // site shift 
+
+        $(document).ready(function() {
+            $('#client_id').change(function() {
+                var clientId = $(this).val();
+                if (clientId) {
+                    $.ajax({
+                        url: '/assignments/sites/' + clientId,
+                        type: 'GET',
+                        success: function(data) {
+                            $('#site_id').empty().append(
+                                '<option value="">Select Site</option>');
+                            $.each(data, function(key, value) {
+                                $('#site_id').append('<option value="' + value.id +
+                                    '">' + value.name + '</option>');
+                            });
+                        }
+                    });
+                } else {
+                    $('#site_id').empty().append('<option value="">Select Site</option>');
+                    $('#shift_id').empty().append('<option value="">Select Shift</option>');
+                }
+            });
+
+            $('#site_id').change(function() {
+                var siteId = $(this).val();
+                if (siteId) {
+                    $.ajax({
+                        url: '/assignments/shifts/' + siteId,
+                        type: 'GET',
+                        success: function(data) {
+                            $('#shift_id').empty().append(
+                                '<option value="">Select Shift</option>');
+                            $.each(data, function(key, value) {
+                                $('#shift_id').append('<option value="' + value.id +
+                                    '">' + value.name + ' (' + value.start_time +
+                                    ' - ' + value.end_time + ')</option>');
+                            });
+                        }
+                    });
+                } else {
+                    $('#shift_id').empty().append('<option value="">Select Shift</option>');
+                }
+            });
         });
-    });
-
-
-
-    // end
         document.addEventListener('DOMContentLoaded', function() {
             let unitOptions = document.querySelectorAll('.unit-option');
 
@@ -360,19 +487,13 @@ $( '#user_ids' ).select2( {
 
 
     <script>
-       
-
-
-
-
-
         document.getElementById("username").addEventListener("keypress", function(event) {
             var usernameInput = event.target.value + event
-            .key; // Get the value of the username input including the newly pressed key
+                .key; // Get the value of the username input including the newly pressed key
 
             // Define a regular expression pattern for valid usernames
             var usernamePattern =
-            /^[a-zA-Z0-9_.]{0,50}$/; // Modified to allow up to 20 characters for real-time validation
+                /^[a-zA-Z0-9_.]{0,50}$/; // Modified to allow up to 20 characters for real-time validation
 
             // Check if the username matches the pattern
             if (!usernamePattern.test(usernameInput)) {
@@ -409,7 +530,7 @@ $( '#user_ids' ).select2( {
             }
         });
     </script>
-       <script>
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             const roleSelect = document.getElementById('role_id');
             const userIdsContainer = document.getElementById('userIdsContainer');

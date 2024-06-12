@@ -10,7 +10,8 @@ use App\Http\Controllers\{
     PrivacyPolicyController,
     ShiftController,
     ClientManagementController,
-    EmployeeController
+    EmployeeController,
+    WorkAssignmentController
 
 
 };
@@ -62,6 +63,9 @@ Route::post('/role-feildexecutive-edit/{id}',[RoleController::class,'feildexecut
     Route::resource('usermanagement', UserManagementController::class);
     Route::get('/user-status',[UserManagementController::class,'status'])->name('user.status');
     Route::get('/get-users-by-role/{roleId}',[UserManagementController::class,'getUsersByRole'])->name('get.users.by.role');
+    Route::get('/assignments/sites/{client_id}', [UserManagementController::class, 'getSites']);
+Route::get('/assignments/shifts/{site_id}', [UserManagementController::class, 'getShifts']);
+    
     // sku management route
 
     Route::resource('sku', SKUController::class);
@@ -87,8 +91,18 @@ Route::post('/role-feildexecutive-edit/{id}',[RoleController::class,'feildexecut
     // Dashboard Routes
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-
-
+    // work assignment 
+    Route::resource('workassignment', WorkAssignmentController::class);
+    Route::post('/client/{clientId}/project-manager/remove', [WorkAssignmentController::class, 'removeProjectManager'])->name('client.removeProjectManager');
+    Route::post('/client/{clientId}/project-manager/add', [WorkAssignmentController::class, 'addProjectManager'])->name('client.addProjectManager');
+    Route::get('/client/{clientId}/shift/{shiftId}/sites', [WorkAssignmentController::class, 'getSites'])->name('client.getSites');
+    Route::get('/avaliable/si', [WorkAssignmentController::class, 'getSI'])->name('client.getSI');
+    Route::post('/client/{clientId}/site/{siteId}/shift/{shiftId}/add-users', [WorkAssignmentController::class, 'addUsers'])->name('client.addUsers');
+    Route::get('/client/{client}/site/{site}/shift/{shiftId}/assigned-users', [WorkAssignmentController::class, 'getAssignedUsers']);
+    Route::post('/client/{client}/site/{site}/shift/{shift}/remove-user', [WorkAssignmentController::class, 'removeUser']);
+    Route::post('/client/{client}/site/{site}/shift/{shift}/remove-users', [WorkAssignmentController::class, 'removeUsers']);
+        // for assign supervisior 
+    Route::get('/avaliable/supervisior', [WorkAssignmentController::class, 'getAvaliableSupervisior'])->name('client.getSupervisior');
 });
 
 // public route

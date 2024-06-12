@@ -8,6 +8,10 @@ use App\Models\State;
 use App\Models\District;
 use App\Models\City;
 use App\Models\UserDetail;
+use App\Models\Client;
+use App\Models\Site;
+use App\Models\Shift;
+use App\Models\UserAssignment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -30,6 +34,17 @@ class UserManagementController extends Controller
     public function index(Request $request)
     {
 
+
+      
+        // $users = User::where('role_id', 3)
+        // ->whereHas('UserAssignment', function ($query) {
+        //     $query->where('shift_id', 2);
+        // })
+        // ->with(['UserAssignment' => function ($query) {
+        //     $query->where('shift_id', 2);
+        // }])
+        // ->get();
+        // dd($users);
         $search_feild['role_id'] = $request->role_id;
         $data = User::with('role')->whereNot('role_id', 0)
 
@@ -61,7 +76,8 @@ class UserManagementController extends Controller
 
         $count = 1;
         $states=State::orderBy('state_title')->get();
-        return view('usermanagement.create', compact('roles', 'count','states'));
+        $clients=Client::where('is_employee',0)->orderBy('name')->get();
+        return view('usermanagement.create', compact('roles', 'count','states','clients'));
     }
 
     /**
@@ -89,13 +105,21 @@ class UserManagementController extends Controller
         if ($role && $role->role_type == 2) {
             $rules['user_ids'] = ['required', 'array', 'min:1'];
         }
-    
+        if ($role && $role->role_type == 3 &&( $request->client_id!=null || $request->site_id!=null ||$request->shift_id!=null)) {
+            $rules['client_id'] = ['required', 'exists:clients,id'];
+            $rules['site_id'] = ['required', 'exists:sites,id'];
+            $rules['shift_id'] = ['required', 'exists:shifts,id'];
+        }  
+
         // Validate the request
         $validated = Validator::make($request->all(), $rules);
     
         if ($validated->fails()) {
             return redirect()->back()->withErrors($validated)->withInput();
         }
+       
+       
+        // dd($request->all());
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -117,6 +141,14 @@ class UserManagementController extends Controller
         // If role_type is 2, attach the selected users
         if ($role && $role->role_type == 2) {
             $user->relatedUsers()->attach($request->user_ids);
+        }    
+        if ($role && $role->role_type == 3 &&( $request->client_id!=null || $request->site_id!=null ||$request->shift_id!=null)) {
+            $assignment = UserAssignment::create([
+                'client_id' => $request->client_id,
+                'site_id' => $request->site_id,
+                'shift_id' => $request->shift_id,
+                'user_id' => $user->id,
+            ]);
         }    
 
         return redirect()->route('usermanagement.index')->with('success', 'User Create Successfully');
@@ -145,12 +177,20 @@ class UserManagementController extends Controller
         
         $districts = District::where('state_id',$data->UserDetail->state_id)->get();
         $cities = City::where('districtid',$data->UserDetail->district_id)->get();
+        $childUsers = [];
         if ( $data->role->role_type == 2) {
             $childUsers = User::where('role_id', $data->role->child_role_id)->get();
         } 
         
-
-        return view('usermanagement.edit', compact('data', 'roles', 'states', 'cities', 'districts', 'childUsers'));
+        $clients=Client::where('is_employee',0)->orderBy('name')->get();
+        $assignment = UserAssignment::where('user_id',$data->id)->first();
+        $sites=[];
+        $shifts=[];
+        if($assignment){
+            $sites = Site::where('client_id', $assignment->client_id)->get();
+            $shifts = Site::find($assignment->site_id)->siteShifts->unique('id');
+        }
+        return view('usermanagement.edit', compact('data', 'roles', 'states', 'cities', 'districts', 'childUsers','assignment','clients','sites','shifts'));
 
 
     }
@@ -161,22 +201,40 @@ class UserManagementController extends Controller
     public function update(Request $request, string $id)
     {
 
-        $request->validate([
-            'name' => 'required|string|max:255',
-            // 'email' => 'required|string|email|max:255|unique:users,email,' . $id,
-            // 'username' => 'required|string|max:255|unique:users,username,' . $id,
-            'role_id' => 'required|exists:roles,id',
-            'user_ids' => 'nullable|array',
-            'user_ids.*' => 'exists:users,id',
-            'state_id' => 'required|exists:state,id',
-            'city_id' => 'required|exists:city,id',
-            'district_id' => 'required|exists:district,id',
-        ]);
+        $rules = [
+            'name' => ['required', 'string', 'max:255'],
+            // 'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            // 'username' => ['required', 'string', 'max:255', 'unique:users,username'],
+            'role_id' => ['required', 'exists:roles,id'],
+            'password' => ['nullable', 'string', 'min:8'],
+            'mobile_no' => ['required', 'numeric', 'digits:10'],
+            'state_id' => ['required', 'exists:state,id'],
+            'city_id' => ['required', 'exists:city,id'],
+            'district_id' => ['required', 'exists:district,id'],
+            'address' => ['required', 'string'],
+        ];
+        $role = Roles::find($request->role_id);
+        if ($role && $role->role_type == 2) {
+            $rules['user_ids'] = ['required', 'array', 'min:1'];
+        }
+        if ($role && $role->role_type == 3 &&( $request->client_id!=null || $request->site_id!=null ||$request->shift_id!=null)) {
+            $rules['client_id'] = ['required', 'exists:clients,id'];
+            $rules['site_id'] = ['required', 'exists:sites,id'];
+            $rules['shift_id'] = ['required', 'exists:shifts,id'];
+        } 
 
+        $validated = Validator::make($request->all(), $rules);
+    
+        if ($validated->fails()) {
+            return redirect()->back()->withErrors($validated)->withInput();
+        }
         $user = User::findOrFail($id);
         $user->name = $request->name;
     
         $user->role_id = $request->role_id;
+        if($request->password!=null){
+            $user->password=bcrypt($request->password);
+        }
         $user->save();
         $role=Roles::whereId($request->role_id)->first();
         // Sync child users
@@ -185,6 +243,24 @@ class UserManagementController extends Controller
         } else {
             $user->relatedUsers()->detach();
         }
+  
+
+
+        if ($role && $role->role_type == 3) {
+            if ($request->client_id && $request->site_id && $request->shift_id) {
+               
+                $user->UserAssignment()->updateOrCreate(
+                    ['user_id' => $user->id],
+                    ['client_id' => $request->client_id, 'site_id' => $request->site_id, 'shift_id' => $request->shift_id]
+                );
+            } else {
+                // If any value is missing, detach the assignment
+                $user->UserAssignment()->delete();
+            }
+        }else{
+            $user->UserAssignment()->delete(); 
+        }
+
 
         // Update user details
         $user->userDetail()->update([
@@ -226,4 +302,17 @@ class UserManagementController extends Controller
     ]);
 }
 
+
+public function getSites($client_id)
+{
+    $sites = Site::where('client_id', $client_id)->get();
+    return response()->json($sites);
+}
+
+public function getShifts($site_id)
+{
+    // $shifts = Shift::where('site_id', $site_id)->get();
+    $shifts = Site::find($site_id)->siteShifts->unique('id');
+    return response()->json($shifts);
+}
 }

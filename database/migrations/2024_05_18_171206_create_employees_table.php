@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('email')->nullable();
             $table->string('emp_code')->nullable();
+            $table->string('profile')->default('user.png');
             $table->unsignedBigInteger('site_id')->nullable();
             $table->unsignedBigInteger('client_id')->nullable();
             $table->unsignedBigInteger('area_id')->nullable();
@@ -26,6 +27,7 @@ return new class extends Migration
             $table->string('age')->nullable();
             $table->string('blood_group')->nullable();
             $table->string('nominee_name')->nullable();
+            $table->string('nominee_relation')->nullable();
             $table->boolean('registration_status')->default(0);
             $table->string('dob')->nullable();
             $table->string('date_of_joining')->nullable();

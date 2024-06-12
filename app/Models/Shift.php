@@ -30,4 +30,18 @@ class Shift extends Model
     {
         return $this->belongsToMany(Area::class, 'site_shift_area')->withTimestamps();
     }
+    public function userAssignments()
+    {
+        return $this->hasMany(UserAssignment::class);
+    }
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_assignments')
+                    ->withPivot('site_id', 'shift_id', 'user_id');
+    }
+    // public function users()
+    // {
+    //     return $this->belongsToMany(UserAssignment::class);
+    // }
+    
 }

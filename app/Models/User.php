@@ -55,4 +55,14 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserDetail::class);
     }
+    public function UserAssignment()
+    {
+        return $this->hasOne(UserAssignment::class);
+    }
+    public function sites()
+    {
+        return $this->belongsToMany(Site::class, 'user_assignments')
+        ->withPivot('site_id', 'shift_id', 'user_id','client_id')
+                    ->withTimestamps();
+    }
 }

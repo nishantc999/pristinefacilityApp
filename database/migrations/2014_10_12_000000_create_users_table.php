@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->bigInteger('role_id')->default(0);
             $table->boolean('status')->default(1);
+            $table->boolean('occupied')->default(0);
             $table->string('profile')->default('user.png');
         
             $table->rememberToken();

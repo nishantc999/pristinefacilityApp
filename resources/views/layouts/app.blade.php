@@ -30,6 +30,8 @@
     <link href="{{ asset('assets/backend/css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/backend/css/icons.css') }}" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet" />
+   
+    <link href="{{ asset('assets/backend/plugins/bs-stepper/css/bs-stepper.css')}}"  rel="stylesheet"/>
     <!-- Theme Style CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" crossorigin="anonymous">
 
@@ -281,7 +283,8 @@ document.getElementById('mobile_no').addEventListener('input', function(event) {
     <script src="{{ asset('assets/backend/plugins/select2/js/select2-custom.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-
+    <script src="{{ asset('assets/backend/plugins/bs-stepper/js/bs-stepper.min.js') }}"></script>
+	<script src="{{ asset('assets/backend/plugins/bs-stepper/js/main.js') }}"></script>
     {{-- date picker  --}}
     <script src="{{ asset('assets/backend/plugins/datetimepicker/js/legacy.js') }}"></script>
     <script src="{{ asset('assets/backend/plugins/datetimepicker/js/picker.js') }}"></script>
