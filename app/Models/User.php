@@ -65,4 +65,10 @@ class User extends Authenticatable
         ->withPivot('site_id', 'shift_id', 'user_id','client_id')
                     ->withTimestamps();
     }
+    public function employees()
+    {
+        return $this->belongsToMany(Employee::class, 'client_employee_shift_site')
+                    
+                    ->withTimestamps();
+    }
 }

@@ -10,8 +10,10 @@ use App\Models\City;
 use App\Models\UserDetail;
 use App\Models\Client;
 use App\Models\Site;
+use App\Models\Employee;
 use App\Models\Shift;
 use App\Models\UserAssignment;
+use App\Models\EmployeeAssignment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -122,6 +124,7 @@ class WorkAssignmentController extends Controller
         $client = Client::findOrFail($clientId);
         $client->project_manager_id = $request->input('user_id');
         $client->save();
+        User::whereId($request->input('user_id'))->update(['occupied'=>1]);
 
         return redirect()->back()->with('success', 'Project Manager added successfully.');
     }
@@ -163,7 +166,7 @@ public function addUsers(Request $request, $clientId, $siteId, $shiftId)
             'user_id' => $userId,
         ]);
     }
-
+     User::whereIn('id',$userIds)->update(['occupied'=>1]);
     return response()->json(['message' => 'Users added successfully.']);
 }
 
@@ -190,7 +193,7 @@ public function addUsers(Request $request, $clientId, $siteId, $shiftId)
                 where('site_id' , $siteId)->
                 where('shift_id' , $shiftId)->
                 where('user_id' , $userId)->delete();
-
+                User::whereId($userId)->update(['occupied'=>0]);
         return response()->json(['message' => 'User removed successfully']);
     }
 
@@ -205,7 +208,7 @@ public function addUsers(Request $request, $clientId, $siteId, $shiftId)
                 where('user_id' , $userId)->delete();
          
         }
-
+        User::whereIn('id',$userIds)->update(['occupied'=>0]);
         return response()->json(['message' => 'Users removed successfully']);
     }
 
@@ -220,5 +223,155 @@ public function getAvaliableSupervisior()
 
     return response()->json(['users' => $users]);
 }
+public function getAssignedSupervisor($clientId, $siteId,$shiftId)
+{
+    
+      // $client = Client::findOrFail($clientId);
+      $shift = Shift::findOrFail($shiftId);
+      $site = Site::findOrFail($siteId);
+
+      $assignedUsers = $site->users()->where('role_id',3)->wherePivot('shift_id', $shiftId)->distinct()
+  ->get();
+      return response()->json(['assignedUsers' => $assignedUsers]);
+}
+// public function addSupervisor(Request $request, $clientId, $siteId, $shiftId)
+// {
+//     $client = Client::findOrFail($clientId);
+//     $site = Site::findOrFail($siteId);
+//     $shift = Shift::findOrFail($shiftId);
+//     $userIds = $request->input('user_id');
+    
+//     // Attach selected users to the site and shift
+//     // $site->users()->attach($userIds, ['shift_id' => $shift->id]);
+//     foreach($userIds as $userId){
+//         UserAssignment::create([
+//             'client_id' => $clientId,
+//             'site_id' => $siteId,
+//             'shift_id' => $shiftId,
+//             'user_id' => $userId,
+//         ]);
+//     }
+
+//     return response()->json(['message' => 'Users added successfully.']);
+// }
+// In your Laravel Controller
+// employee
+    public function getSites1($clientId, $shiftId)
+    {
+        // @foreach ($client->shifts as $shifts )
+        // {{$shifts->sites->unique('id')->count()}}
+        $client = Client::findOrFail($clientId);
+        $shift = Shift::findOrFail($shiftId);
+        $sites = $shift->sites->unique('id');
+    return view('workassignment.partial.site', compact('sites'));
+}
+
+
+
+// public function getAreas(Request $request, $clientId, $siteId, $shiftId)
+// {
+//     $client = Client::findOrFail($clientId);
+//     $site = Site::findOrFail($siteId);
+//     $shift = Shift::findOrFail($shiftId);
+//     // $areas= $site->areas->unique('id');
+//     $areas = $site->areas()->wherePivot('shift_id', $shiftId)->distinct()->get();
+//     return view('workassignment.partial.area', compact('areas'));
+//     // return response()->json(['areas' => $areas]);
+// }
+
+
+
+// employee
+
+  // Ajax request to get supervisors based on client, shift, and site
+  public function getSupervisors($clientId, $shiftId, $siteId)
+  {
+    $shift = Shift::findOrFail($shiftId);
+    $site = Site::findOrFail($siteId);
+
+    $supervisors = $site->users()->where('role_id',3)->wherePivot('shift_id', $shiftId)->distinct()->get();
+    // return response()->json(['assignedUsers' => $assignedUsers]);
+    return view('workassignment.partial.supervisors', compact('supervisors'));
+   
+  }
+
+  // Ajax request to get assigned employees based on client, shift, site, and supervisor
+  public function getAssignedEmployees($clientId, $shiftId, $siteId, $supervisorId)
+  {
+    //   $employees = Employee::where('client_id', $clientId)
+    //                        ->where('shift_id', $shiftId)
+    //                        ->where('site_id', $siteId)
+    //                        ->where('supervisor_id', $supervisorId)
+    //                        ->get();
+    $supervisior=User::findOrFail($supervisorId);
+    $site=Site::findOrFail($siteId);
+    // dd($site->employees->unique('id'));
+    // $employees = $site->employees()->wherePivot('shift_id', $shiftId)->wherePivot('user_id', $supervisorId)->wherePivot('client_id', $clientId)->distinct('employee_id')
+    // ->get();
+    $employees = Employee::whereHas('clients', function ($query) use ($clientId, $shiftId, $siteId, $supervisorId) {
+        $query->where('user_id', $supervisorId);
+    })
+    ->whereHas('sites', function ($query) use ($siteId) {
+        $query->where('site_id', $siteId);
+    })
+    ->whereHas('shifts', function ($query) use ($shiftId) {
+        $query->where('shift_id', $shiftId);
+    })
+    ->get();
+      return response()->json(['employees' => $employees]);
+  }
+
+  // Ajax request to get available employees based on client, shift, site, and supervisor
+  public function getAvailableEmployees()
+  {
+      // Example query to get available employees (replace with your logic)
+      $availableEmployees = Employee::where('occupied', 0)->get();
+
+    
+
+      return response()->json(['employees' => $availableEmployees]);
+  }
+
+  // Ajax request to assign employees to supervisor
+  public function assignEmployees(Request $request)
+  {
+      $supervisorId = $request->supervisor_id;
+      $employeeIds = $request->employee_ids;
+     
+    
+      $shiftId= $request->shiftId;
+      $siteId= $request->siteId;
+      $clientId= $request->clientId;
+    $supervisior=User::findOrFail($supervisorId);
+      $supervisior->employees()->attach($employeeIds, ['client_id' => $clientId, 'shift_id' => $shiftId,'site_id'=>$siteId]);
+    //   foreach ($employeeIds as $employeeId) {
+    //       // Assign employee to supervisor (update supervisor_id in Employee model)
+    //       $employee = Employee::findOrFail($employeeId);
+    //       $employee->supervisor_id = $supervisorId;
+    //       $employee->save();
+    //   }
+    Employee::whereIn('id',$employeeIds)->update(['occupied'=>1]);
+      return response()->json(['success' => true]);
+  }
+
+  // Ajax request to remove assigned employees
+  public function removeEmployees(Request $request)
+  {
+      $employeeIds = $request->employee_ids;
+        foreach($employeeIds as $employeeId){
+            EmployeeAssignment::where('employee_id',$employeeId)->delete();
+           
+        }
+        Employee::whereIn('id',$employeeIds)->update(['occupied'=>0]);
+      // Example code to remove employees (replace with your logic)
+     
+
+      return response()->json(['success' => true]);
+  }
+
+
+
+
+
 
 }

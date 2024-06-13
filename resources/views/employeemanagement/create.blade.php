@@ -277,7 +277,7 @@
                                         <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="form-group card card-body">
+                        {{--        <div class="form-group card card-body">
                                     <h6>Assign Work</h6>
                                     <div class="form-group">
                                         <label for="shift_id">Select Client:</label>
@@ -298,11 +298,7 @@
                                         <select name="shift_id" id="shift_id"
                                             class="form-control @error('shift_id') is-invalid @enderror" onchange="get_shift_wise_site(this)">
                                             <option value="">Select Shift</option>
-                                            {{-- @foreach ($shifts as $shift)
-                                                <option value="{{ $shift->id }}">{{ $shift->name }}
-                                                    ({{ $shift->start_time->format('H:i') }} -
-                                                    {{ $shift->end_time->format('H:i') }})</option>
-                                            @endforeach --}}
+                                      
                                         </select>
     
                                         @error('shift_id')
@@ -314,7 +310,7 @@
                                       
     
                                         <select name="site_id" id="site_id"
-                                            class="form-control @error('site_id') is-invalid @enderror" onchange="getAreaSiteWise(this)">
+                                            class="form-control @error('site_id') is-invalid @enderror" >
                                             <option value="">Select Site</option>
                                         </select>
                                         @error('site_id')
@@ -322,20 +318,20 @@
                                         @enderror
                                     </div>
                                     <div class="form-group">
-                                        <label for="area_id">Select Area:</label>
+                                        <label for="area_id">Select Supervisior:</label>
                                      
     
-                                            <select name="area_id" id="area_id"
-                                            class="form-control @error('area_id') is-invalid @enderror" >
-                                            <option value="">Select Area</option>
+                                            <select name="supervisior_id" id="supervisior_id"
+                                            class="form-control @error('supervisior_id') is-invalid @enderror" >
+                                            <option value="">Select Supervisior</option>
                                         </select>
-                                        @error('area_id')
+                                        @error('supervisior_id')
                                             <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>
 
-                            
+                            --}} 
                                
                                 <div class="form-group">
                                     <label for="family_detail">Family Details:</label>
@@ -497,17 +493,18 @@ $(document).ready(function() {
                 $.ajax({
                     type: "get",
 
-                    url: "{{ route('clientmanagement.getSiteByClientAndShift') }}",
-                    data: {
+                    // url: "{{ route('clientmanagement.getSiteByClientAndShift') }}",
+                    url: '/client/'+id+'/shift/' + shiftId + '/sites',
+                    // data: {
                        
-                        clientId: id,
-                        shiftId: shiftId
-                    },
+                    //     clientId: id,
+                    //     shiftId: shiftId
+                    // },
 
-                    success: function(result) {
+                    success: function(response) {
 
                         $('#site_id').html('<option value="">Select Site</option>');
-                        $.each(result, function(index, site) {
+                        $.each(response.sites, function(index, site) {
                             $('#site_id').append('<option value="' + site.id + '">' + site.name +
                                 '</option>');
                         });
@@ -520,34 +517,34 @@ $(document).ready(function() {
 
         }
    
-        function getAreaSiteWise(e) {
-            id = e.value;
+        // function getsupervisiorSiteWise(e) {
+        //     id = e.value;
         
-            if (id != null) {
-                $.ajax({
-                    type: "get",
+        //     if (id != null) {
+        //         $.ajax({
+        //             type: "get",
 
-                    url: "{{ route('clientmanagement.getAreaSiteWise') }}",
-                    data: {
-                        site_id: id,
+        //             url: "{{ route('clientmanagement.getAreaSiteWise') }}",
+        //             data: {
+        //                 site_id: id,
                      
-                    },
+        //             },
 
-                    success: function(result) {
+        //             success: function(result) {
 
-                        $('#area_id').html('<option value="">Select Site</option>');
-                        $.each(result, function(index, site) {
-                            $('#area_id').append('<option value="' + site.id + '">' + site.name +
-                                '</option>');
-                        });
+        //                 $('#area_id').html('<option value="">Select Site</option>');
+        //                 $.each(result, function(index, site) {
+        //                     $('#area_id').append('<option value="' + site.id + '">' + site.name +
+        //                         '</option>');
+        //                 });
 
 
 
-                    }
-                });
-            }
+        //             }
+        //         });
+        //     }
 
-        }
+        // }
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {

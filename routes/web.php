@@ -103,6 +103,17 @@ Route::get('/assignments/shifts/{site_id}', [UserManagementController::class, 'g
     Route::post('/client/{client}/site/{site}/shift/{shift}/remove-users', [WorkAssignmentController::class, 'removeUsers']);
         // for assign supervisior 
     Route::get('/avaliable/supervisior', [WorkAssignmentController::class, 'getAvaliableSupervisior'])->name('client.getSupervisior');
+    Route::get('/client/{client}/site/{site}/shift/{shiftId}/assigned-supervisor', [WorkAssignmentController::class, 'getAssignedSupervisor']);
+
+
+    // employee
+    Route::get('/client/{clientId}/shift/{shiftId}/sites/blade', [WorkAssignmentController::class, 'getSites1'])->name('client.getSites');
+    
+    Route::get('/get-supervisors/{clientId}/{shiftId}/{siteId}', [WorkAssignmentController::class, 'getSupervisors']);
+Route::get('/get-assigned-employees/{clientId}/{shiftId}/{siteId}/{supervisorId}', [WorkAssignmentController::class, 'getAssignedEmployees']);
+Route::get('/get-available-employees', [WorkAssignmentController::class, 'getAvailableEmployees']);
+Route::post('/assign-employees', [WorkAssignmentController::class, 'assignEmployees']);
+Route::post('/remove-employees', [WorkAssignmentController::class, 'removeEmployees']);
 });
 
 // public route

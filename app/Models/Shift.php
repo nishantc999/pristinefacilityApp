@@ -43,5 +43,11 @@ class Shift extends Model
     // {
     //     return $this->belongsToMany(UserAssignment::class);
     // }
+    public function employees()
+    {
+        return $this->belongsToMany(Employee::class, 'client_employee_shift_site')
+                    
+                    ->withTimestamps();
+    }
     
 }

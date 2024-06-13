@@ -111,6 +111,20 @@
         </li>
         <hr>
         @endif
+        @if (ispermission('work assignment', 'update') || ispermission('work assignment', 'show'))
+        <li>
+
+
+            <a href="{{ route('workassignment.index') }}">
+
+
+                <div class="parent-icon"><i class='bx bx-home-alt'></i>
+                </div>
+                <div class="menu-title">Work Assignment</div>
+            </a>
+        </li>
+        <hr>
+        @endif
         {{-- Manager & Admin & Distributer Sidebar --}}
 
 

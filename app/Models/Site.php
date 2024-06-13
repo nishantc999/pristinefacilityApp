@@ -39,4 +39,10 @@ class Site extends Model
         return $this->belongsToMany(User::class, 'user_assignments')
                     ->withPivot('site_id', 'shift_id', 'user_id','client_id');
     }
+    public function employees()
+    {
+        return $this->belongsToMany(Employee::class, 'client_employee_shift_site')
+                  
+                    ->withTimestamps();
+    }
 }

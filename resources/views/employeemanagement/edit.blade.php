@@ -253,7 +253,7 @@
                                         <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="form-group card card-body">
+                                {{-- <div class="form-group card card-body">
                                     <h6>Assign Work</h6>
                                     <div class="form-group">
                                         <label for="shift_id">Select Client:</label>
@@ -312,7 +312,7 @@
                                             <div class="invalid-feedback" style="display: block">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="form-group">
                                     <label for="family_detail">Family Details:</label>
                                     <div id="family-details-container">

@@ -51,4 +51,11 @@ class Client extends Model
                     ->withPivot('site_id', 'shift_id', 'area_id');
     }
 
+    public function employees()
+    {
+        return $this->belongsToMany(Employee::class, 'client_employee_shift_site')
+                    ->withPivot('shift_id', 'site_id')
+                    ->withTimestamps();
+    }
+
 }

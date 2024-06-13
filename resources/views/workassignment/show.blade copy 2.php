@@ -279,7 +279,7 @@
                                         <form id="assignedUserForm">
                                             @csrf
                                             <div class="table-responsive">
-                                            <table id="assignedUserTable" class="table table-striped table-bordered w-100">
+                                            <table id="assignedUserTable" class="table table-striped table-bordered">
                                                 <thead>
                                                     <tr>
                                                         <th>Select</th>
@@ -309,7 +309,7 @@
                                         <form id="userForm">
                                             @csrf
                                             <div class="table-responsive">
-                                            <table class="table table-striped table-bordered w-100" id="userTable">
+                                            <table class="table table-striped table-bordered">
                                                 <thead>
                                                     <tr>
                                                         <th>Select</th>
@@ -404,7 +404,7 @@
                                         <form id="assignedUserFormsupervisor">
                                             @csrf
                                             <div class="table-responsive">
-                                            <table id="assignedUserTablesupervisor" class="table table-striped table-bordered w-100">
+                                            <table id="assignedUserTablesupervisor" class="table table-striped table-bordered">
                                                 <thead>
                                                     <tr>
                                                         <th>Select</th>
@@ -434,7 +434,7 @@
                                         <form id="userFormsupervisor">
                                             @csrf
                                             <div class="table-responsive">
-                                            <table class="table table-striped table-bordered w-100" id="avaliableSupervisiorTable">
+                                            <table class="table table-striped table-bordered">
                                                 <thead>
                                                     <tr>
                                                         <th>Select</th>
@@ -549,7 +549,7 @@
                                             <form id="assignedEmployeesForm">
                                                 @csrf
                                                 <div class="table-responsive">
-                                                <table class="table table-striped table-bordered w-100" id="assignedEmployeesTable">
+                                                <table class="table table-striped table-bordered">
                                                     <thead>
                                                         <tr>
                                                             <th>Select</th>
@@ -574,7 +574,7 @@
                                             <form id="availableEmployeesForm">
                                                 @csrf
                                                 <div class="table-responsive">
-                                                <table class="table table-striped table-bordered w-100" id="availableEmployeesTable" >
+                                                <table class="table table-striped table-bordered">
                                                     <thead>
                                                         <tr>
                                                             <th>Select</th>
@@ -597,7 +597,36 @@
                                         </div>
                                         @endif
                                     {{-- <div class="row g-3">
-                                      
+                                        <div class="col-12 col-lg-6">
+                                            <label for="Experience1" class="form-label">Experience 1</label>
+                                            <input type="text" class="form-control" id="Experience1"
+                                                placeholder="Experience 1">
+                                        </div>
+                                        <div class="col-12 col-lg-6">
+                                            <label for="Position1" class="form-label">Position</label>
+                                            <input type="text" class="form-control" id="Position1"
+                                                placeholder="Position">
+                                        </div>
+                                        <div class="col-12 col-lg-6">
+                                            <label for="Experience2" class="form-label">Experience 2</label>
+                                            <input type="text" class="form-control" id="Experience2"
+                                                placeholder="Experience 2">
+                                        </div>
+                                        <div class="col-12 col-lg-6">
+                                            <label for="PhoneNumber" class="form-label">Position</label>
+                                            <input type="text" class="form-control" id="PhoneNumber"
+                                                placeholder="Position">
+                                        </div>
+                                        <div class="col-12 col-lg-6">
+                                            <label for="Experience3" class="form-label">Experience 3</label>
+                                            <input type="text" class="form-control" id="Experience3"
+                                                placeholder="Experience 3">
+                                        </div>
+                                        <div class="col-12 col-lg-6">
+                                            <label for="PhoneNumber" class="form-label">Position</label>
+                                            <input type="text" class="form-control" id="PhoneNumber"
+                                                placeholder="Position">
+                                        </div>
                                         <div class="col-12">
                                             <div class="d-flex align-items-center gap-3">
                                                 <button class="btn btn-primary px-4" onclick="stepper2.previous()"><i
@@ -633,60 +662,21 @@
         <script src="{{ asset('assets/backend/plugins/datatable/js/dataTables.bootstrap5.min.js') }}"></script>
         <script>
             $(document).ready(function() {
-                var table1 = $('#example2').DataTable({
+                var table = $('#example2').DataTable({
                     lengthChange: true,
                     // "order": [[0, 'desc']],
                     // buttons: ['copy', 'excel', 'pdf', 'print'] 
                 });
 
-                table1.buttons().container()
+                table.buttons().container()
                     .appendTo('#example2_wrapper .col-md-6:eq(0)');
             });
 
-      
-            var availableEmployeesTable = $('#availableEmployeesTable').DataTable({
-            responsive: true,
-            paging: true,
-            searching: true
-        });
-        availableEmployeesTable.buttons().container()
-        .appendTo('#availableEmployeesTable_wrapper .col-md-6:eq(0)');
-
-        var assignedEmployeesTable = $('#assignedEmployeesTable').DataTable({
-            responsive: true,
-            paging: true,
-            searching: true
-        });
-        assignedEmployeesTable.buttons().container()
-        .appendTo('#assignedEmployeesTable_wrapper .col-md-6:eq(0)');
-        var assignedUserTable = $('#assignedUserTable').DataTable({
-            responsive: true,
-            paging: true,
-            searching: true
-        });
-        assignedUserTable.buttons().container()
-        .appendTo('#assignedEmployeesTable_wrapper .col-md-6:eq(0)');
-        var userTable = $('#userTable').DataTable({
-            responsive: true,
-            paging: true,
-            searching: true
-        });
-        userTable.buttons().container()
-        .appendTo('#userTable_wrapper .col-md-6:eq(0)');
-        var assignedUserTablesupervisor = $('#assignedUserTablesupervisor').DataTable({
-            responsive: true,
-            paging: true,
-            searching: true
-        });
-        assignedUserTablesupervisor.buttons().container()
-        .appendTo('#assignedUserTablesupervisor_wrapper .col-md-6:eq(0)');
-        var avaliableSupervisiorTable = $('#avaliableSupervisiorTable').DataTable({
-            responsive: true,
-            paging: true,
-            searching: true
-        });
-        avaliableSupervisiorTable.buttons().container()
-        .appendTo('#avaliableSupervisiorTable_wrapper .col-md-6:eq(0)');
+            var userTable = $('#userTable').DataTable({
+                "paging": false,
+                "searching": false,
+                "info": false
+            });
         </script>
         <script>
             $(document).ready(function() {
@@ -731,38 +721,25 @@
                     var shiftId = $('input[name="shift_id"]:checked').val();
                     $('#noAssignedUsersMessage').hide();
                     $('#userSelection').show();
-                    
                     $.ajax({
                         type: 'GET',
                         url: '/avaliable/si',
                         success: function(response) {
                             var users = response.users;
-                         
-                            // var userTableHTML = '';
-                            // $.each(users, function(index, user) {
-                            //     userTableHTML += '<tr>';
-                            //     userTableHTML +=
-                            //         '<td><input type="checkbox" name="user_id[]" value="' +
-                            //         user.id + '"></td>';
-                            //     userTableHTML += '<td>' + user.name + '</td>';
-                            //     userTableHTML += '<td>' + user.username + '</td>';
-                            //     userTableHTML += '<td>' + user.email + '</td>';
-
-                            //     userTableHTML += '</tr>';
-                            // });
-                            // $('#userTableBody').html(userTableHTML);
-                            // data table start
-                            $('#userTableBody').empty();
-                            userTable.clear();
+                            userTable.clear().draw();
+                            var userTableHTML = '';
                             $.each(users, function(index, user) {
-                                userTable.row.add([
-                            '<input type="checkbox" name="user_id[]" value="' + user.id + '">',
-                            user.name,
-                            user.username,
-                            user.email
-                        ]).draw(false);
-                    });
-                            // data table end
+                                userTableHTML += '<tr>';
+                                userTableHTML +=
+                                    '<td><input type="checkbox" name="user_id[]" value="' +
+                                    user.id + '"></td>';
+                                userTableHTML += '<td>' + user.name + '</td>';
+                                userTableHTML += '<td>' + user.username + '</td>';
+                                userTableHTML += '<td>' + user.email + '</td>';
+
+                                userTableHTML += '</tr>';
+                            });
+                            $('#userTableBody').html(userTableHTML);
                         },
                         error: function(xhr) {
                             console.log(xhr.responseText);
@@ -776,36 +753,24 @@
                         success: function(response) {
                             var assignedUsers = response.assignedUsers;
                             var assignedUserTableBody = $('#assignedUserTableBody');
-                            assignedUserTableBody.empty();
-                            assignedUserTable.clear(); // Clear existing table data
+                            assignedUserTableBody.empty(); // Clear existing table data
                             if (assignedUsers.length == 0) {
                                 $('#noAssignedUsersMessage').show();
                                 $('#assignedUserForm').hide();
                             }
-                            // $.each(assignedUsers, function(index, user) {
-                            //     assignedUserTableBody.append(
-                            //         '<tr>' +
-                            //         '<td><input type="checkbox" name="assigned_user_id[]" value="' +
-                            //         user.id + '"></td>' +
-                            //         '<td>' + user.name + '</td>' +
-                            //         '<td>' + user.username + '</td>' +
-                            //         '<td>' + user.email + '</td>' +
-                            //         '<td><button type="button" class="btn btn-danger btn-sm removeUser" data-user-id="' +
-                            //         user.id + '">Remove</button></td>' +
-                            //         '</tr>'
-                            //     );
-                            // });
-                            // start data table 
-                            assignedUsers.forEach(function(user) {
-                            assignedUserTable.row.add([
-                                '<input type="checkbox" name="assigned_user_id[]" value="' + user.id + '">',
-                                user.name,
-                                user.username,
-                                user.email,
-                                '<button type="button" class="btn btn-danger btn-sm removeUser" data-user-id="' + user.id + '">Remove</button>'
-                            ]).draw(false);
-                        });
-                            // start data table end 
+                            $.each(assignedUsers, function(index, user) {
+                                assignedUserTableBody.append(
+                                    '<tr>' +
+                                    '<td><input type="checkbox" name="assigned_user_id[]" value="' +
+                                    user.id + '"></td>' +
+                                    '<td>' + user.name + '</td>' +
+                                    '<td>' + user.username + '</td>' +
+                                    '<td>' + user.email + '</td>' +
+                                    '<td><button type="button" class="btn btn-danger btn-sm removeUser" data-user-id="' +
+                                    user.id + '">Remove</button></td>' +
+                                    '</tr>'
+                                );
+                            });
                             if (assignedUsers.length > 0) {
 
                                 $('#assignedUserForm').show();
@@ -946,36 +911,25 @@
                     var shiftId = $('#shiftFormsupervisor input[name="shift_id"]:checked').val();
                     $('#noAssignedUsersMessagesupervisor').hide();
                     $('#userSelectionsupervisor').show();
-                   
-                  
                     $.ajax({
                         type: 'GET',
                         url: '/avaliable/supervisior',
                         success: function(response) {
                             var users = response.users;
-                            $('#userTableBodysupervisor').empty();
-                            avaliableSupervisiorTable.clear();
+                           
                             var userTableHTML = '';
-                            // $.each(users, function(index, user) {
-                            //     userTableHTML += '<tr>';
-                            //     userTableHTML +=
-                            //         '<td><input type="checkbox" name="user_id[]" value="' +
-                            //         user.id + '"></td>';
-                            //     userTableHTML += '<td>' + user.name + '</td>';
-                            //     userTableHTML += '<td>' + user.username + '</td>';
-                            //     userTableHTML += '<td>' + user.email + '</td>';
-
-                            //     userTableHTML += '</tr>';
-                            // });
-                            // $('#userTableBodysupervisor').html(userTableHTML);
                             $.each(users, function(index, user) {
-                                avaliableSupervisiorTable.row.add([
-                            '<input type="checkbox" name="user_id[]" value="' + user.id + '">',
-                            user.name,
-                            user.username,
-                            user.email
-                        ]).draw(false);
-                    });
+                                userTableHTML += '<tr>';
+                                userTableHTML +=
+                                    '<td><input type="checkbox" name="user_id[]" value="' +
+                                    user.id + '"></td>';
+                                userTableHTML += '<td>' + user.name + '</td>';
+                                userTableHTML += '<td>' + user.username + '</td>';
+                                userTableHTML += '<td>' + user.email + '</td>';
+
+                                userTableHTML += '</tr>';
+                            });
+                            $('#userTableBodysupervisor').html(userTableHTML);
                         },
                         error: function(xhr) {
                             console.log(xhr.responseText);
@@ -990,33 +944,23 @@
                             var assignedUsers = response.assignedUsers;
                             var assignedUserTableBody = $('#assignedUserTableBodysupervisor');
                             assignedUserTableBody.empty(); // Clear existing table data
-                            assignedUserTablesupervisor.clear(); // Clear existing table data
                             if (assignedUsers.length == 0) {
                                 $('#noAssignedUsersMessagesupervisor').show();
                                 $('#assignedUserFormsupervisor').hide();
                             }
-                            // $.each(assignedUsers, function(index, user) {
-                            //     assignedUserTableBody.append(
-                            //         '<tr>' +
-                            //         '<td><input type="checkbox" name="assigned_user_id[]" value="' +
-                            //         user.id + '"></td>' +
-                            //         '<td>' + user.name + '</td>' +
-                            //         '<td>' + user.username + '</td>' +
-                            //         '<td>' + user.email + '</td>' +
-                            //         '<td><button type="button" class="btn btn-danger btn-sm removeUsersupervisor" data-user-id="' +
-                            //         user.id + '">Remove</button></td>' +
-                            //         '</tr>'
-                            //     );
-                            // });
                             $.each(assignedUsers, function(index, user) {
-                                assignedUserTablesupervisor.row.add([
-                                '<input type="checkbox" name="assigned_user_id[]" value="' + user.id + '">',
-                                user.name,
-                                user.username,
-                                user.email,
-                                '<button type="button" class="btn btn-danger btn-sm removeUsersupervisor" data-user-id="' + user.id + '">Remove</button>'
-                            ]).draw(false);
-                        });
+                                assignedUserTableBody.append(
+                                    '<tr>' +
+                                    '<td><input type="checkbox" name="assigned_user_id[]" value="' +
+                                    user.id + '"></td>' +
+                                    '<td>' + user.name + '</td>' +
+                                    '<td>' + user.username + '</td>' +
+                                    '<td>' + user.email + '</td>' +
+                                    '<td><button type="button" class="btn btn-danger btn-sm removeUsersupervisor" data-user-id="' +
+                                    user.id + '">Remove</button></td>' +
+                                    '</tr>'
+                                );
+                            });
                             if (assignedUsers.length > 0) {
 
                                 $('#assignedUserFormsupervisor').show();
@@ -1187,23 +1131,12 @@
                     success: function(response) {
                         
                         $('#assignedEmployeesBody').empty();
-                        assignedEmployeesTable.clear();
                         if (response.employees.length > 0) {
-                            // response.employees.forEach(function(employee) {
-                            //     $('#assignedEmployeesBody').append(
-                            //         '<tr><td><input type="checkbox" name="employee_ids[]" value="' + employee.id + '"></td><td>' + employee.emp_code + '</td><td>' + employee.name + '</td><td>' + employee.email + '</td><td><button type="button" class="btn btn-danger removeEmployee" data-id="' + employee.id + '">Remove</button></td></tr>'
-                            //     );
-                            // });
-                            
                             response.employees.forEach(function(employee) {
-                                assignedEmployeesTable.row.add([
-                                '<input type="checkbox" name="employee_ids[]" value="' + employee.id + '">',
-                                employee.emp_code,
-                                employee.name,
-                                employee.email,
-                                '<button type="button" class="btn btn-danger removeEmployee" data-id="' + employee.id + '">Remove</button>'
-                            ]).draw(false);
-                        });
+                                $('#assignedEmployeesBody').append(
+                                    '<tr><td><input type="checkbox" name="employee_ids[]" value="' + employee.id + '"></td><td>' + employee.emp_code + '</td><td>' + employee.name + '</td><td>' + employee.email + '</td><td><button type="button" class="btn btn-danger removeEmployee" data-id="' + employee.id + '">Remove</button></td></tr>'
+                                );
+                            });
                             $('#assignedEmployees').show();
                             $('#noAssignedEmployeesMessage').hide();
                         } else {
@@ -1222,25 +1155,12 @@
                     type: 'GET',
                     success: function(response) {
                         $('#availableEmployeesBody').empty();
-                        // response.employees.forEach(function(employee) {
-                        //     $('#availableEmployeesBody').append(
-                        //         '<tr><td><input type="checkbox" name="available_employee_ids[]" value="' + employee.id + '"></td><td>' + employee.emp_code + '</td><td>' + employee.name + '</td><td>' + employee.email + '</td></tr>'
-                        //     );
-                        // });
+                        response.employees.forEach(function(employee) {
+                            $('#availableEmployeesBody').append(
+                                '<tr><td><input type="checkbox" name="available_employee_ids[]" value="' + employee.id + '"></td><td>' + employee.emp_code + '</td><td>' + employee.name + '</td><td>' + employee.email + '</td></tr>'
+                            );
+                        });
                         $('#availableEmployees').show();
-                        // data table 
-           
-    
-                 availableEmployeesTable.clear();
-                response.employees.forEach(function(employee) {
-                        availableEmployeesTable.row.add([
-                            '<input type="checkbox" name="available_employee_ids[]" value="' + employee.id + '">',
-                            employee.emp_code,
-                            employee.name,
-                            employee.email
-                        ]).draw(false);
-                    });
-                     // data table end
                     }
                 });
             });
