@@ -11,7 +11,8 @@ use App\Http\Controllers\{
     ShiftController,
     ClientManagementController,
     EmployeeController,
-    WorkAssignmentController
+    WorkAssignmentController,
+    InventoryManagementController,
 
 
 };
@@ -115,6 +116,9 @@ Route::get('/get-assigned-employees/{clientId}/{shiftId}/{siteId}/{supervisorId}
 Route::get('/get-available-employees', [WorkAssignmentController::class, 'getAvailableEmployees']);
 Route::post('/assign-employees', [WorkAssignmentController::class, 'assignEmployees']);
 Route::post('/remove-employees', [WorkAssignmentController::class, 'removeEmployees']);
+Route::get('inventory/bill/{id}', [InventoryManagementController::class, 'bill_get'])->name("inventory.bill_get");
+Route::resource('inventory', InventoryManagementController::class);
+Route::get('/inventorymeasure', [InventoryManagementController::class, 'inventorymeasure'])->name('inventorymeasure');
 });
 
 // public route
@@ -179,6 +183,7 @@ Route::get('/privacy-policy', [PrivacyPolicyController::class, 'privacy_policy']
     // Assign employees to a site
     Route::post('/sites/assign-employees', [ClientController::class, 'assignEmployees'])->name('sites.assign-employees');
     Route::get('/checklist/{id}/qr-code', [ClientController::class, 'generateQrCode'])->name('checklist.qr-code');
+
 
 
 });

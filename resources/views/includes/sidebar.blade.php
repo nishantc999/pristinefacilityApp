@@ -125,6 +125,23 @@
         </li>
         <hr>
         @endif
+        @if (ispermission('inventory management', 'update') || ispermission('inventory management', 'show'))
+        <li>
+            <a href="javascript:;" class="has-arrow">
+                <div class="parent-icon"><i class='bx bx-home-alt'></i>
+                </div>
+                <div class="menu-title">Inventory</div>
+            </a>
+            <ul>
+                <li> <a href="{{ route('inventory.index') }}"><i class='bx bx-radio-circle'></i>Inward</a>
+                </li>
+                <li> <a href="{{ route('inventorymeasure') }}"><i class='bx bx-radio-circle'></i>Inventory</a>
+                </li>
+                
+            </ul>
+        </li>
+        <hr>
+        @endif
         {{-- Manager & Admin & Distributer Sidebar --}}
 
 

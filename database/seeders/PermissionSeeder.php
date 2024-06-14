@@ -53,6 +53,11 @@ class PermissionSeeder extends Seeder
             'feature_name' => $value,
 
         ]);
+        DB::table('permissions')->insert([
+            'module_name' => 'inventory management',
+            'feature_name' => $value,
+
+        ]);
    
 
       }

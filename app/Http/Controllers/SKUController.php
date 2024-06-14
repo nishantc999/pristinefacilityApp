@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\City;
 use App\Models\SKU;
+use App\Models\InventoryMeasure;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Validator;
 class SKUController extends Controller
 {
 
@@ -83,7 +84,10 @@ class SKUController extends Controller
         SKU::create($data);
 
         // Redirect back with success message
-
+        $skuData = $request->only(['sku','label']); // Replace 'other_field_1', 'other_field_2' with your actual field names
+        $skuData['sku_label'] = $request -> sku;
+        if($request->hasFile('image')){$skuData['image'] = $imageName;}
+$inventory = InventoryMeasure::create($skuData);
         return redirect()->route('sku.index')->with('success', 'SKU created successfully!');
     }
 
@@ -153,7 +157,19 @@ class SKUController extends Controller
         // Update the record
 
         SKU::whereId($id)->update($data);
+        $skuSku = $request -> sku;
+        $inventory = InventoryMeasure::where('sku_label', $skuSku);
 
+        $updateData = [
+            'sku_label' => $request->sku,
+            'label' => $request->label,
+        ];
+        
+        if (isset($data['image'])) {
+            $updateData['image'] = $data['image'];
+        }
+        
+        $inventory->update($updateData);
         // Redirect back with success message
         return redirect()->route('sku.index')->with('success', 'SKU updated successfully!');
     }
@@ -169,7 +185,11 @@ class SKUController extends Controller
 
             // Delete the SKU
             // $sku->update(['is_delete' => 1]);
-
+            $InventoryMeasure = InventoryMeasure::where('sku_label', $sku->sku)->first();
+            if($InventoryMeasure){
+                $InventoryMeasure->delete();
+            }
+            $sku->delete();
             // Return success response
             return response()->json(['success' => true, 'message' => 'SKU deleted successfully']);
         } catch (\Exception $e) {
