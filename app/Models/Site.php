@@ -12,6 +12,7 @@ class Site extends Model
     {
         return $this->hasMany(Checklist::class);
     }
+
     public function shifts()
     {
         return $this->belongsToMany(Shift::class, 'site_shift_area')->withPivot('client_id', 'area_id')->withTimestamps();

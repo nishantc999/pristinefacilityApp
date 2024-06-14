@@ -15,6 +15,16 @@ class Area extends Model
         return $this->hasMany(Checklist::class);
     }
 
+    public function sites()
+    {
+        return $this->belongsToMany(Site::class, 'site_shift_area')->withPivot('client_id', 'shift_id')->withTimestamps();
+    }
+
+    public function shifts()
+    {
+        return $this->belongsToMany(Shift::class, 'site_shift_area')->withPivot('client_id', 'site_id')->withTimestamps();
+    }
+
     public function client()
     {
         return $this->belongsTo(Client::class);

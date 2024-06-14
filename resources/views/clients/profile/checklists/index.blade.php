@@ -24,6 +24,7 @@
                                             <th>Site</th>
                                             <th>Shift</th>
                                             <th>Area</th>
+                                            <th>QR Code</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
@@ -37,6 +38,7 @@
                                                 <td><span
                                                     class="badge rounded-pill bg-info">{{ $checklist->shift->name ?? 'N/A' }}</span></td>
                                                 <td>{{ $checklist->area->name ?? 'N/A' }}</td>
+                                                <td><a href="{{ route('checklist.qr-code', $checklist->id) }}" target="_blank"><i class='bx bx-qr-scan' ></i>QR Code </a></td>
                                                 <td>
                                                     <div class="form-check-primary form-check form-switch">
                                                         <input class="form-check-input" type="checkbox"

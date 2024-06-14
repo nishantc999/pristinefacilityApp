@@ -17,18 +17,21 @@ class Checklist extends Model
         'status',
     ];
 
-    public function shift()
-    {
-        return $this->belongsTo(Shift::class);
-    }
-
-    // Define the relationship with Area
     public function area()
     {
         return $this->belongsTo(Area::class);
     }
+
     public function site()
     {
         return $this->belongsTo(Site::class);
+    }
+    public function shift()
+    {
+        return $this->belongsTo(Shift::class);
+    }
+    public function getVariablesAttribute($value)
+    {
+        return Variables::whereIn('id', json_decode($value))->get();
     }
 }
