@@ -588,7 +588,7 @@
                                                     </tbody>
                                                 </table>
                                                 </div>
-                                                <button type="button" id="addSelectedEmployees" class="btn btn-success">Add Selected Employees</button>
+                                                <button type="button" id="addSelectedEmployees" class="btn btn-success">Add Employees</button>
                                             </form>
                                         </div>
                                 

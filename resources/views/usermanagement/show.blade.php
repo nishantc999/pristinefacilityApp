@@ -29,70 +29,65 @@
             </div> --}}
             </div>
             <!--end breadcrumb-->
-          
-                <div class="main-body">
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="d-flex flex-column align-items-center text-center">
-                                        <img src="{{asset('assets/images/profile/'.$user->profile)}}" alt="user profile"
-                                            class="rounded-circle p-1 bg-primary" width="110">
-                                        <div class="mt-3">
-                                            <h4>{{ $user->name }}</h4>
-                                            <p class="text-secondary mb-1">Role: {{ $user->role->name }}</p>
-                                            {{-- <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p> --}}
-                                            @if (ispermission('user management', 'update'))
+
+            <div class="main-body">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex flex-column align-items-center text-center">
+                                    <img src="{{ asset('assets/images/profile/' . $user->profile) }}" alt="user profile"
+                                        class="rounded-circle p-1 bg-primary" width="110">
+                                    <div class="mt-3">
+                                        <h4>{{ $user->name }}</h4>
+                                        <p class="text-secondary mb-1">Role: {{ $user->role->name }}</p>
+                                        {{-- <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p> --}}
+                                        @if (ispermission('user management', 'update'))
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <a href="{{ route('usermanagement.edit', $user->id) }}"
                                                         class="btn btn-outline-primary">Edit Profile</a>
                                                 </div>
                                             </div>
-                                            @endif
-                                            {{-- <button class="btn btn-primary">Follow</button>
+                                        @endif
+                                        {{-- <button class="btn btn-primary">Follow</button>
                                             <button class="btn btn-outline-primary">Message</button> --}}
-                                        </div>
                                     </div>
-                                    <hr class="my-4" />
-                                    <ul class="list-group list-group-flush">
-                                        <li
-                                            class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                            <h6 class="mb-0">Username</h6>
-                                            <span class="text-secondary">{{ $user->username }}</span>
-                                        </li>
-                                        <li
-                                            class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                            <h6 class="mb-0">Email</h6>
-                                            <span class="text-secondary">{{$user->email}}</span>
-                                        </li>
-                                        <li
-                                            class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                            <h6 class="mb-0">Mobile No.</h6>
-                                            <span class="text-secondary">{{$user->userDetail->mobile_no}}</span>
-                                        </li>
-                                        <li
-                                            class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                            <h6 class="mb-0">City</h6>
-                                            <span class="text-secondary">{{$user->userDetail->city->name}}</span>
-                                        </li>
-                                        <li
-                                            class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                            <h6 class="mb-0">District</h6>
-                                            <span class="text-secondary">{{$user->userDetail->district->district_title}}</span>
-                                        </li>
-                                        <li
-                                            class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                            <h6 class="mb-0">State</h6>
-                                            <span class="text-secondary">{{$user->userDetail->state->state_title}}</span>
-                                        </li>
-                                 
-                                    </ul>
                                 </div>
+                                <hr class="my-4" />
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                        <h6 class="mb-0">Username</h6>
+                                        <span class="text-secondary">{{ $user->username }}</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                        <h6 class="mb-0">Email</h6>
+                                        <span class="text-secondary">{{ $user->email }}</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                        <h6 class="mb-0">Mobile No.</h6>
+                                        <span class="text-secondary">{{ $user->userDetail->mobile_no }}</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                        <h6 class="mb-0">City</h6>
+                                        <span class="text-secondary">{{ $user->userDetail->city->name }}</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                        <h6 class="mb-0">District</h6>
+                                        <span
+                                            class="text-secondary">{{ $user->userDetail->district->district_title }}</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                        <h6 class="mb-0">State</h6>
+                                        <span class="text-secondary">{{ $user->userDetail->state->state_title }}</span>
+                                    </li>
+
+                                </ul>
                             </div>
                         </div>
-                        <div class="col-lg-8">
-                            {{-- <div class="card">
+                    </div>
+                    <div class="col-lg-8">
+                        {{-- <div class="card">
                                 <div class="card-body">
                                     <div class="row mb-3">
                                         <div class="col-sm-3">
@@ -144,31 +139,32 @@
                                 </div>
                             </div> --}}
 
-                            @if($user->role->role_type==2)
+                        @if ($user->role->role_type == 2)
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="card">
                                         <div class="card-body">
-                                            <h5 class="d-flex align-items-center mb-3">No. of {{$user->role->childRole->name??''}} Under :{{$user->name}}</h5>
+                                            <h5 class="d-flex align-items-center mb-3">No. of
+                                                {{ $user->role->childRole->name ?? '' }} Under :{{ $user->name }}</h5>
                                             <div class="table-responsive">
                                                 <table class="table mb-0" id="example2">
                                                     <thead class="table-light">
                                                         <tr>
                                                             {{-- <th>ID#</th> --}}
                                                             <th>Name</th>
-                                                      
+
                                                             <th>Role</th>
                                                             <th>Username</th>
-                                                           
+
                                                             <th>Email</th>
                                                             <th>Contact No.</th>
-                                                            
+
                                                             <th>City</th>
                                                             <th>State</th>
                                                             <th>Profile</th>
-                        
-                                                         
-                                                        
+
+
+
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -183,37 +179,184 @@
                                                                     </div>
                                                                 </td> --}}
                                                                 <td>{{ $value->name }}</td>
-                        
-                        
-                                                              
-                                                                <td>{{ $value->role->name ??''}}</td>
-                                                               
+
+
+
+                                                                <td>{{ $value->role->name ?? '' }}</td>
+
                                                                 <td>{{ $value->username }}</td>
                                                                 <td>{{ $value->email }}</td>
-                                                                <td>{{ $value->userDetail->mobile_no??'' }}</td>
-                                                                
+                                                                <td>{{ $value->userDetail->mobile_no ?? '' }}</td>
+
                                                                 <td>{{ $value->userDetail->city->name ?? '' }}</td>
-                                                                <td>{{ $value->userDetail->state->state_title??'' }}</td>
-                                                                <td><a href="{{route('usermanagement.show',$value->id)}}" class="btn btn-primary btn-sm radius-30 px-4">View</a></td>
-                                                           
-            
+                                                                <td>{{ $value->userDetail->state->state_title ?? '' }}</td>
+                                                                <td><a href="{{ route('usermanagement.show', $value->id) }}"
+                                                                        class="btn btn-primary btn-sm radius-30 px-4">View</a>
+                                                                </td>
+
+
                                                             </tr>
                                                         @endforeach
                                                     </tbody>
                                                 </table>
                                             </div>
-                                       
-                                       
+
+
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            @endif
-                           
-                        </div>
+                        @endif
+                        @if ($user->role_id == 1)
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="d-flex align-items-center mb-3">Work Detail</h5>
+                                            @if ($client)
+                                                <div class="d-flex flex-column align-items-center text-center">
+
+                                                    <div class="mt-3">
+                                                        <h4>Client Information</h4>
+                                                        <h5>Name: {{ $client->name }}</h5>
+                                                        {{-- <p class="text-secondary mb-1">Mobile No.: {{ $client->detail->mobile_no??''}}</p> --}}
+                                                        {{-- <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p> --}}
+
+                                                        {{-- <div class="row">
+                                                        <div class="col-md-12">
+                                                            <a href="{{ route('usermanagement.edit', $user->id) }}"
+                                                                class="btn btn-outline-primary">Edit Profile</a>
+                                                        </div>
+                                                    </div> --}}
+
+
+                                                    </div>
+
+                                                </div>
+                                                <hr class="my-4" />
+                                                <ul class="list-group list-group-flush">
+                                                    <li
+                                                        class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                        <h6 class="mb-0">Username</h6>
+                                                        <span class="text-secondary">{{ $client->username }}</span>
+                                                    </li>
+                                                    <li
+                                                        class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                        <h6 class="mb-0">Email</h6>
+                                                        <span class="text-secondary">{{ $client->email }}</span>
+                                                    </li>
+                                                    <li
+                                                        class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                        <h6 class="mb-0">Mobile No.</h6>
+                                                        <span
+                                                            class="text-secondary">{{ $client->detail->mobile_no }}</span>
+                                                    </li>
+                                                    <li
+                                                        class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                        <h6 class="mb-0">City</h6>
+                                                        <span
+                                                            class="text-secondary">{{ $client->detail->city->name }}</span>
+                                                    </li>
+                                                    <li
+                                                        class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                        <h6 class="mb-0">District</h6>
+                                                        <span
+                                                            class="text-secondary">{{ $client->detail->district->district_title }}</span>
+                                                    </li>
+                                                    <li
+                                                        class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                        <h6 class="mb-0">State</h6>
+                                                        <span
+                                                            class="text-secondary">{{ $client->detail->state->state_title }}</span>
+                                                    </li>
+
+                                                </ul>
+                                                @else
+                                                <h4>The user has not been assigned any work yet.</h4>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                        @if ($user->role_id == 2 || $user->role_id == 3)
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="d-flex align-items-center mb-3">Work Detail</h5>
+                                            {{-- @dd($user->UserAssignment->client); --}}
+                                            @if ($user->UserAssignment)
+                                                <div class="d-flex flex-column align-items-center text-center">
+
+                                                    <div class="mt-3">
+                                                       
+                                                        <h5>Client Name: {{ $user->UserAssignment->client->name }}</h5>
+                                                        <p class="text-secondary mb-1">Shift: {{ $user->UserAssignment->shift->name??''}}</p>
+                                                        <p class="text-muted font-size-sm">Site: {{ $user->UserAssignment->site->name??''}}</p>
+                                                        <h4>Client Information</h4>
+                                                        {{-- <div class="row">
+                                                        <div class="col-md-12">
+                                                            <a href="{{ route('usermanagement.edit', $user->id) }}"
+                                                                class="btn btn-outline-primary">Edit Profile</a>
+                                                        </div>
+                                                    </div> --}}
+
+
+                                                    </div>
+
+                                                </div>
+                                                <hr class="my-4" />
+                                                <ul class="list-group list-group-flush">
+                                                    <li
+                                                        class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                        <h6 class="mb-0">Username</h6>
+                                                        <span class="text-secondary">{{ $user->UserAssignment->client->username }}</span>
+                                                    </li>
+                                                    <li
+                                                        class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                        <h6 class="mb-0">Email</h6>
+                                                        <span class="text-secondary">{{ $user->UserAssignment->client->email }}</span>
+                                                    </li>
+                                                    <li
+                                                        class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                        <h6 class="mb-0">Mobile No.</h6>
+                                                        <span
+                                                            class="text-secondary">{{ $user->UserAssignment->client->detail->mobile_no }}</span>
+                                                    </li>
+                                                    <li
+                                                        class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                        <h6 class="mb-0">City</h6>
+                                                        <span
+                                                            class="text-secondary">{{ $user->UserAssignment->client->detail->city->name }}</span>
+                                                    </li>
+                                                    <li
+                                                        class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                        <h6 class="mb-0">District</h6>
+                                                        <span
+                                                            class="text-secondary">{{ $user->UserAssignment->client->detail->district->district_title }}</span>
+                                                    </li>
+                                                    <li
+                                                        class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                        <h6 class="mb-0">State</h6>
+                                                        <span
+                                                            class="text-secondary">{{ $user->UserAssignment->client->detail->state->state_title }}</span>
+                                                    </li>
+
+                                                </ul>
+                                                @else
+                                                <h4>The user has not been assigned any work yet.</h4>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
                     </div>
                 </div>
-        
+            </div>
+
         </div>
     </div>
 

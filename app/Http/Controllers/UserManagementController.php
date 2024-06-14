@@ -158,7 +158,12 @@ class UserManagementController extends Controller
     public function show(string $id)
     {
         $user = User::with(['role', 'userDetail.state', 'userDetail.city', 'userDetail.district', 'relatedUsers'])->findOrFail($id);
-            return view('usermanagement.show', compact('user'));
+        $client=null;
+        if($user->role_id==1){
+            $client=Client::where('project_manager_id',$id)->first();
+        }
+
+            return view('usermanagement.show', compact('user','client'));
     }
 
     /**

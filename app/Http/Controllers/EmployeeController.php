@@ -42,7 +42,7 @@ class EmployeeController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|email',
-            'emp_code' => 'nullable|string|max:255',
+            'emp_code' => 'required|string|max:255',
             'site_id' => 'nullable|integer',
             'area_id' => 'nullable|integer',
             'shift_id' => 'nullable|integer',
@@ -104,7 +104,7 @@ class EmployeeController extends Controller
         $data=  $request->only([
             'name',
             'email',
-            'emp_code',
+            // 'emp_code',
             'site_id',
             'area_id',
             'shift_id',
@@ -127,7 +127,8 @@ class EmployeeController extends Controller
             'family_detail',
             'nominee_relation'
         ]);
-
+        $emp_code=Employee::max('emp_code')??1000;
+        $data['emp_code']=$emp_code+1;
        $employee= Employee::create($data);
       
        $employeeDetail = new EmployeeDetail();
