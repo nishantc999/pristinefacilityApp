@@ -16,18 +16,13 @@ class Shift extends Model
         'weekday' => 'json',
     ];
 
-    public function checklists()
-    {
-        return $this->hasMany(Checklist::class);
-    }
-
     public function sites()
     {
-        return $this->belongsToMany(Site::class, 'site_shift_area')->withTimestamps();
+        return $this->belongsToMany(Site::class, 'site_shift_area')->withPivot('client_id', 'area_id')->withTimestamps();
     }
 
     public function areas()
     {
-        return $this->belongsToMany(Area::class, 'site_shift_area')->withTimestamps();
+        return $this->belongsToMany(Area::class, 'site_shift_area')->withPivot('client_id', 'site_id')->withTimestamps();
     }
 }

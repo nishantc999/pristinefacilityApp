@@ -14,6 +14,7 @@ use App\Http\Controllers\{
 
 
 };
+
 use App\Http\Controllers\Clients\ClientController;
 /*
 |--------------------------------------------------------------------------
@@ -150,6 +151,8 @@ Route::get('/privacy-policy', [PrivacyPolicyController::class, 'privacy_policy']
 
     // Assign employees to a site
     Route::post('/sites/assign-employees', [ClientController::class, 'assignEmployees'])->name('sites.assign-employees');
+    Route::get('/checklist/{id}/qr-code', [ClientController::class, 'generateQrCode'])->name('checklist.qr-code');
+
 
 });
 

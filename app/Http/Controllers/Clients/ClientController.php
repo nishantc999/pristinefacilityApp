@@ -17,6 +17,11 @@ use App\Models\SiteShiftAreawithClient;
 use App\Models\Variables;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Writer\PngWriter;
+use Intervention\Image\ImageManagerStatic as Image;
+
 
 class ClientController extends Controller
 {
@@ -109,7 +114,7 @@ class ClientController extends Controller
     public function shifts($id)
     {
         $count = 1;
-        $shifts = Shift::get();
+        $shifts = Shift::where('client_id',$id)->get();
         // $shifts = Shift::where('client_id', $id)->get();
         return view('clients.profile.shifts.shifts', compact('shifts','id', 'count'));
     }
@@ -152,7 +157,21 @@ class ClientController extends Controller
 
     public function storeArea(Request $request){
         $request->validate([
-            'name' => 'required|string|unique:areas,name|max:255',
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                function ($attribute, $value, $fail) use ($request) {
+                    $exists = \DB::table('areas')
+                        ->where('name', $value)
+                        ->where('client_id', $request->input('client_id'))
+                        ->exists();
+
+                    if ($exists) {
+                        $fail('The ' . $attribute . ' has already been taken for the given client.');
+                    }
+                }
+            ],
             'client_id' => 'required|exists:clients,id',
 
         ]);
@@ -405,5 +424,24 @@ public function ChecklistUpdate(Request $request)
         }
     }
 
+    public function generateQrCode($id)
+    {
+        $url = url("/checklist/{$id}");
+
+        // Generate QR code
+        $result = Builder::create()
+            ->writer(new PngWriter())
+            ->data($url)
+            ->size(200)
+            ->margin(10)
+            ->build();
+
+        // Save the QR code to a temporary file
+        $filePath = storage_path("app/public/qr_codes/checklist_{$id}.png");
+        $result->saveToFile($filePath);
+
+        // Return the QR code as a downloadable response
+        return response()->download($filePath, "checklist_{$id}.png")->deleteFileAfterSend(true);
+    }
 
 }
