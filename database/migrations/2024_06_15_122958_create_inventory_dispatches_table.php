@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('inventory_dispatches', function (Blueprint $table) {
             $table->id();
             $table->string('dispatchNumber')->unique();
-            $table->string('sendor')->nullable();
+            $table->string('sender')->nullable();
             $table->unsignedBigInteger('receiver_id')->nullable();
             $table->string('sendingDate')->nullable();
             $table->string('receivingDate')->nullable();

@@ -115,11 +115,11 @@
                                     @enderror
                                 </div>
                             <div class="col-md-12 d-none">
-                                <label for="Sendor" class="form-label">Sendor</label>
-                                <input type="text" name="Sendor"
-                                    class="form-control @error('label') is-invalid @enderror" id="Sendor"
-                                    value="{{$userName}}" placeholder="Sendor" {{ $toshow ? 'readonly' : 'disabled' }}>
-                                @error('Sendor')
+                                <label for="Sender" class="form-label">Sender</label>
+                                <input type="text" name="Sender"
+                                    class="form-control @error('label') is-invalid @enderror" id="Sender"
+                                    value="{{$userName}}" placeholder="Sender" {{ $toshow ? 'readonly' : 'disabled' }}>
+                                @error('Sender')
                                     <div class="invalid-feedback" style="display: block">
                                         {{ $message }}
                                     </div>

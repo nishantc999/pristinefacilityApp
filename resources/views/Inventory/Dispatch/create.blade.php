@@ -97,11 +97,11 @@
                                         @enderror
                                     </div>
                                 <div class="col-md-12 d-none">
-                                    <label for="Sendor" class="form-label ">Sendor</label>
-                                    <input type="text" name="Sendor"
-                                        class="form-control @error('label') is-invalid @enderror" id="Sendor"
+                                    <label for="Sender" class="form-label ">Sender</label>
+                                    <input type="text" name="Sender"
+                                        class="form-control @error('label') is-invalid @enderror" id="Sender"
                                         value="{{$userName}}" readonly>
-                                    @error('Sendor')
+                                    @error('Sender')
                                         <div class="invalid-feedback" style="display: block">
                                             {{ $message }}
                                         </div>

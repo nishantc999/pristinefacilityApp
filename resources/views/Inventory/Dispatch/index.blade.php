@@ -181,7 +181,7 @@ text/x-generic index.blade.php ( HTML document, ASCII text, with very long lines
                                     </div>
                                 </td>
                                 <td>{{$value->dispatchNumber}}</td>
-                                <td>{{$value->sendor}}</td>
+                                <td>{{$value->sender}}</td>
                                 <td>{{$value->receiver ?? "not  yet received"}}</td>
                                 <td>{{$value->sendingDate}}</td>
                                 <td>{{$value->receivingDate?? "not available"}}</td>

@@ -63,11 +63,11 @@ class InventoryDispatchController extends Controller
 $sendingDate = InventoryDispatch::whereNot('sendingDate', "")
 ->where(function ($query) use ($request) {
 })->pluck('sendingDate');
-$sendor = InventoryDispatch::whereNot('sendor', "")
+$sendor = InventoryDispatch::whereNot('sender', "")
 ->where(function ($query) use ($request) {
 })
 
-->pluck('sendor')->unique();
+->pluck('sender')->unique();
         // $data = Inward::latest()->get();
         // $data = RW_Dispatch::latest()->get();
            $shifts=Shift::get();
@@ -232,7 +232,7 @@ if($filteredSkus->count()){}else{
         $data['client_id'] = $request -> client_id;
         $data['shift_id'] = $request -> shift_id;
         $data['receiver_id'] = $request -> user_id;
-        $data['sendor'] = $request->Sendor;
+        $data['sender'] = $request->Sender;
         $data['product_quantity'] = $composition;
         $currentDateTime = date('Y-m-d H:i:s');
         $data['sendingDate'] = date('Y-m-d H:i:s');
@@ -360,7 +360,7 @@ if($filteredSkus->count()){}else{
         $data = $request->only(['dispatchNumber']);
         // dd($data);
         $data['product_quantity'] = $composition;
-        $data['sendor'] = $request -> Sendor;
+        $data['sender'] = $request -> Sender;
         $data['receiver_id'] = $request -> user_id;
         $data['client_id'] = $request -> client_id;
         $data['shift_id'] = $request -> shift_id;

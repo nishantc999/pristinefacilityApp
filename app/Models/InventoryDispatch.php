@@ -10,7 +10,7 @@ class InventoryDispatch extends Model
     use HasFactory;
     protected $fillable = [
         'dispatchNumber',
-        'sendor', 
+        'sender', 
         'receiver_id', 
         'sendingDate', 
         'receivingDate', 
