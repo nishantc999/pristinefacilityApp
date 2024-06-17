@@ -59,13 +59,13 @@ text/x-generic index.blade.php ( HTML document, ASCII text, with very long lines
 
                             <label for="status" class="form-label">Choose Sender</label>
 
-                            <select name="sendor" id="sendor" class="form-select"
+                            <select name="sender" id="sender" class="form-select"
                                 data-placeholder="Choose Distributor">
                                 <option value="">All</option>
-                                    @foreach ($sendor as $sendor)
-                                        <option value="{{ $sendor }}"
-                                            {{ $sendor == $search_feild['sendor'] ? 'selected' : '' }}>
-                                            {{ $sendor }}</option>
+                                    @foreach ($sender as $sender)
+                                        <option value="{{ $sender }}"
+                                            {{ $sender == $search_feild['sender'] ? 'selected' : '' }}>
+                                            {{ $sender }}</option>
                                     @endforeach
 
                             </select>
@@ -517,7 +517,7 @@ $(function() {
         searchformsubmit22();
     });
 });
-var input1 = document.getElementById('sendor');
+var input1 = document.getElementById('sender');
        
        input1.addEventListener('change', function() {
 

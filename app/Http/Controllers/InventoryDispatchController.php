@@ -29,7 +29,7 @@ class InventoryDispatchController extends Controller
     public function index(Request $request)
     {
         $search_feild['sendingDate'] = $request->sendingDate; // Assuming $request->date contains the date range "2024-05-01 to 2024-05-24"
-        $search_feild['sendor'] = $request->sendor;
+        $search_feild['sender'] = $request->sender;
          $search_feild['shift_id'] = $request->shift_id;
         if ($request->shift_id != null) {$users = User::where('shift_id', $request->shift_id)  // Select users where the 'shift_id' column matches the value from the request
     ->latest()  // Orders the results by the created_at column in descending order
@@ -56,7 +56,7 @@ class InventoryDispatchController extends Controller
     if($request->shift_id!=null){
     if ($users ) {
         // Apply the sender filter
-        $query->whereIn('sendor', $users);
+        $query->whereIn('sendor_id', $users);
     }}
         // Get the results
         $data = $query->latest()->orderBy('dispatchNumber','desc')->get();
@@ -64,11 +64,23 @@ class InventoryDispatchController extends Controller
 $sendingDate = InventoryDispatch::whereNot('sendingDate', "")
 ->where(function ($query) use ($request) {
 })->pluck('sendingDate');
-$sendor = InventoryDispatch::whereNot('sender', "")
+$sender = InventoryDispatch::whereNot('sender_id', null)
 ->where(function ($query) use ($request) {
 })
 
-->pluck('sender')->unique();
+->pluck('sender_id')->unique();
+// dd($sendor);
+
+$senders = [];
+foreach($sender as &$send) { // Use reference to modify the actual array elements
+    if($send == 0) {
+        $send = User::whereId(1)->first()->name;
+    } else {
+        $send = User::whereId($send)->first()->name;
+    }
+    array_push($senders,$send);
+}
+$sender = $senders;
         // $data = Inward::latest()->get();
         // $data = RW_Dispatch::latest()->get();
            $shifts=Shift::get();
@@ -77,9 +89,15 @@ $sendor = InventoryDispatch::whereNot('sender', "")
             $dat["receiver"] = $user;
             $dat["client"] = Client::whereId($dat->client_id)->first()->name;
             $dat["shift"] = Shift::whereId($dat->shift_id)->first()->name;
+            if($dat->sender == 0){
+                $dat["sender"] = User::whereId(1)->first()->name;
+            }else{
+                $dat["sender"] = User::whereId($dat->sender)->first()->name;
+            }
+            
            }
         //    dd($data);
-        return view('Inventory.Dispatch.index', ['data' => $data, 'count' => 1, 'search_feild' => $search_feild, "sendingDate"=>$sendingDate,'sendor'=>$sendor,'shifts' => $shifts]);
+        return view('Inventory.Dispatch.index', ['data' => $data, 'count' => 1, 'search_feild' => $search_feild, "sendingDate"=>$sendingDate,'sender'=>$sender,'shifts' => $shifts]);
     }
 
     public function create()
@@ -126,7 +144,7 @@ $skus = $filteredSkus;
 if($filteredSkus->count()){}else{
     return redirect()->route('inventorydispatch.index')->with('failure', 'no more inventory to create!!');
 }
-      $userName = Auth::user()->name;
+      $userName = Auth::user()->id;
     $userName = $userName;
     $clients = Client::select('name','id')->get();
     // $users = 
@@ -248,7 +266,7 @@ if($filteredSkus->count()){}else{
         $data['client_id'] = $request -> client_id;
         $data['shift_id'] = $request -> shift_id;
         $data['receiver_id'] = $request -> user_id;
-        $data['sender'] = $request->Sender;
+        $data['sender'] = Auth::user()->id;
         $data['product_quantity'] = $composition;
         $currentDateTime = date('Y-m-d H:i:s');
         $data['sendingDate'] = date('Y-m-d H:i:s');
@@ -391,7 +409,7 @@ if($filteredSkus->count()){}else{
         $data = $request->only(['dispatchNumber']);
         // dd($data);
         $data['product_quantity'] = $composition;
-        $data['sender'] = $request -> Sender;
+        $data['sender_id'] = Auth::user()->id;
         $data['receiver_id'] = $request -> user_id;
         $data['client_id'] = $request -> client_id;
         $data['shift_id'] = $request -> shift_id;
