@@ -59,7 +59,7 @@
                                 <label for="status" class="form-label">Choose Role</label>
 
                                 <select name="role_id" id="role_id" class="form-select"
-                                    data-placeholder="Choose Distributor">
+                                    data-placeholder="Choose Role" onchange="searchformsubmit22()">
                                   <option value="">All</option>
                                         @foreach ($roles as $role)
                                             <option value="{{ $role->id }}"
@@ -250,19 +250,25 @@
 
 
 
-        var input1 = document.getElementById('role_id');
-        var input2 = document.getElementById('warehouse_id');
-        var input3 = document.getElementById('city_id');
-        input1.addEventListener('change', function() {
+        // var input1 = document.getElementById('role_id');
+        // var input2 = document.getElementById('warehouse_id');
+        // var input3 = document.getElementById('city_id');
+        // input1.addEventListener('change', function() {
 
-            input2.value = null;
-            input3.value = null;
-            searchformsubmit22()
-        });
-        input3.addEventListener('change', function() {
+        //     input2.value = null;
+        //     input3.value = null;
+        //     searchformsubmit22()
+        // });
+        // input3.addEventListener('change', function() {
 
-            input2.value = null;
-            searchformsubmit22()
-        });
+        //     input2.value = null;
+        //     searchformsubmit22()
+        // });
+        $( '#role_id' ).select2( {
+        theme: "bootstrap-5",
+        width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+        placeholder: $( this ).data( 'placeholder' ),
+        allowClear: true
+    } );
     </script>
 @endpush

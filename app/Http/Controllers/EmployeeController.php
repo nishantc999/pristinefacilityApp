@@ -20,6 +20,13 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 class EmployeeController extends Controller
 {
+    public function __construct()
+    {
+         $this->middleware('permission:employee management,create')->only(['create','store']);
+         $this->middleware('permission:employee management,delete')->only(['destroy']);
+         $this->middleware('permission:employee management,show')->only(['index','show']);
+         $this->middleware('permission:employee management,update')->only(['edit','update','status','approveDocument','rejectDocument']);
+    }
     public function index()
     {
         $employees = Employee::latest()->get();

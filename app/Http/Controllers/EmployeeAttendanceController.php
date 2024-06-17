@@ -13,6 +13,15 @@ use Illuminate\Support\Facades\Validator;
 class EmployeeAttendanceController extends Controller
 {
     
+    public function __construct()
+    {
+
+      
+        $this->middleware('permission:employee attendance,show')->only(['employeewiseAttendance','clientwiseAttendance']);
+        
+
+    }
+
     public function employeewiseAttendance(Request $request)
     {
         

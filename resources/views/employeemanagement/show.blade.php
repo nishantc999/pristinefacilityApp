@@ -43,7 +43,7 @@
                                         <p class="text-muted font-size-sm">Employee code: {{ $employee->emp_code }}A</p>
                                         <p class="text-secondary mb-1">Designation: {{ $employee->designation }}</p>
 
-                                        @if (ispermission('user management', 'update'))
+                                        @if (ispermission('employee management', 'update'))
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <a href="{{ route('usermanagement.edit', $employee->id) }}"
@@ -193,7 +193,9 @@
                                                         <th>Document</th>
                                                         <th>View</th>
                                                         <th>Status</th>
+                                                        @if (ispermission('employee management', 'update'))
                                                         <th>Actions</th>
+                                                        @endif
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -210,17 +212,12 @@
                                                             </td>
                                                             <td>{{ $employee->employeeDetail->{$document . '_status'} ?? 'Not Uploaded' }}
                                                             </td>
+                                                            @if (ispermission('employee management', 'update'))
                                                             <td>
                                                                 @if ($employee->employeeDetail->$document)
-                                                                    @if (
-                                                                        $employee->employeeDetail->{$document . '_status'} != 'approved' &&
-                                                                            $employee->employeeDetail->{$document . '_status'} != 'rejected')
-                                                                        <button class="btn btn-success approve-document"
-                                                                            data-document="{{ $document }}"
-                                                                            data-id="{{ $employee->employeeDetail->employee_id }}">Approve</button>
-                                                                        <button class="btn btn-danger reject-document"
-                                                                            data-document="{{ $document }}"
-                                                                            data-id="{{ $employee->employeeDetail->employee_id }}">Reject</button>
+                                                                    @if ($employee->employeeDetail->{$document . '_status'} != 'approved' && $employee->employeeDetail->{$document . '_status'} != 'rejected')
+                                                                        <button class="btn btn-success approve-document" data-document="{{ $document }}" data-id="{{ $employee->employeeDetail->employee_id }}">Approve</button>
+                                                                        <button class="btn btn-danger reject-document" data-document="{{ $document }}" data-id="{{ $employee->employeeDetail->employee_id }}">Reject</button>
                                                                     @else
                                                                         No Actions Available
                                                                     @endif
@@ -228,6 +225,7 @@
                                                                     No Actions Available
                                                                 @endif
                                                             </td>
+                                                            @endif
                                                         </tr>
                                                     @endforeach
                                                 </tbody>
