@@ -15,7 +15,7 @@ use App\Models\UserAssignment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-
+use Yajra\DataTables\Facades\DataTables;
 class UserManagementController extends Controller
 {
     /**
@@ -31,39 +31,96 @@ class UserManagementController extends Controller
         $this->middleware('permission:user management,update')->only(['edit', 'update', 'status']);
 
     }
+    // public function index(Request $request)
+    // {
+
+
+      
+ 
+    //     $search_feild['role_id'] = $request->role_id;
+    //     $data = User::with('role')->whereNot('role_id', 0)
+
+    //         ->where(function ($query) use ($request) {
+    //             if ($request->role_id != null) {
+    //                 $query->where('role_id', $request->role_id);
+    //             }
+
+    //         })
+
+    //         ->latest()->get();
+
+    //     $roles = Roles::whereNot('id', 0)
+    //         ->where(function ($query) use ($request) {
+    //         })
+
+    //         ->get();
+    //     $count = 1;
+    //     return view('usermanagement.index', compact('data', 'count', 'roles', 'search_feild'));
+
+    // }
     public function index(Request $request)
     {
 
 
-      
-        // $users = User::where('role_id', 3)
-        // ->whereHas('UserAssignment', function ($query) {
-        //     $query->where('shift_id', 2);
-        // })
-        // ->with(['UserAssignment' => function ($query) {
-        //     $query->where('shift_id', 2);
-        // }])
-        // ->get();
-        // dd($users);
-        $search_feild['role_id'] = $request->role_id;
-        $data = User::with('role')->whereNot('role_id', 0)
-
-            ->where(function ($query) use ($request) {
-                if ($request->role_id != null) {
-                    $query->where('role_id', $request->role_id);
-                }
-
-            })
-
-            ->latest()->get();
-
-        $roles = Roles::whereNot('id', 0)
+           $roles = Roles::whereNot('id', 0)
             ->where(function ($query) use ($request) {
             })
 
             ->get();
-        $count = 1;
-        return view('usermanagement.index', compact('data', 'count', 'roles', 'search_feild'));
+ 
+        $search_feild['role_id'] = $request->role_id;
+        if ($request->ajax()) {
+            $data = User::with(['role', 'userDetail.city', 'userDetail.state'])
+                ->whereNot('role_id', 0);
+    
+            if ($request->role_id) {
+                $data->where('role_id', $request->role_id);
+            }
+    
+            return Datatables::of($data)
+                ->addIndexColumn()  // This adds the DT_RowIndex column
+                ->addColumn('action', function ($row) {
+                    $editUrl = route('usermanagement.edit', $row->id);
+                    $deleteUrl = "javascript:;";
+    
+                    $actions = ' <div class="d-flex order-actions">';
+                    if (ispermission('user management', 'update')) {
+                        $actions .= "<a href='$editUrl' class='edit'><i class='bx bxs-edit'></i></a>";
+                    }
+                    if (ispermission('user management', 'delete')) {
+                        $actions .= "<a href='$deleteUrl' class='delete ms-3' onclick='Deletedata({$row->id}, \"{$deleteUrl}\")'><i class='bx bxs-trash text-danger'></i></a>";
+                    }
+                     $actions .='</div>';
+                    return $actions;
+                })
+                ->addColumn('status', function ($row) {
+                    $checked = $row->status == 1 ? 'checked' : '';
+                    $statusUrl = route('user.status');
+                    return "<div class='form-check-primary form-check form-switch'>
+                                <input class='form-check-input' type='checkbox' onclick='statuschange(this, \"$statusUrl\")' data-id='$row->id' $checked>
+                            </div>";
+                })
+                
+                ->addColumn('mobile_no', function ($row) {
+                    return $row->userDetail->mobile_no ?? '';
+                })
+                ->addColumn('city', function ($row) {
+                    return $row->userDetail->city->name ?? '';
+                })
+                ->addColumn('state', function ($row) {
+                    return $row->userDetail->state->state_title ?? '';
+                })
+                ->addColumn('view', function ($row) {
+                    $viewUrl = route('usermanagement.show', $row->id);
+                    $view = "<a href='$viewUrl' class='btn btn-primary btn-sm radius-30 px-4'>View</a>";
+                    return $view;
+                })
+                ->rawColumns(['action', 'status', 'view'])
+                ->make(true);
+        }
+    
+        return view('usermanagement.index', compact('roles', 'search_feild'));
+       
 
     }
 
