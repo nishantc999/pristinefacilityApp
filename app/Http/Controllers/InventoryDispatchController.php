@@ -72,7 +72,7 @@ $sendor = InventoryDispatch::whereNot('sendor', "")
         // $data = RW_Dispatch::latest()->get();
            $shifts=Shift::get();
            foreach ($data as $dat){
-            $user = User::whereId($dat->receiver)->first()->name;
+            $user = User::whereId($dat->receiver_id)->first()->name;
             $dat["receiver"] = $user;
 
            }
@@ -229,9 +229,9 @@ if($filteredSkus->count()){}else{
         $number = "1001";}
         // $data["purchase_no"] = $number;
         $data['dispatchNumber'] = $number;
-        $data['client'] = $request -> client;
-        $data['Shift'] = $request -> Shift;
-        $data['receiver'] = $request -> User;
+        $data['client_id'] = $request -> client_id;
+        $data['shift_id'] = $request -> shift_id;
+        $data['receiver_id'] = $request -> user_id;
         $data['sendor'] = $request->Sendor;
         $data['product_quantity'] = $composition;
         $currentDateTime = date('Y-m-d H:i:s');
@@ -308,9 +308,9 @@ if($filteredSkus->count()){}else{
       }
   }
   $clients = Client::select('name','id')->get();
-  $data["user_label"] = Client::whereId($data->client)->first()->name;
-  $data["shift_label"] = Shift::whereId($data->Shift)->first()->name;
-  $data["receiver_label"] = User::whereId($data->receiver)->first()->name . "(".Roles::whereId(User::whereId($data->receiver)->first()->role_id)->first()->name.")";
+  $data["user_label"] = Client::whereId($data->client_id)->first()->name;
+  $data["shift_label"] = Shift::whereId($data->shift_id)->first()->name;
+  $data["receiver_label"] = User::whereId($data->receiver_id)->first()->name . "(".Roles::whereId(User::whereId($data->receiver_id)->first()->role_id)->first()->name.")";
   return view('Inventory.Dispatch.edit', ['defaultSku' => $defaultSku,'skus'=>$skus, 'data'=>$data, 'composition'=>$composition, 'userName'=>$userName, 'defaultdispatchNumber'=>$defaultdispatchNumber,'toshow'=>true,'req'=>"" ,'clients'=>$clients]);
     }
 
@@ -361,9 +361,9 @@ if($filteredSkus->count()){}else{
         // dd($data);
         $data['product_quantity'] = $composition;
         $data['sendor'] = $request -> Sendor;
-        $data['receiver'] = $request -> User;
-        $data['client'] = $request -> client;
-        $data['Shift'] = $request -> Shift;
+        $data['receiver_id'] = $request -> user_id;
+        $data['client_id'] = $request -> client_id;
+        $data['shift_id'] = $request -> shift_id;
         $data['sendingDate'] = date('Y-m-d H:i:s');
 
         // Upload SKU image
@@ -421,7 +421,7 @@ if($filteredSkus->count()){}else{
                 //working//
                 $inventories = [];
                 foreach ($user as $use){
-                    $inventory = InventoryDispatch::where("receiver", $use["id"])->pluck('product_quantity');
+                    $inventory = InventoryDispatch::where("receiver_id", $use["id"])->pluck('product_quantity');
                     if(!$inventory->isEmpty()){
                         array_push($inventories,$inventory);
                     }
@@ -489,7 +489,7 @@ $data = $result;
         
         
 
-        $inventory = InventoryDispatch::where("receiver", $request->receiver)->pluck('product_quantity');
+        $inventory = InventoryDispatch::where("receiver_id", $request->receiver)->pluck('product_quantity');
         if($request->receiver){
          
         

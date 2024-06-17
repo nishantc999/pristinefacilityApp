@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('dispatchNumber')->unique();
             $table->string('sendor')->nullable();
-            $table->string('receiver')->nullable();
+            $table->unsignedBigInteger('receiver_id')->nullable();
             $table->string('sendingDate')->nullable();
             $table->string('receivingDate')->nullable();
-            $table->string('client')->nullable();
-            $table->string('Shift')->nullable();
+            $table->unsignedBigInteger('client_id')->nullable();
+            $table->unsignedBigInteger('shift_id')->nullable();
              $table->string('req')->nullable();
             $table->enum('status', ['dispatched', 'received', 'rejected'])->default('dispatched');
             $table->text('product_quantity')->nullable();

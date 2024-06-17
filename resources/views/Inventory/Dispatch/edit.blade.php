@@ -69,9 +69,9 @@
                             <div class="row mt-4">
                                 <div class="col-md-12">
                                     <label class="form-label" for="client">Clients:</label>
-                                    <select class="form-select @error('client') is-invalid @enderror" id="client" name="client" onchange="shiftfetch(this.value)"
+                                    <select class="form-select @error('client') is-invalid @enderror" id="client" name="client_id" onchange="shiftfetch(this.value)"
                                         required >
-                                        <option value="{{$data->client }}">{{$data->user_label }}</option>
+                                        <option value="{{$data->client_id }}">{{$data->user_label }}</option>
                                         @foreach ($clients as $client)
                                             <option value="{{ $client->id }}" >{{ $client->name }}</option>
                                         @endforeach
@@ -85,9 +85,9 @@
                             <div id="Shifts" class="row mt-4">
                                 <div class="col-md-12">
                                     <label class="form-label" for="Shift">Shifts:</label>
-                                    <select class="form-select @error('Shift') is-invalid @enderror" id="Shift" name="Shift" onchange="userfetch(this.value)"
+                                    <select class="form-select @error('Shift') is-invalid @enderror" id="Shift" name="shift_id" onchange="userfetch(this.value)"
                                         required >
-                                        <option value="{{$data->Shift }}">{{$data->shift_label }}</option>
+                                        <option value="{{$data->shift_id }}">{{$data->shift_label }}</option>
                                         {{-- @foreach ($clients as $client)
                                             <option value="{{ $client->id }}" >{{ $client->name }}</option>
                                         @endforeach --}}
@@ -101,9 +101,9 @@
                             <div id="Users" class="row mt-4">
                                 <div class="col-md-12">
                                     <label class="form-label" for="User">Receiver:</label>
-                                    <select class="form-select @error('User') is-invalid @enderror" id="User" name="User" onchange=""
+                                    <select class="form-select @error('User') is-invalid @enderror" id="User" name="user_id" onchange=""
                                         required >
-                                        <option value="{{$data->receiver }}">{{$data->receiver_label }}</option>
+                                        <option value="{{$data->receiver_id }}">{{$data->receiver_label }}</option>
                                         {{-- @foreach ($clients as $client)
                                             <option value="{{ $client->id }}" >{{ $client->name }}</option>
                                         @endforeach --}}

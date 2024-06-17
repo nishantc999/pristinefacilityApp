@@ -51,7 +51,7 @@
                                 <div class="row mt-4">
                                     <div class="col-md-12">
                                         <label class="form-label" for="client">Clients:</label>
-                                        <select class="form-select @error('client') is-invalid @enderror" id="client" name="client" onchange="shiftfetch(this.value)"
+                                        <select class="form-select @error('client') is-invalid @enderror" id="client" name="client_id" onchange="shiftfetch(this.value)"
                                             required >
                                             <option value="">Select Clients</option>
                                             @foreach ($clients as $client)
@@ -67,7 +67,7 @@
                                 <div id="Shifts" class="row mt-4">
                                     <div class="col-md-12">
                                         <label class="form-label" for="Shift">Shifts:</label>
-                                        <select class="form-select @error('Shift') is-invalid @enderror" id="Shift" name="Shift" onchange="userfetch(this.value)"
+                                        <select class="form-select @error('Shift') is-invalid @enderror" id="Shift" name="shift_id" onchange="userfetch(this.value)"
                                             required >
                                             <option value="">Select Shifts</option>
                                             {{-- @foreach ($clients as $client)
@@ -83,7 +83,7 @@
                                 <div id="Users" class="row mt-4">
                                     <div class="col-md-12">
                                         <label class="form-label" for="User">Receiver:</label>
-                                        <select class="form-select @error('User') is-invalid @enderror" id="User" name="User" onchange=""
+                                        <select class="form-select @error('User') is-invalid @enderror" id="User" name="user_id" onchange=""
                                             required >
                                             <option value="">Select Receiver</option>
                                             {{-- @foreach ($clients as $client)

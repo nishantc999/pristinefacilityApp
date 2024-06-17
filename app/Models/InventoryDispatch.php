@@ -11,14 +11,14 @@ class InventoryDispatch extends Model
     protected $fillable = [
         'dispatchNumber',
         'sendor', 
-        'receiver', 
+        'receiver_id', 
         'sendingDate', 
         'receivingDate', 
         'status',
         'product_quantity',
         'req',
-        'client',
-        'Shift',
+        'client_id',
+        'shift_id',
     ];
 
     protected $casts = [
