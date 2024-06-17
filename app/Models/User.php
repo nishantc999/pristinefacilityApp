@@ -71,4 +71,8 @@ class User extends Authenticatable
                     
                     ->withTimestamps();
     }
+    public function complaints()
+    {
+        return $this->hasMany(ComplaintTicket::class);
+    }
 }

@@ -59,4 +59,13 @@ class Client extends Authenticatable
                     ->withTimestamps();
     }
 
+    public function complainer()
+    {
+        return $this->hasMany(Complaint::class, 'complainer_id');
+    }
+    public function complaints()
+    {
+        return $this->hasMany(ComplaintTicket::class);
+    }
+
 }
