@@ -184,8 +184,8 @@ text/x-generic index.blade.php ( HTML document, ASCII text, with very long lines
                                 <td>{{$value->sender}}</td>
                                 <td>{{$value->receiver ?? "not  yet received"}}</td>
                                 <td>{{$value->sendingDate}}</td>
-                                <td>{{$value->sendingDate}}</td>
-                                <td>{{$value->sendingDate}}</td>
+                                <td>{{$value->client}}</td>
+                                <td>{{$value->shift}}</td>
                                 {{-- <td>{{$value->receivingDate?? "not available"}}</td> --}}
                                 {{-- <td> @if($value->status == "rejected")
         <p class="status status-rejected">{{$value->status}}</p>

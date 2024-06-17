@@ -75,8 +75,10 @@ $sendor = InventoryDispatch::whereNot('sender', "")
            foreach ($data as $dat){
             $user = User::whereId($dat->receiver_id)->first()->name;
             $dat["receiver"] = $user;
-
+            $dat["client"] = Client::whereId($dat->client_id)->first()->name;
+            $dat["shift"] = Shift::whereId($dat->shift_id)->first()->name;
            }
+        //    dd($data);
         return view('Inventory.Dispatch.index', ['data' => $data, 'count' => 1, 'search_feild' => $search_feild, "sendingDate"=>$sendingDate,'sendor'=>$sendor,'shifts' => $shifts]);
     }
 
