@@ -6,7 +6,8 @@ use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\API\{
     ClientForgotPasswordController,
     ClientAuthController,
-    ClientResetPasswordController
+    ClientResetPasswordController,
+    ComplaintTicketController
 };
 use App\Http\Controllers\API\Clients\{
     EmployeeController,
@@ -57,6 +58,9 @@ Route::prefix('client')->middleware('auth:clientapi')->group(function () {
 
     Route::post('password/email', [ClientForgotPasswordController::class, 'sendResetLinkEmail']);
     Route::post('password/reset', [ClientResetPasswordController::class, 'reset']);
+    // employee Complaint
+    Route::post('/employee/complaint', [ComplaintTicketController::class, 'store']);
+    Route::post('/employee/complaint/{id}', [ComplaintTicketController::class, 'update']);
 });
 
 

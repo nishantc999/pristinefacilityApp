@@ -62,4 +62,8 @@ class Employee extends Model
     {
         return $this->hasMany(EmployeeAttendance::class);
     }
+    public function complaints()
+    {
+        return $this->hasMany(ComplaintTicket::class);
+    }
 }
