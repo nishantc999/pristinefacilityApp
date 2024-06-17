@@ -161,8 +161,8 @@ text/x-generic index.blade.php ( HTML document, ASCII text, with very long lines
                                 <th>Sender</th>
                                 <th>Receiver</th>
                                 <th>Sending Date</th>
-                                <th>Receiving Date</th>
-                                <th>Status</th>
+                                <th>Client</th>
+                                <th>Shift</th>
                                 <th>Products</th>
                                 <th>Action</th>
                             </tr>
@@ -184,8 +184,10 @@ text/x-generic index.blade.php ( HTML document, ASCII text, with very long lines
                                 <td>{{$value->sender}}</td>
                                 <td>{{$value->receiver ?? "not  yet received"}}</td>
                                 <td>{{$value->sendingDate}}</td>
-                                <td>{{$value->receivingDate?? "not available"}}</td>
-                                <td> @if($value->status == "rejected")
+                                <td>{{$value->sendingDate}}</td>
+                                <td>{{$value->sendingDate}}</td>
+                                {{-- <td>{{$value->receivingDate?? "not available"}}</td> --}}
+                                {{-- <td> @if($value->status == "rejected")
         <p class="status status-rejected">{{$value->status}}</p>
     @elseif($value->status == "received")
         <p class="status status-received">{{$value->status}}</p>
@@ -195,7 +197,7 @@ text/x-generic index.blade.php ( HTML document, ASCII text, with very long lines
                                     @if($value->status=="rejected")
                                     <i class="fas fa-reply cursor-pointer" onclick="Resend({{ $value->dispatchNumber }},{{$value->quantity}})">Resend</i>
                                     @endif
-                                </td>
+                                </td> --}}
                                 <td>
                                     <a href="{{route('inventorydispatch.show',$value->dispatchNumber)}}"> 
                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">

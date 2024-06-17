@@ -7,6 +7,7 @@ use App\Models\InventoryDispatch;
 use App\Models\Shift;
 use App\Models\Sku;
 use App\Models\InventoryMeasure;
+use App\Models\InventoryDispatchMeasure;
 use App\Models\Client;
 use App\Models\Roles;
 use App\Models\User;
@@ -215,6 +216,19 @@ if($filteredSkus->count()){}else{
             //     // Handle the case where the product is not found in the inventory
             //     // You might want to log an error or perform other actions here
              }
+             $inventorydispatch = InventoryDispatchMeasure::where('receiver_id',$request -> user_id)->where('sku_label', $inwardItem['product'])->first();
+             if($inventorydispatch){
+                $inventorydispatch["sku_quantity"] += $inwardItem['quantity'];
+                $inventorydispatch->save();
+             }else{
+             $inventorydispatch["label"] = SKU::where('sku',$inwardItem['product'])->first()->label;
+             $inventorydispatch["image"] = SKU::where('sku',$inwardItem['product'])->first()->image;
+             $inventorydispatch["receiver_id"] = $request -> user_id;
+             $inventorydispatch["sku_label"] = $inwardItem['product'];
+             $inventorydispatch["sku_quantity"] = $inwardItem['quantity'];
+             $inventory = InventoryDispatchMeasure::create($inventorydispatch);
+             }
+            //  $inventory = InventoryDispatchMeasure::where('sku_label', $inwardItem['product'])->first();
     }
         //  dd($inwards);
         //  $composition = array_merge($composition, $purchase_no);
@@ -338,23 +352,38 @@ if($filteredSkus->count()){}else{
             foreach ($result as $inwardItem) {
                 $key = array_search($inwardItem["product"], array_column($inward->product_quantity, "product"));
                 $inventory = InventoryMeasure::where('sku_label', $inwardItem['product'])->first();
-                
+                $inventorydispatch = InventoryDispatchMeasure::where('receiver_id',$request -> user_id)->where('sku_label', $inwardItem['product'])->first();
                 if ($inventory) {
                     if ($key !== false) {
                         // Update the quantity based on the difference
                         $newQuantity = intval($inventory->sku_quantity ?? 0) + intval($inwardcomp[$key]['quantity']) - intval($inwardItem['quantity']);
+                        $newQuantityDispatch = intval($inventorydispatch->sku_quantity ?? 0) - intval($inwardcomp[$key]['quantity']) + intval($inwardItem['quantity']);
+                        $inventorydispatch->sku_quantity = $newQuantityDispatch;
+                        $inventorydispatch->save();
+                        // dd($inventorydispatch->sku_quantity,"+",$inwardcomp[$key]['quantity'],"-",$inwardItem['quantity'],"=", $newQuantityDispatch);
                     } else {
                         // Add the quantity if the SKU is not found in inwardcomp
                         $newQuantity = intval($inventory->sku_quantity ?? 0) - intval($inwardItem['quantity']);
+                        // $newQuantityDispatch = 
+                        $inventorydispatch["label"] = SKU::where('sku',$inwardItem['product'])->first()->label;
+                        $inventorydispatch["image"] = SKU::where('sku',$inwardItem['product'])->first()->image;
+                        $inventorydispatch["receiver_id"] = $request -> user_id;
+                        $inventorydispatch["sku_label"] = $inwardItem['product'];
+                        $inventorydispatch["sku_quantity"] = intval($inventorydispatch->sku_quantity ?? 0) + intval($inwardItem['quantity']);
+                        $inventorydispatch = InventoryDispatchMeasure::create($inventorydispatch);
                     }
             
                     // Ensure the quantity is non-negative
                     if($newQuantity<0){
-                        return redirect()->route('RWDispatch.index')->with('failure', 'not enough inventory');
+                        return redirect()->route('inventorydispatch.index')->with('failure', 'not enough inventory');
                     }else{
                     $inventory->sku_quantity = $newQuantity;
-                    $inventory->save();}
+                    $inventory->save();
+                
                 }
+                }
+                
+
             }
         // $inwardcomps = $inward->product_quantity;
         $data = $request->only(['dispatchNumber']);
@@ -393,6 +422,9 @@ if($filteredSkus->count()){}else{
                 $inventory = InventoryMeasure::where('sku_label',$product["product"] )->first();
                 $inventory->sku_quantity = $inventory->sku_quantity + $product["quantity"];
                 $inventory->save();
+                $inventorydispatch = InventoryDispatchMeasure::where('receiver_id',$inward->receiver_id)->where('sku_label', $product["product"])->first();
+                $inventorydispatch->sku_quantity = $inventorydispatch->sku_quantity - $product["quantity"];
+                $inventorydispatch->save();
             }
             $inward -> delete();
            
@@ -403,6 +435,7 @@ if($filteredSkus->count()){}else{
     }
 
     public function inventorymeasureuser(Request $request){
+        $datareq = false;
         $search_feild['receiver'] = $request->receiver;
         $search_feild['client'] = $request->client;
         $search_feild['shift'] = $request->shift;
@@ -421,21 +454,49 @@ if($filteredSkus->count()){}else{
                 //working//
                 $inventories = [];
                 foreach ($user as $use){
-                    $inventory = InventoryDispatch::where("receiver_id", $use["id"])->pluck('product_quantity');
+                    $inventory = InventoryDispatchMeasure::where("receiver_id", $use->id)
+                    ->select('sku_label', 'sku_quantity')
+                    ->get();
                     if(!$inventory->isEmpty()){
                         array_push($inventories,$inventory);
                     }
                 }
-                $flattened = collect($inventories)->flatMap(function ($collection) {
-                    return $collection->all();
-                })->collapse()->all();
-                $inventory = $flattened;
+                // dd($inventories);
+                $aggregated = [];
+                if($inventories==null){
+                    $datareq = true;
+                }
+    // Iterate through each collection in the inventories array
+    foreach ($inventories as $collection) {
+        // Iterate through each item in the collection
+        foreach ($collection as $item) {
+            $skuLabel = $item->sku_label;
+            $skuQuantity = (int) $item->sku_quantity;
+
+            // If the sku_label already exists in the aggregated array, add to the sku_quantity
+            if (isset($aggregated[$skuLabel])) {
+                $aggregated[$skuLabel]['sku_quantity'] += $skuQuantity;
+            } else {
+                // Otherwise, create a new entry for the sku_label
+                $aggregated[$skuLabel] = [
+                    'sku_label' => $skuLabel,
+                    'sku_quantity' => $skuQuantity,
+                ];
+            }
+        }
+    }
+
+    // Convert the aggregated results to an array format suitable for dd or further processing
+    $aggregated = array_values($aggregated);
+
+    // Dump the aggregated results
+    $inventory = $aggregated;
                 $combined = [];
 
 // Iterate through each inventory item
 foreach ($inventory as $item) {
-    $productId = $item['product'];
-    $quantity = (int) $item['quantity']; // Convert quantity to integer for summing
+    $productId = $item['sku_label'];
+    $quantity = (int) $item['sku_quantity']; // Convert quantity to integer for summing
     
     // If the product ID already exists in $combined, add to the quantity
     if (isset($combined[$productId])) {
@@ -478,10 +539,11 @@ $data = $result;
                 //working//
         }
         if($request->client && $request->shift){}else{
-        $data = InventoryMeasure::get();
+        $data = InventoryDispatchMeasure::get();
         foreach($data as $dat){
             $dat['label'] = SKU::where('sku',$dat['sku_label'])->value('label');
-        }}
+        }
+    }
         $inventoryname = "User Inventory";
         $clients = Client::select('name','id')->get();
         //
@@ -489,33 +551,39 @@ $data = $result;
         
         
 
-        $inventory = InventoryDispatch::where("receiver_id", $request->receiver)->pluck('product_quantity');
+        $inventory = InventoryDispatchMeasure::where("receiver_id", $request->receiver)
+        ->select('sku_label', 'sku_quantity')
+        ->get();
+
         if($request->receiver){
          
         
-            $result = [];
+          // Initialize an empty array to store the aggregated results
+    $aggregated = [];
 
-// Iterate through each group of products
-foreach ($inventory as $group) {
-    foreach ($group as $item) {
-        $productId = $item['product'];
-        $quantity = (int) $item['quantity'];
-        
-        // If the product already exists in the result array, add the quantity
-        if (isset($result[$productId])) {
-            $result[$productId]['quantity'] += $quantity;
+    // Iterate through the inventory items
+    foreach ($inventory as $item) {
+        $skuLabel = $item->sku_label;
+        $skuQuantity = (int) $item->sku_quantity;
+
+        // If the sku_label already exists in the aggregated array, add to the sku_quantity
+        if (isset($aggregated[$skuLabel])) {
+            $aggregated[$skuLabel]['sku_quantity'] += $skuQuantity;
         } else {
-            // Otherwise, add the product to the result array
-            $result[$productId] = [
-                'product' => $productId,
-                'quantity' => $quantity
+            // Otherwise, create a new entry for the sku_label
+            $aggregated[$skuLabel] = [
+                'product' => $skuLabel,
+                'quantity' => $skuQuantity,
             ];
         }
     }
-}
 
-// Resetting the array keys to have a sequential array structure
-$result = array_values($result);
+    // Convert the aggregated results to an array format suitable for dd or further processing
+    $aggregated = array_values($aggregated);
+
+    // Dump the aggregated results
+    // dd($aggregated);
+    $result = $aggregated;
 // dd($result);
 // Step 1: Collect all product values
 // Step 1: Collect all product values
@@ -543,6 +611,9 @@ $data = $result;
 
         }
         // dd($data);
+        if($datareq){
+            $data = [];
+        }
         return view('Inventory.measure', ['data' => $data, 'inventoryname'=> $inventoryname, 'count' => 1, 'sendor'=>$user, 'search_feild'=>$search_feild,'clients'=>$clients,'shift'=>$shift]);
     }
 }
