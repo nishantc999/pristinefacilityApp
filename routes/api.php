@@ -13,6 +13,16 @@ use App\Http\Controllers\API\Clients\{
     DataController,
     FeedbackController,
 };
+use App\Http\Controllers\API\UserAuth\{
+    UserAuthController,
+    UserForgotPasswordController,
+    UserResetPasswordController
+
+};
+use App\Http\Controllers\API\User\{
+    EmployeeAttendanceController
+
+};
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +40,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/client/login', [ClientAuthController::class, 'login']);
+Route::post('/user/login', [UserAuthController::class, 'login']);
 
 Route::prefix('client')->middleware('auth:clientapi')->group(function () {
     Route::post('logout', [ClientAuthController::class, 'logout']);
@@ -50,3 +61,11 @@ Route::prefix('client')->middleware('auth:clientapi')->group(function () {
 
 
 
+
+// user api 
+Route::prefix('user')->middleware('auth:userapi')->group(function () {
+    Route::post('attendance/store', [EmployeeAttendanceController::class, 'storeAndUpdate']);
+    
+});
+Route::post('user/password/email', [UserForgotPasswordController::class, 'sendResetLinkEmail']);
+Route::post('user/password/reset', [UserResetPasswordController::class, 'reset']);

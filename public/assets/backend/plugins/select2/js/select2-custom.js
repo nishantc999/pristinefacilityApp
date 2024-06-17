@@ -7,21 +7,8 @@ $(function() {
         width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
         placeholder: $( this ).data( 'placeholder' ),
     } );
-    $( '#setglobalcity' ).select2( {
-        theme: "bootstrap-5",
-        width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
-        placeholder: $( this ).data( 'placeholder' ),
-    } );
-    $( '#setdistributor' ).select2( {
-        theme: "bootstrap-5",
-        width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
-        placeholder: $( this ).data( 'placeholder' ),
-    } );
-    $( '#setwarehouse' ).select2( {
-        theme: "bootstrap-5",
-        width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
-        placeholder: $( this ).data( 'placeholder' ),
-    } );
+
+
     $( '#single-select-field2' ).select2( {
         theme: "bootstrap-5",
         width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',

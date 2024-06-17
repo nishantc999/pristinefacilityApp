@@ -125,6 +125,20 @@
         </li>
         <hr>
         @endif
+        @if (ispermission('employee attendance', 'show'))
+        <li>
+
+
+            <a href="{{ route('employee.attendance.employeewise') }}">
+
+
+                <div class="parent-icon"><i class='bx bx-home-alt'></i>
+                </div>
+                <div class="menu-title">Employee Attendance</div>
+            </a>
+        </li>
+        <hr>
+        @endif
         {{-- Manager & Admin & Distributer Sidebar --}}
 
 

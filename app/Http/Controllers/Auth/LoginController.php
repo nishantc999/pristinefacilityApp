@@ -53,7 +53,7 @@ class LoginController extends Controller
 
     if (!$user || ($user->status == 0)) {
         return back()->withErrors([
-            'email' => 'This User is Deactivated or Deleted. Please contact the admin.',
+            'username' => 'This User is Deactivated or Deleted. Please contact the admin.',
         ]);
     }
 

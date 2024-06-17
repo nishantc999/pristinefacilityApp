@@ -58,6 +58,11 @@ class PermissionSeeder extends Seeder
       }
  
       DB::table('permissions')->insert([
+        'module_name' => 'employee attendance',
+        'feature_name' => 'show',
+
+    ]);
+      DB::table('permissions')->insert([
         'module_name' => 'daily sale',
         'feature_name' => 'show',
 

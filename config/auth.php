@@ -41,14 +41,14 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-        // 'apigaurd' => [
-        //     'driver' => 'passport',
-        //     'provider' => 'users',
-        // ],
-        'client' => [
-            'driver' => 'session',
-            'provider' => 'clients',
-         ],
+        'userapi' => [
+            'driver' => 'passport',
+            'provider' => 'users',
+        ],
+        // 'client' => [
+        //     'driver' => 'session',
+        //     'provider' => 'clients',
+        //  ],
          'clientapi' => [
             'driver' => 'passport',
             'provider' => 'clients',

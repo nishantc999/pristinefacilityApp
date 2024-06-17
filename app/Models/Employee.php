@@ -58,4 +58,8 @@ class Employee extends Model
                     
                     ->withTimestamps();
     }
+    public function attendances()
+    {
+        return $this->hasMany(EmployeeAttendance::class);
+    }
 }

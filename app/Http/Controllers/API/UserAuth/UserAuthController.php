@@ -1,61 +1,25 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\API\UserAuth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Client;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Auth;
-class ClientAuthController extends Controller
+
+class UserAuthController extends Controller
 {
     use HasApiTokens;
 
-    public function register(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:clients',
-            'email' => 'required|string|email|max:255|unique:clients',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
 
-        $client = Client::create([
-            'name' => $request->name,
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
 
-        return response()->json(['message' => 'Client registered successfully'], 201);
-    }
-
-    // public function login(Request $request)
-    // {
-    //     $request->validate([
-    //         'username' => 'required|string',
-    //         'password' => 'required|string',
-    //     ]);
-
-    //     $client = Client::where('username', $request->username)->first();
-
-    //     if (!$client || !Hash::check($request->password, $client->password)) {
-    //         return response()->json(['message' => 'Invalid credentials'], 401);
-    //     }
-
-    //     $token = $client->createToken('client')->accessToken;
-
-    //     return response()->json(['token' => $token,'user'=>$client], 200);
-    // }
 
     public function login(Request $request)
     {
@@ -76,9 +40,11 @@ class ClientAuthController extends Controller
             ], 400);
         }
 
-        $client = Client::where('username', $request->username)->first();
-
-        if (!$client || !Hash::check($request->password, $client->password)) {
+        $user = User::where('username', $request->username)->first();
+        if($user->role->role_type==1|| $user->role_id==0){
+            return response()->json(['message' => 'Invalid credentials'], 401);
+        }
+        if (!$user || !Hash::check($request->password, $user->password)) {
             // Log the failed login attempt
             Log::warning('Failed login attempt', ['username' => $request->username]);
 
@@ -93,16 +59,17 @@ class ClientAuthController extends Controller
 
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
-        if ($client->status === 0) {
+        if ($user->status === 0) {
             return response()->json(['message' => 'User is Deactivated'], 403);
         }
 
         // Clear rate limiter on successful login
         RateLimiter::clear($this->throttleKey($request));
-        Auth::guard('clientapi')->setUser($client);
-        $token = $client->createToken('client')->accessToken;
-
-        return response()->json(['token' => $token, 'user' => $client], 200);
+        $token = $user->createToken('user')->accessToken;
+  
+     
+        Auth::guard('userapi')->setUser($user);
+        return response()->json(['token' => $token, 'user' => $user], 200);
     }
 
 

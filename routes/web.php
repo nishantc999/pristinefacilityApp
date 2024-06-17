@@ -11,11 +11,11 @@ use App\Http\Controllers\{
     ShiftController,
     ClientManagementController,
     EmployeeController,
-    WorkAssignmentController
+    WorkAssignmentController,
+    EmployeeAttendanceController
 
 
 };
-
 use App\Http\Controllers\Clients\ClientController;
 /*
 |--------------------------------------------------------------------------
@@ -107,7 +107,7 @@ Route::get('/assignments/shifts/{site_id}', [UserManagementController::class, 'g
     Route::get('/client/{client}/site/{site}/shift/{shiftId}/assigned-supervisor', [WorkAssignmentController::class, 'getAssignedSupervisor']);
 
 
-    // employee
+    // employee work assignment 
     Route::get('/client/{clientId}/shift/{shiftId}/sites/blade', [WorkAssignmentController::class, 'getSites1'])->name('client.getSites');
     
     Route::get('/get-supervisors/{clientId}/{shiftId}/{siteId}', [WorkAssignmentController::class, 'getSupervisors']);
@@ -115,6 +115,13 @@ Route::get('/get-assigned-employees/{clientId}/{shiftId}/{siteId}/{supervisorId}
 Route::get('/get-available-employees', [WorkAssignmentController::class, 'getAvailableEmployees']);
 Route::post('/assign-employees', [WorkAssignmentController::class, 'assignEmployees']);
 Route::post('/remove-employees', [WorkAssignmentController::class, 'removeEmployees']);
+
+
+// attendance report 
+
+
+Route::get('/employee-wise-attendance', [EmployeeAttendanceController::class, 'employeewiseAttendance'])->name('employee.attendance.employeewise');
+Route::get('/client-wise-attendance', [EmployeeAttendanceController::class, 'clientwiseAttendance'])->name('employee.attendance.clientwise');
 });
 
 // public route
@@ -178,8 +185,6 @@ Route::get('/privacy-policy', [PrivacyPolicyController::class, 'privacy_policy']
 
     // Assign employees to a site
     Route::post('/sites/assign-employees', [ClientController::class, 'assignEmployees'])->name('sites.assign-employees');
-    Route::get('/checklist/{id}/qr-code', [ClientController::class, 'generateQrCode'])->name('checklist.qr-code');
-
 
 });
 

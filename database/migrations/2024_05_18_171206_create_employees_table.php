@@ -39,6 +39,7 @@ return new class extends Migration
             $table->boolean('occupied')->default(0);
             $table->decimal('salary', 8, 2);
             $table->boolean('status')->default(1);
+            $table->boolean('emp_type')->default(1);
             $table->json('family_detail')->default(json_encode([]));
             // $table->json('documents')->default(json_encode([]));
             $table->timestamps();
