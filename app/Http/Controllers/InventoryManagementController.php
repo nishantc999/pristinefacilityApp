@@ -7,6 +7,7 @@ use App\Models\State;
 use App\Models\SKU;
 use App\Models\Client;
 use App\Models\Inventory;
+use App\Models\InventoryMeasure;
 use Illuminate\Http\Request;
 
 class InventoryManagementController extends Controller
@@ -118,18 +119,18 @@ class InventoryManagementController extends Controller
 
         $composition = $result;
         
-        // foreach ($result as $inwardItem){
+        foreach ($result as $inwardItem){
 
-        //         $inventory = Inventory::where('sku_label', $inwardItem['product'])->first();
-        //         if ($inventory) {
-        //             // Update the quantity
-        //             $inventory->sku_quantity = ($inventory->sku_quantity ?? 0) + intval($inwardItem['quantity']);
-        //             $inventory->save();
-        //         } else {
-        //             // Handle the case where the product is not found in the inventory
-        //             // You might want to log an error or perform other actions here
-        //         }
-        // }
+                $inventory = InventoryMeasure::where('sku_label', $inwardItem['product'])->first();
+                if ($inventory) {
+                    // Update the quantity
+                    $inventory->sku_quantity = ($inventory->sku_quantity ?? 0) + intval($inwardItem['quantity']);
+                    $inventory->save();
+                } else {
+                    // Handle the case where the product is not found in the inventory
+                    // You might want to log an error or perform other actions here
+                }
+        }
        // dd($composition);
     
         // Create SKU record
@@ -266,28 +267,28 @@ if ($extension === 'pdf') {
         
                 $composition = $result;
                 $inward = Inventory::where('vendor', $request->vendor_name)->first();
-                // if($inward){
-                // $inwardcomp = $inward->sku_label_and_quantity;
+                if($inward){
+                $inwardcomp = $inward->sku_label_and_quantity;
         
-                //      foreach ($result as $inwardItem) {
-                //         $key = array_search($inwardItem["product"], array_column($inward->sku_label_and_quantity, "product"));
-                //         $inventory = Inventory::where('sku_label', $inwardItem['product'])->first();
+                     foreach ($result as $inwardItem) {
+                        $key = array_search($inwardItem["product"], array_column($inward->sku_label_and_quantity, "product"));
+                        $inventory = InventoryMeasure::where('sku_label', $inwardItem['product'])->first();
                         
-                //         if ($inventory) {
-                //             if ($key !== false) {
-                //                 // Update the quantity based on the difference
-                //                 $newQuantity = intval($inventory->sku_quantity ?? 0) - intval($inwardcomp[$key]['quantity']) + intval($inwardItem['quantity']);
-                //             } else {
-                //                 // Add the quantity if the SKU is not found in inwardcomp
-                //                 $newQuantity = intval($inventory->sku_quantity ?? 0) + intval($inwardItem['quantity']);
-                //             }
+                        if ($inventory) {
+                            if ($key !== false) {
+                                // Update the quantity based on the difference
+                                $newQuantity = intval($inventory->sku_quantity ?? 0) - intval($inwardcomp[$key]['quantity']) + intval($inwardItem['quantity']);
+                            } else {
+                                // Add the quantity if the SKU is not found in inwardcomp
+                                $newQuantity = intval($inventory->sku_quantity ?? 0) + intval($inwardItem['quantity']);
+                            }
                     
-                //             // Ensure the quantity is non-negative
-                //             $inventory->sku_quantity = max(0, $newQuantity);
-                //             $inventory->save();
-                //         }
-                //     }
-                // }
+                            // Ensure the quantity is non-negative
+                            $inventory->sku_quantity = max(0, $newQuantity);
+                            $inventory->save();
+                        }
+                    }
+                }
                 // dd($request);
             
                 // Create SKU record
@@ -329,10 +330,10 @@ if ($extension === 'pdf') {
         try {
             // Find the SKU by its ID
             $inward = Inventory::findOrFail($id);  
-                // foreach($inward->sku_label_and_quantity as $product){
-                // $inventory = Inventory::where('sku_label',$product["product"] )->first();
-                // $inventory->sku_quantity = max(0, $inventory->sku_quantity - $product["quantity"]);
-                // $inventory->save();}
+                foreach($inward->sku_label_and_quantity as $product){
+                $inventory = InventoryMeasure::where('sku_label',$product["product"] )->first();
+                $inventory->sku_quantity = max(0, $inventory->sku_quantity - $product["quantity"]);
+                $inventory->save();}
                 $inward -> delete();
                 
         } catch (\Exception $e) {
@@ -342,6 +343,11 @@ if ($extension === 'pdf') {
     }
 
     public function inventorymeasure(){
-        return "hello";
+        $data = InventoryMeasure::get();
+        foreach($data as $dat){
+            $dat['label'] = SKU::where('sku',$dat['sku_label'])->value('label');
+        }
+        $inventoryname = "Master Inventory";
+        return view('Inventory.measure', ['data' => $data, 'inventoryname'=> $inventoryname, 'count' => 1]);
     }
 }

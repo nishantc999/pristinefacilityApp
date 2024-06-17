@@ -48,7 +48,7 @@
                     </div> --}}
 
                     <div class="ms-auto">
-                        <a href="{{route('inventory.index')}}" class="btn btn-danger radius-30 mt-2 mt-lg-0"><i class="bx bxs-plus-square"></i>Close</a>
+                        <a href="{{route('inventory.index')}}" class="btn btn-danger radius-30 mt-2 mt-lg-0"><i class="bx bx-x"></i>Close</a>
                     </div>
 
 

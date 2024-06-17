@@ -13,6 +13,7 @@ use App\Http\Controllers\{
     EmployeeController,
     WorkAssignmentController,
     InventoryManagementController,
+    InventoryDispatchController,
 
 
 };
@@ -119,6 +120,11 @@ Route::post('/remove-employees', [WorkAssignmentController::class, 'removeEmploy
 Route::get('inventory/bill/{id}', [InventoryManagementController::class, 'bill_get'])->name("inventory.bill_get");
 Route::resource('inventory', InventoryManagementController::class);
 Route::get('/inventorymeasure', [InventoryManagementController::class, 'inventorymeasure'])->name('inventorymeasure');
+Route::delete('/inventorydispatch/getshift/{id}', [InventoryDispatchController::class, 'get_shift'])->name('Dispatch.getshift');
+Route::delete('/inventorydispatch/getuser/{id}', [InventoryDispatchController::class, 'get_user'])->name('Dispatch.getuser');
+Route::resource('inventorydispatch', InventoryDispatchController::class);
+Route::get('/inventorymeasureuser', [InventoryDispatchController::class, 'inventorymeasureuser'])->name('inventorymeasureuser');
+
 });
 
 // public route

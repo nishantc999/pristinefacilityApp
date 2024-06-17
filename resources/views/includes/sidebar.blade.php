@@ -130,12 +130,16 @@
             <a href="javascript:;" class="has-arrow">
                 <div class="parent-icon"><i class='bx bx-home-alt'></i>
                 </div>
-                <div class="menu-title">Inventory</div>
+                <div class="menu-title">Inventory Management</div>
             </a>
             <ul>
                 <li> <a href="{{ route('inventory.index') }}"><i class='bx bx-radio-circle'></i>Inward</a>
                 </li>
                 <li> <a href="{{ route('inventorymeasure') }}"><i class='bx bx-radio-circle'></i>Inventory</a>
+                </li>
+                
+                <li> <a href="{{ route('inventorydispatch.index') }}"><i class='bx bx-radio-circle'></i>Dispatch</a>
+                </li><li> <a href="{{ route('inventorymeasureuser') }}"><i class='bx bx-radio-circle'></i>Dispatch Inventory</a>
                 </li>
                 
             </ul>
