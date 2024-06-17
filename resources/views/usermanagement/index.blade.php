@@ -59,7 +59,7 @@
                                 <label for="status" class="form-label">Choose Role</label>
 
                                 <select name="role_id" id="role_id" class="form-select"
-                                    data-placeholder="Choose Role" onchange="searchformsubmit22()">
+                                    data-placeholder="Choose Role">
                                   <option value="">All</option>
                                         @foreach ($roles as $role)
                                             <option value="{{ $role->id }}"
@@ -166,13 +166,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($data as $value)
+                                {{-- @foreach ($data as $value)
                                     <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                {{-- <div>
-                                            <input class="form-check-input me-3" type="checkbox" value="" aria-label="...">
-                                        </div> --}}
+                                         
                                                 <div class="ms-2">
                                                     <h6 class="mb-0 font-14">{{ $count++ }}</h6>
                                                 </div>
@@ -221,7 +219,7 @@
                                             </div>
                                         </td>
                                     </tr>
-                                @endforeach
+                                @endforeach --}}
                             </tbody>
                         </table>
                     </div>
@@ -236,16 +234,16 @@
     <script src="{{ asset('assets/backend/plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/backend/plugins/datatable/js/dataTables.bootstrap5.min.js') }}"></script>
     <script>
-        $(document).ready(function() {
-            var table = $('#example2').DataTable({
-                lengthChange: true,
-                // "order": [[0, 'desc']],
-                buttons: ['copy', 'excel', 'pdf', 'print']
-            });
+        // $(document).ready(function() {
+        //     var table = $('#example2').DataTable({
+        //         lengthChange: true,
+        //         // "order": [[0, 'desc']],
+        //         buttons: ['copy', 'excel', 'pdf', 'print']
+        //     });
 
-            table.buttons().container()
-                .appendTo('#example2_wrapper .col-md-6:eq(0)');
-        });
+        //     table.buttons().container()
+        //         .appendTo('#example2_wrapper .col-md-6:eq(0)');
+        // });
 
 
 
@@ -270,5 +268,37 @@
         placeholder: $( this ).data( 'placeholder' ),
         allowClear: true
     } );
+    </script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var table = $('#example2').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: '{{ route('usermanagement.index') }}',
+                data: function(d) {
+                    d.role_id = $('#role_id').val();
+                }
+            },
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+            { data: 'name', name: 'name' },
+            { data: 'role.name', name: 'role.name' },
+            { data: 'username', name: 'username' },
+            { data: 'email', name: 'email' },
+            { data: 'mobile_no', name: 'mobile_no' },
+            { data: 'city', name: 'city' },
+            { data: 'state', name: 'state' },
+            { data: 'view', name: 'view', orderable: false, searchable: false },
+            { data: 'action', name: 'action', orderable: false, searchable: false },
+            { data: 'status', name: 'status', orderable: false, searchable: false },
+            ]
+        });
+    
+        $('#role_id').change(function() {
+            table.draw();
+        });
+    });
     </script>
 @endpush
