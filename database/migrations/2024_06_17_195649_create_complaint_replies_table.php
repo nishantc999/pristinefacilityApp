@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('complaint_ticket_id');
         $table->text('message')->nullable();
+        $table->enum('sending_by', ['user', 'client'])->nullable(); //sending by me relation name dal dena taki get kar sake 
+        $table->unsignedBigInteger('sender_id')->nullable();
         $table->string('attechment')->nullable();
         $table->timestamps();
 

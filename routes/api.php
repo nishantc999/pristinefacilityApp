@@ -59,8 +59,8 @@ Route::prefix('client')->middleware('auth:clientapi')->group(function () {
     Route::post('password/email', [ClientForgotPasswordController::class, 'sendResetLinkEmail']);
     Route::post('password/reset', [ClientResetPasswordController::class, 'reset']);
     // employee Complaint
-    Route::post('/employee/complaint', [ComplaintTicketController::class, 'store']);
-    Route::post('/employee/complaint/{id}', [ComplaintTicketController::class, 'update']);
+    Route::post('/complaint/create', [ComplaintTicketController::class, 'store']);
+    Route::post('/complaint/closed/{id}', [ComplaintTicketController::class, 'closed']);
 });
 
 

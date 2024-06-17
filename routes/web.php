@@ -12,7 +12,8 @@ use App\Http\Controllers\{
     ClientManagementController,
     EmployeeController,
     WorkAssignmentController,
-    EmployeeAttendanceController
+    EmployeeAttendanceController,
+    ComplaintTicketController
 
 
 };
@@ -189,3 +190,11 @@ Route::get('/privacy-policy', [PrivacyPolicyController::class, 'privacy_policy']
 });
 
 
+// ticket 
+Route::group(['middleware' => ['auth'],'prefix'=>"ticket"], function () {
+
+    Route::resource('complaint', ComplaintTicketController::class);
+    Route::post('/reply', [ComplaintTicketController::class, 'reply'])->name('ticket.reply');
+    
+
+});

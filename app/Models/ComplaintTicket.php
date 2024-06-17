@@ -47,4 +47,8 @@ class ComplaintTicket extends Model
     {
         return $this->belongsTo(Site::class);
     }
+    public function replies()
+    {
+        return $this->hasMany(ComplaintReply::class);
+    }
 }
