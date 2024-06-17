@@ -252,7 +252,7 @@ class ClientController extends Controller
         $count = 1;
         $checklists = Checklist::where('client_id', $id)->with(['shift', 'area','site'])->get();
 
-        $areas = Area::where('client_id', $id)->get();
+        $areas = Area::where('client_id', $id)->where('checklist', 0)->get();
         $shifts = Shift::where('client_id', $id)->get();
         $variables = Variables::where('client_id', $id)->get();
         return view('clients.profile.checklists.index', compact('id', 'checklists', 'count', 'areas', 'variables',  'shifts'));
@@ -274,6 +274,7 @@ class ClientController extends Controller
             'variables.*' => 'exists:variables,id',
         ]);
 
+
         foreach ($request->shifts as $shift) {
             Checklist::create([
                 'name' => $request->name,
@@ -283,7 +284,7 @@ class ClientController extends Controller
                 'shift_id' => $shift,
             ]);
         }
-
+            Area::where('id', $request->area_id)->update(['checklist' =>1]);
             $clientId = $request->client_id;
 
         // Redirect to the shifts route with the client_id as parameter
@@ -349,7 +350,7 @@ public function ChecklistUpdate(Request $request)
     }
 
     public function storeSite(Request $request){
-        // dd($request);
+
             // Accessing the request parameters
             $requestData = $request->all();
 
@@ -363,6 +364,10 @@ public function ChecklistUpdate(Request $request)
             $site->client_id = $client_id;
             $site->save();
 
+
+            // SiteShiftAreawithClient::where('client_id', $client_id)
+            //            ->where('area_id', $request->area_id)
+            //            ->value('site_id');
             // Attach shifts and their areas to the site
 
            foreach ($requestData['shifts'] as $shiftId) {
@@ -373,7 +378,46 @@ public function ChecklistUpdate(Request $request)
 
             // Attach areas to the shift
             foreach ($areas as $areaId) {
-                $site->shifts()->attach($shiftId, ['client_id' => $client_id, 'area_id' => $areaId]);
+                $site->shifts()->attach($shiftId, ['client_id' => $client_id, 'area_id' => $areaId ]);
+
+             // Check if checklist exists with site_id null
+                $checklist = Checklist::where('client_id', $client_id)
+                ->where('area_id', $areaId)
+                ->where('shift_id', $shiftId)
+                ->whereNull('site_id')
+                ->first();
+
+            if ($checklist) {
+                // Update the existing checklist to set the site_id
+                $checklist->update(['site_id' => $site->id]);
+            } else {
+                // Check if a checklist with the given site_id already exists
+                $checklistWithSiteId = Checklist::where('client_id', $client_id)
+                    ->where('area_id', $areaId)
+                    ->where('shift_id', $shiftId)
+                    ->where('site_id', $site->id)
+                    ->first();
+
+                    // If no checklist with the site_id exists, create a new one
+                    if (!$checklistWithSiteId) {
+                        $existingChecklist = Checklist::where('client_id', $client_id)
+                        ->where('area_id', $areaId)
+                        ->where('shift_id', $shiftId)
+                        ->whereNull('site_id')
+                        ->first();
+
+                    $name = $existingChecklist ? $existingChecklist->name : $request->name;
+
+                    Checklist::create([
+                        'client_id' => $client_id,
+                        'area_id' => $areaId,
+                        'shift_id' => $shiftId,
+                        'site_id' => $site->id,
+                        'name' => $name,
+                        'variables' => json_encode($request->variables),
+                    ]);
+                }
+            }
             }
         }
             return redirect()->route('site', ['id' => $client_id]);

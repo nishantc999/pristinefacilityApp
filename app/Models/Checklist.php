@@ -12,6 +12,7 @@ class Checklist extends Model
         'name',
         'area_id',
         'shift_id',
+        'site_id',
         'variables',
         'client_id',
         'status',
