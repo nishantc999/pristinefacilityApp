@@ -14,11 +14,17 @@ class SiteResource extends JsonResource
      */
     public function toArray($request)
     {
+
+        $shifts = $this->shifts->unique('id')->map(function ($shift) {
+            $shift->pivot_site_id = $this->id;
+            return $shift;
+        });
         return [
             'id' => $this->id,
             'name' => $this->name,
             'client' => new ClientResource($this->whenLoaded('client')),
-            'shifts' => ShiftResource::collection($this->whenLoaded('shifts')),
+            'shifts' => ShiftResource::collection($shifts),
+            // 'areas' => AreaResource::collection($this->whenLoaded('areas')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

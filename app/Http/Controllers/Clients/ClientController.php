@@ -27,7 +27,7 @@ class ClientController extends Controller
 {
     public function index()
     {
-        $clients = Client::with('detail')->get();
+        $clients = Client::where('is_employee', 0)->with('detail')->get();
 
         $count = 1;
         return view('clients.index', compact('clients','count'));

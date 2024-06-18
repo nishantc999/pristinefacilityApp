@@ -36,6 +36,7 @@ class DataController extends Controller
             $assignedSiteIds = json_decode($user->lines); // Assuming `lines` is an array of site IDs
             $sites = Site::whereIn('id', $assignedSiteIds)->where('status', 1)->with(['shifts.areas.checklists'])->get();
         }
+
         return response()->json([
             'status' => 'success',
             'data' => SiteResource::collection($sites)

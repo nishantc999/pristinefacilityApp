@@ -10,7 +10,8 @@ class Site extends Model
     use HasFactory;
     public function checklists()
     {
-        return $this->hasMany(Checklist::class);
+        // return $this->hasMany(Checklist::class);
+        return $this->belongsToMany(Checklist::class, 'site_shift_area')->withPivot('client_id','site_id', 'shift_id','area_id')->withTimestamps();
     }
 
     public function shifts()
@@ -20,7 +21,7 @@ class Site extends Model
 
     public function areas()
     {
-        return $this->belongsToMany(Area::class, 'site_shift_area')->withPivot('client_id', 'shift_id')->withTimestamps();
+        return $this->belongsToMany(Area::class, 'site_shift_area')->withPivot('client_id','site_id', 'shift_id','area_id')->withTimestamps();
     }
 
     public function client()

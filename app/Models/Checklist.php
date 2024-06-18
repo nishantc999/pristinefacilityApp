@@ -35,4 +35,15 @@ class Checklist extends Model
     {
         return Variables::whereIn('id', json_decode($value))->get();
     }
+    public function feedbacks()
+    {
+        return $this->hasMany(Feedback::class);
+    }
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
+
+
 }
