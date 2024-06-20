@@ -51,7 +51,7 @@ Route::prefix('client')->middleware('auth:clientapi')->group(function () {
     Route::get('/sites', [DataController::class, 'getAllSites']);
     Route::get('/sites-with-relations', [DataController::class, 'getAllSiteswithRelations']); //
 
-    Route::get('checklist/{id}', [FeedbackController::class, 'getChecklist']);
+    Route::get('checklist/{id}/{date}', [FeedbackController::class, 'getChecklist']);
     Route::post('checklist/feedback', [FeedbackController::class, 'storeFeedback']);
 
 

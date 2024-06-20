@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->unsignedBigInteger('client_id');
             $table->unsignedBigInteger('site_id')->nullable();
-            $table->unsignedBigInteger('checklist_id')->nullable();
+            $table->unsignedBigInteger('checklist')->default(0);
             $table->boolean('status')->default(1);
             $table->timestamps();
         });
