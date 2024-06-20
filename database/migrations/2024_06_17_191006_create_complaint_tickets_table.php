@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
            
             
-            $table->enum('user_type', ['user', 'employee'])->nullable();
-            $table->unsignedBigInteger('employee_id')->nullable();
-            $table->unsignedBigInteger('user_id')->nullable();
+            $table->enum('user_type', ['user', 'employee'])->nullable();// to check complaint for witch user type
+            $table->unsignedBigInteger('employee_id')->nullable(); //if user_type employee 
+            $table->unsignedBigInteger('user_id')->nullable(); //if user_type user
             $table->foreignId('client_id')->constrained()->onDelete('cascade');
             $table->unsignedBigInteger('complainer_id')->nullable();
             $table->unsignedBigInteger('closer_id')->nullable();

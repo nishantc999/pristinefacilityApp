@@ -135,7 +135,7 @@
                                 <div class="col-md-12">
                                     <label for="mobile_no" class="form-label">Address</label>
                                     <input type="text" class="form-control @error('address') is-invalid @enderror"
-                                        name="address" id="mobile_no" placeholder="address"
+                                        name="address" id="address" placeholder="address"
                                         value="{{ old('address') }}" required>
                                     @error('address')
                                         <div class="invalid-feedback" style="display: block">

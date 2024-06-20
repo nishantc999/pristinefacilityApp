@@ -13,6 +13,7 @@ use App\Models\{
     
 
 };
+use Auth;
 class ComplaintTicketController extends Controller
 {
     /**
@@ -54,7 +55,7 @@ class ComplaintTicketController extends Controller
      */
     public function show(string $id)
     {
-        $complaint = ComplaintTicket::first();
+        $complaint = ComplaintTicket::whereId($id)->first();
         $count = 1;
         return view('complainttickets.show', compact('complaint', 'count'));
 
@@ -88,11 +89,37 @@ class ComplaintTicketController extends Controller
     public function reply(Request $request)
     {
         $request->validate([
-            'message' => 'required|string',
+            'message' => 'nullable|string',
+            'complaint_ticket_id' => 'integer|exists:complaint_tickets,id',
+            // 'attachment' => 'nullable|file|mimes:jpg,png,pdf,doc,docx,txt|max:2048',
+            'attachment' => 'nullable|file|max:2048',
         ]);
-        $ticket= ComplaintTicket::whereId($request->complaint_ticket_id)->first();
-        $ticket->replies()->create($request->all());
 
-        return back();
+        $message = $request->input('message');
+        $attachment = $request->hasFile('attachment');
+
+        if (!$message && !$attachment) {
+            return response()->json(['error' => 'Either message or attachment is required.'], 400);
+        }
+        $ticket= ComplaintTicket::whereId($request->complaint_ticket_id)->first();
+        $data=$request->all();
+        $data['sender_id']=Auth::user()->id;
+        $data['sending_by']='user';
+        if ($request->hasFile('attachment')) {
+            $imageName = time() . uniqid() . '.' . $request->attachment->extension();
+            $request->attachment->move('assets/images/tickets', $imageName);
+            $data['attachment']= 'tickets/'.$imageName;
+           
+    
+            }
+        // $ticket->replies()->create($data);
+       $complaint= ComplaintReply::create($data);
+
+        return response()->json([
+            'success' => 'Message sent successfully.',
+            'message' => $message,
+            'created_at'=>$complaint->created_at->format('d-m-Y h:i A'),
+            'attachment' => $complaint->attachment!=null ? asset('assets/images/'.$complaint->attachment): null
+        ], 200);
     }
 }
