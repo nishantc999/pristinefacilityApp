@@ -24,7 +24,7 @@ class ComplaintTicketController extends Controller
             // 'closed_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             // 'opened_description' => 'nullable|string',
             // 'closed_description' => 'nullable|string',
-            // 'ticket_status' => 'required|in:opned,closed',
+          
         ]);
 
         if ($validator->fails()) {

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('complaint_tickets', function (Blueprint $table) {
             $table->id();
-           
-            
+            $table->boolean('ticket_type')->default(0);// 0 for normal,1 for complain against user or employee
+            // $table->string('ticket_type')->nullable();
             $table->enum('user_type', ['user', 'employee'])->nullable();// to check complaint for witch user type
             $table->unsignedBigInteger('employee_id')->nullable(); //if user_type employee 
             $table->unsignedBigInteger('user_id')->nullable(); //if user_type user

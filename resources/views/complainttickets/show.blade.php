@@ -896,13 +896,59 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Modal title</h5>
+                        <h5 class="modal-title">Detail</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur.</div>
+                    <div class="modal-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0">Ticket Status</h6>
+                                <span class="text-secondary"><span class="badge  {{ $complaint->ticket_status =='opened' ? 'bg-danger': 'bg-success'}}">{{ $complaint->ticket_status }}</span></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0">Ticket Type</h6>
+                                <span class="text-secondary">
+                                    {{ $complaint->ticket_type==0?'General':'' }}
+                                    {{ $complaint->ticket_type==1?'Complaint Against Employee':'' }}
+                                </span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0">From Client</h6>
+                                <span class="text-secondary">{{ $complaint->client->name }}</span>
+                            </li>
+                          
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0">Ticket Created By</h6>
+                                <span class="text-secondary">{{ $complaint->complainer->name }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0">Ticket Created at</h6>
+                                <span class="text-secondary">{{ $complaint->created_at->format('d-m-Y H:i A') }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0">For Site</h6>
+                                <span class="text-secondary">{{ $complaint->site->name }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0">In Shift</h6>
+                                <span class="text-secondary">{{ $complaint->shift->name }}</span>
+                            </li>
+                           
+                        </ul>
+                        @if ($complaint->ticket_type==1)
+                        <div class="card">
+                            <div class="card-body">
+                                @if ($complaint->emp==1)
+
+                                @endif
+                            </div>
+                        </div>
+                        @endif
+                      
+                    </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
+                        {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
                     </div>
                 </div>
             </div>
