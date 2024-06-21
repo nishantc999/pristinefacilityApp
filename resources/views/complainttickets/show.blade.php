@@ -674,7 +674,7 @@
                                 <a href="javascript:;" class="list-inline-item d-flex align-items-center text-secondary"><i class='bx bx-search me-1'></i>Find</a> --}}
                                 </div>
                             </div>
-                            <div class="chat-top-header-menu ms-auto"> 
+                            <div class="chat-top-header-menu ms-auto" style="display: initial"> 
                                 <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#exampleLargeModal"><i class='bx bx-info-circle'></i></a>
                                 {{-- <a href="javascript:;"><i class='bx bx-phone'></i></a>
                                 <a href="javascript:;"><i class='bx bx-user-plus'></i></a> --}}
@@ -913,13 +913,17 @@
                                 </span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0">Subject</h6>
+                                <span class="text-secondary">{{ $complaint->subject }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                 <h6 class="mb-0">From Client</h6>
-                                <span class="text-secondary">{{ $complaint->client->name }}</span>
+                                <span class="text-secondary">{{ $complaint->client->name ??''}}</span>
                             </li>
                           
                             <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                 <h6 class="mb-0">Ticket Created By</h6>
-                                <span class="text-secondary">{{ $complaint->complainer->name }}</span>
+                                <span class="text-secondary">{{ $complaint->complainer->name ??''}}</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                 <h6 class="mb-0">Ticket Created at</h6>
@@ -927,19 +931,42 @@
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                 <h6 class="mb-0">For Site</h6>
-                                <span class="text-secondary">{{ $complaint->site->name }}</span>
+                                <span class="text-secondary">{{ $complaint->site->name ??''}}</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                 <h6 class="mb-0">In Shift</h6>
-                                <span class="text-secondary">{{ $complaint->shift->name }}</span>
+                                <span class="text-secondary">{{ $complaint->shift->name ??''}}</span>
                             </li>
                            
                         </ul>
                         @if ($complaint->ticket_type==1)
                         <div class="card">
                             <div class="card-body">
-                                @if ($complaint->emp==1)
-
+                                @if ($complaint->user_type=='user')
+                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                    <h6 class="mb-0">Complaint Against</h6>
+                                    <span class="text-secondary">
+                                        @if ($complaint->user)
+                                            <a href="{{route('usermanagement.show', $complaint->user->id)}}" target="blank"> {{ $complaint->user->name}}</a>
+                                            @else
+                                            Not Include Specific Person 
+                                        @endif
+                                        
+                                    </span>
+                                </li>
+                                @endif
+                                @if ($complaint->user_type=='employee')
+                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                    <h6 class="mb-0">Complaint Against</h6>
+                                    <span class="text-secondary">
+                                        @if ($complaint->employee)
+                                            <a href="{{route('employeemanagement.show', $complaint->employee->id)}}" target="blank"> {{ $complaint->employee->name}}</a>
+                                            @else
+                                            Not Include Specific Person 
+                                        @endif
+                                        
+                                    </span>
+                                </li>
                                 @endif
                             </div>
                         </div>
@@ -948,7 +975,12 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
+                        @if ($complaint->ticket_status=='opened')
+                        <a href="{{route('ticket.close',$complaint->id)}}" class="btn btn-primary">Close Ticket</a>
+                        @else
+                       <p class="btn btn-success m-0 disabled">Ticket Closed</p>
+                        @endif
+                     
                     </div>
                 </div>
             </div>

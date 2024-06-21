@@ -186,6 +186,7 @@ Route::get('/privacy-policy', [PrivacyPolicyController::class, 'privacy_policy']
 
     // Assign employees to a site
     Route::post('/sites/assign-employees', [ClientController::class, 'assignEmployees'])->name('sites.assign-employees');
+    Route::get('/checklist/{id}/qr-code', [ClientController::class, 'generateQrCode'])->name('checklist.qr-code');
 
 });
 
@@ -195,6 +196,7 @@ Route::group(['middleware' => ['auth'],'prefix'=>"ticket"], function () {
 
     Route::resource('complaint', ComplaintTicketController::class);
     Route::post('/reply', [ComplaintTicketController::class, 'reply'])->name('ticket.reply');
+    Route::get('/close/{id}', [ComplaintTicketController::class, 'closed'])->name('ticket.close');
     
 
 });

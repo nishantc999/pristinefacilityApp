@@ -102,6 +102,8 @@ class ComplaintTicketController extends Controller
             return response()->json(['error' => 'Either message or attachment is required.'], 400);
         }
         $ticket= ComplaintTicket::whereId($request->complaint_ticket_id)->first();
+        $ticket->ticket_status='opened';
+        $ticket->save();
         $data=$request->all();
         $data['sender_id']=Auth::user()->id;
         $data['sending_by']='user';
@@ -121,5 +123,20 @@ class ComplaintTicketController extends Controller
             'created_at'=>$complaint->created_at->format('d-m-Y h:i A'),
             'attachment' => $complaint->attachment!=null ? asset('assets/images/'.$complaint->attachment): null
         ], 200);
+    }
+
+    public function closed(Request $request,$id)
+    {
+     
+     
+    
+
+      
+        $data['ticket_status']='closed';
+        $data['closer_id']=Auth::user()->id;
+        
+        $complaint = ComplaintTicket::whereId($id)->update($data);
+
+        return redirect()->back()->with('success', 'Ticket Closed successfully.');
     }
 }

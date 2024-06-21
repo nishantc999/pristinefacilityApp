@@ -139,6 +139,18 @@
         </li>
         <hr>
         @endif
+        @if (ispermission('ticket management', 'show'))
+        <li>
+            <a href="{{ route('complaint.index') }}">
+
+
+                <div class="parent-icon"><i class='bx bx-home-alt'></i>
+                </div>
+                <div class="menu-title">Tickets</div>
+            </a>
+        </li>
+        <hr>
+        @endif
         {{-- Manager & Admin & Distributer Sidebar --}}
 
 

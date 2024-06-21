@@ -63,9 +63,20 @@ class PermissionSeeder extends Seeder
 
     ]);
       DB::table('permissions')->insert([
-        'module_name' => 'daily sale',
+        'module_name' => 'ticket management',
         'feature_name' => 'show',
 
     ]);
+      DB::table('permissions')->insert([
+        'module_name' => 'ticket management',
+        'feature_name' => 'chat',
+
+    ]);
+      DB::table('permissions')->insert([
+        'module_name' => 'ticket management',
+        'feature_name' => 'close',
+
+    ]);
+
     }
 }

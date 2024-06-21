@@ -53,34 +53,23 @@ class ComplaintTicketController extends Controller
     }
     public function closed(Request $request,$id)
     {
-        $validator = Validator::make($request->all(), [
-           
-           
-            'closer_id' => 'required|exists:users,id',
-            
-            // 'closed_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            
-            // 'closed_description' => 'nullable|string',
-        
-        ]);
+        // $validator = Validator::make($request->all(), [
+        //     'closer_id' => 'required|exists:users,id',
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
+        // ]);
 
-        $data = $request->all();
+        // if ($validator->fails()) {
+        //     return response()->json(['errors' => $validator->errors()], 422);
+        // }
 
-        // if ($request->hasFile('closed_image')) {
-        //     $imageName = time() . uniqid() . '.' . $request->closed_image->extension();
-        //     $request->closed_image->move('assets/images/closed_image', $imageName);
-        //     $data['closed_image']  = 'closed_image/'.$imageName;
-          
-    
-        //     }
+        // $data = $request->all();
+
+     
     
 
       
         $data['ticket_status']='closed';
+        $data['closer_id']=Auth::guard('userapi')->user()->id;
         
         $complaint = ComplaintTicket::whereId($id)->update($data);
 
