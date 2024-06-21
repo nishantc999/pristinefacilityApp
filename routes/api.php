@@ -53,6 +53,7 @@ Route::prefix('client')->middleware('auth:clientapi')->group(function () {
 
     Route::get('checklist/{id}/{date}', [FeedbackController::class, 'getChecklist']);
     Route::post('checklist/feedback', [FeedbackController::class, 'storeFeedback']);
+    Route::post('/feedback/revised', [FeedbackController::class,'requestRevisedFeedback']);
 
 
 
