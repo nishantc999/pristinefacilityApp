@@ -17,7 +17,7 @@ class Feedback extends Model
 
     public function variable()
     {
-        return $this->belongsTo(Variables::class, 'checklist_variable_id');
+        return $this->belongsTo(Variables::class);
     }
 
     public function user()

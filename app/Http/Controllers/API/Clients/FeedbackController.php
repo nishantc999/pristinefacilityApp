@@ -127,7 +127,9 @@ public function storeFeedback(Request $request)
     ], [
         'media.mimes' => 'The media must be a file of type: pdf, jpeg, png.',
     ]);
-
+    if($request->rating >1){
+        $status = 'completed';
+    }
 
     if ($validator->fails()) {
         return response()->json($validator->errors(), 422);
@@ -185,7 +187,7 @@ public function storeFeedback(Request $request)
         'checklist_id' => $request->checklist_id,
         'checklist_variable_id' => $request->checklist_variable_id,
         'rating' => $request->rating,
-        'status' => 'pending',
+        'status' => $status ?? 'pending',
         'rating_given_by' => $user->id, // Assuming the authenticated user is the one giving the rating
         'remark' => $request->remark ?? null,
         'media' => $mediaPath,
@@ -197,4 +199,48 @@ public function storeFeedback(Request $request)
         'data' => $feedback
     ], 201);
 }
-}
+
+    public function requestRevisedFeedback(Request $request){
+          // Validate the request data
+            $validator = Validator::make($request->all(), [
+                'feedback_id' => 'required|exists:feedback,id',
+                'checklist_id' => 'required|exists:checklists,id',
+                'checklist_variable_id' => 'required|exists:variables,id',
+                // 'status' => 'required|in:revised',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json($validator->errors(), 422);
+            }
+
+            // Retrieve authenticated user
+            $user = auth('clientapi')->user();
+
+            // Check if the user is authorized to request revised feedback (additional logic if needed)
+
+            // Update existing feedback record with revised status
+            $feedback = Feedback::where('id', $request->feedback_id)->first();
+            if (!$feedback) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Feedback not found or user not authorized to request revision.'
+                ], 404);
+            }
+            if($feedback->rating <= 1){
+                $feedback->update(['status' => 'revised']);
+            }else{
+                return response()->json([
+                    'status' => 'unauthorised',
+                    'message' => 'Feedback status is completed you dont have permission to modify it.'
+                ], 403);
+            }
+
+
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Request for revised feedback rating successful.',
+            ]);
+        }
+    }
+
