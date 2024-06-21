@@ -9,6 +9,7 @@ use App\Models\Feedback;
 use App\Models\SiteShiftAreawithClient;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\File;
 
 class FeedbackController extends Controller
 {
@@ -122,7 +123,9 @@ public function storeFeedback(Request $request)
         'rating' => 'required|numeric|between:0,2',
 
         'remark' => 'nullable|string',
-        'media' => 'nullable|string|required_if:rating,<=,1', // Conditionally required
+        'media' => 'nullable|file|required_if:rating,<=,1|mimes:pdf,jpeg,png', // File validation and type restriction
+    ], [
+        'media.mimes' => 'The media must be a file of type: pdf, jpeg, png.',
     ]);
 
 
@@ -164,7 +167,18 @@ public function storeFeedback(Request $request)
                 'message' => 'Unauthorized access'
             ], 403);
         }
-
+        // Ensure the directory exists for storing media
+        $storagePath = public_path('assets/Feedbacks');
+        if (!File::isDirectory($storagePath)) {
+            File::makeDirectory($storagePath, 0777, true, true);
+        }
+        // Move uploaded media to the specified directory
+    $mediaPath = null;
+    if ($request->hasFile('media')) {
+        $file = $request->file('media');
+        $filename = $file->getClientOriginalName();
+        $mediaPath = $file->move($storagePath, $filename)->getPathname();
+    }
 
     // Create a new feedback
     $feedback = Feedback::create([
@@ -174,7 +188,7 @@ public function storeFeedback(Request $request)
         'status' => 'pending',
         'rating_given_by' => $user->id, // Assuming the authenticated user is the one giving the rating
         'remark' => $request->remark ?? null,
-        'media' => $request->media ?? null,
+        'media' => $mediaPath,
     ]);
 
     return response()->json([
