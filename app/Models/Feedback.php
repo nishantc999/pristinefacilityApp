@@ -22,6 +22,6 @@ class Feedback extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'rating_given_by');
+        return $this->belongsTo(Client::class, 'rating_given_by');
     }
 }

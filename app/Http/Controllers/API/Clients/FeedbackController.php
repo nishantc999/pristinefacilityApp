@@ -9,6 +9,7 @@ use App\Models\Feedback;
 use App\Models\SiteShiftAreawithClient;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\File;
 
 class FeedbackController extends Controller
 {
@@ -119,11 +120,15 @@ public function storeFeedback(Request $request)
     $validator = Validator::make($request->all(), [
         'checklist_id' => 'required|exists:checklists,id',
         'checklist_variable_id' => 'required|exists:variables,id',
-        'rating' => 'required|numeric|between:0,5',
-        'status' => 'required|in:pending,completed,revised',
+        'rating' => 'required|numeric|between:0,2',
+
         'remark' => 'nullable|string',
-        'media' => 'nullable|string',
+        'media' => 'nullable|file|required_if:rating,<=,1|mimes:pdf,jpeg,png', // File validation and type restriction
+    ], [
+        'media.mimes' => 'The media must be a file of type: pdf, jpeg, png.',
     ]);
+
+
     if ($validator->fails()) {
         return response()->json($validator->errors(), 422);
     }
@@ -131,11 +136,11 @@ public function storeFeedback(Request $request)
     if ($user->is_employee === 0) {
         $checklist = Checklist::where('client_id', $user->id)
             ->with('area')
-            ->find($validator['checklist_id']);
+            ->find($request->checklist_id);
     } else {
         $checklist = Checklist::where('client_id', $user->client_id)
         ->with('area')
-        ->find($validator['checklist_id']);
+        ->find($request->checklist_id);
     }
 
 
@@ -151,27 +156,39 @@ public function storeFeedback(Request $request)
         $areaId = $checklist->area_id;
 
         // Fetch the site_id associated with the area_id using pivot table
-        $siteId = SiteShiftAreawithClient::where('area_id', $areaId)->value('site_id');
-        $lines = is_array($user->lines) ? $user->lines : json_decode($user->lines, true);
+        $siteId = SiteShiftAreawithClient::where('area_id', $areaId)->where('client_id', $user->id)->value('site_id');
+        // dd($user->lines);
+        // $lines = is_array($user->lines) ? $user->lines : json_decode($user->lines, true);
 
         // Check if the user has permission to access the site based on site_id
-        if (!in_array($siteId, $lines)) {
+        if ($siteId === null) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Unauthorized access'
             ], 403);
         }
-
+        // Ensure the directory exists for storing media
+        $storagePath = public_path('assets/Feedbacks');
+        if (!File::isDirectory($storagePath)) {
+            File::makeDirectory($storagePath, 0777, true, true);
+        }
+        // Move uploaded media to the specified directory
+    $mediaPath = null;
+    if ($request->hasFile('media')) {
+        $file = $request->file('media');
+        $filename = $file->getClientOriginalName();
+        $mediaPath = $file->move($storagePath, $filename)->getPathname();
+    }
 
     // Create a new feedback
     $feedback = Feedback::create([
-        'checklist_id' => $validator['checklist_id'],
-        'checklist_variable_id' => $validator['checklist_variable_id'],
-        'rating' => $validator['rating'],
-        'status' => $validator['status'],
+        'checklist_id' => $request->checklist_id,
+        'checklist_variable_id' => $request->checklist_variable_id,
+        'rating' => $request->rating,
+        'status' => 'pending',
         'rating_given_by' => $user->id, // Assuming the authenticated user is the one giving the rating
-        'remark' => $validator['remark'] ?? null,
-        'media' => $validator['media'] ?? null,
+        'remark' => $request->remark ?? null,
+        'media' => $mediaPath,
     ]);
 
     return response()->json([

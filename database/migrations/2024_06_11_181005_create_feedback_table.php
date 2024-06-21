@@ -27,7 +27,7 @@ class CreateFeedbackTable extends Migration
             // Foreign keys
             $table->foreign('checklist_id')->references('id')->on('checklists')->onDelete('cascade');
             $table->foreign('checklist_variable_id')->references('id')->on('variables')->onDelete('cascade');
-            $table->foreign('rating_given_by')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('rating_given_by')->references('id')->on('clients')->onDelete('cascade');
         });
     }
 
