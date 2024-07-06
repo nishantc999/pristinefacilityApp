@@ -161,7 +161,7 @@ text/x-generic Inventory.blade.php ( HTML document, ASCII text )
                     @foreach ($data as $value)
                     @if($inventoryname=="User Inventory")
                         @if($value["sku_quantity"])
-                        @if($shift != null && $search_feild['client'] != null && $search_feild['shift'])
+                        @if( $search_feild['client'] != null )
                          <?php $hasInventory = true; ?>
         <div class="card" style="display: flex; flex-direction: row; align-items: center; margin-right:1vw;">
             <img src="{{ asset('assets/images/' . $value["image"]) }}" alt="Card image" style="height:7vw; width:7vw; margin:0.5vw; object-fit: cover; ">

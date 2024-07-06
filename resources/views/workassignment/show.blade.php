@@ -1118,6 +1118,42 @@
 
 // get site on change shift
             $(document).ready(function() {
+
+                var siteId = {{ $site->id }};
+
+                // Fetch assigned employees
+                $.ajax({
+                    url: '/get-assigned-employees/' + siteId,
+                    type: 'GET',
+                    success: function(response) {
+                        
+                        $('#assignedEmployeesBody').empty();
+                        assignedEmployeesTable.clear();
+                        if (response.employees.length > 0) {
+                            // response.employees.forEach(function(employee) {
+                            //     $('#assignedEmployeesBody').append(
+                            //         '<tr><td><input type="checkbox" name="employee_ids[]" value="' + employee.id + '"></td><td>' + employee.emp_code + '</td><td>' + employee.name + '</td><td>' + employee.email + '</td><td><button type="button" class="btn btn-danger removeEmployee" data-id="' + employee.id + '">Remove</button></td></tr>'
+                            //     );
+                            // });
+                            
+                            response.employees.forEach(function(employee) {
+                                assignedEmployeesTable.row.add([
+                                '<input type="checkbox" name="employee_ids[]" value="' + employee.id + '">',
+                                employee.emp_code,
+                                employee.name,
+                                employee.email,
+                                '<button type="button" class="btn btn-danger removeEmployee" data-id="' + employee.id + '">Remove</button>'
+                            ]).draw(false);
+                        });
+                            $('#assignedEmployees').show();
+                            $('#noAssignedEmployeesMessage').hide();
+                        } else {
+                            $('#assignedEmployees').hide();
+                            $('#noAssignedEmployeesMessage').show();
+                        }
+                    }
+                });
+                
                 $('.shiftOptionemployee').change(function() {
                     var shiftId = $(this).val();
                    
@@ -1175,43 +1211,7 @@
              
             $('#supervisorForm').on('change', 'input[type="radio"][name="supervisor_id"]', function() {
                 
-                var supervisorId = $(this).val();
-                var clientId = {{ $client->id }};
-                var shiftId = $('#shiftFormemployee input[name="shift_id"]:checked').val();
-                var siteId = $('#shiftFormemployee input[name="site_id"]:checked').val();
-
-                // Fetch assigned employees
-                $.ajax({
-                    url: '/get-assigned-employees/' + clientId + '/' + shiftId + '/' + siteId + '/' + supervisorId,
-                    type: 'GET',
-                    success: function(response) {
-                        
-                        $('#assignedEmployeesBody').empty();
-                        assignedEmployeesTable.clear();
-                        if (response.employees.length > 0) {
-                            // response.employees.forEach(function(employee) {
-                            //     $('#assignedEmployeesBody').append(
-                            //         '<tr><td><input type="checkbox" name="employee_ids[]" value="' + employee.id + '"></td><td>' + employee.emp_code + '</td><td>' + employee.name + '</td><td>' + employee.email + '</td><td><button type="button" class="btn btn-danger removeEmployee" data-id="' + employee.id + '">Remove</button></td></tr>'
-                            //     );
-                            // });
-                            
-                            response.employees.forEach(function(employee) {
-                                assignedEmployeesTable.row.add([
-                                '<input type="checkbox" name="employee_ids[]" value="' + employee.id + '">',
-                                employee.emp_code,
-                                employee.name,
-                                employee.email,
-                                '<button type="button" class="btn btn-danger removeEmployee" data-id="' + employee.id + '">Remove</button>'
-                            ]).draw(false);
-                        });
-                            $('#assignedEmployees').show();
-                            $('#noAssignedEmployeesMessage').hide();
-                        } else {
-                            $('#assignedEmployees').hide();
-                            $('#noAssignedEmployeesMessage').show();
-                        }
-                    }
-                });
+                
 
 
            

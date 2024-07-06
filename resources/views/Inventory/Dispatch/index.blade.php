@@ -57,21 +57,21 @@ text/x-generic index.blade.php ( HTML document, ASCII text, with very long lines
                         <div class="col-sm-12 col-md-4">
 
 
-                            <label for="status" class="form-label">Choose Sender</label>
+                            <label for="status" class="form-label">Choose Receiver</label>
 
-                            <select name="sender" id="sender" class="form-select"
+                            <select name="receiver" id="receiver" class="form-select"
                                 data-placeholder="Choose Distributor">
                                 <option value="">All</option>
-                                    @foreach ($sender as $sender)
-                                        <option value="{{ $sender }}"
-                                            {{ $sender == $search_feild['sender'] ? 'selected' : '' }}>
-                                            {{ $sender }}</option>
+                                    @foreach ($receiver as $receiver)
+                                        <option value="{{ $receiver }}"
+                                            {{ $receiver == $search_feild['receiver'] ? 'selected' : '' }}>
+                                            {{ $receiver }}</option>
                                     @endforeach
 
                             </select>
 
                         </div>
-                        <div class="col-sm-12 col-md-4">
+                        {{-- <div class="col-sm-12 col-md-4">
 
 
                                 <label for="status" class="form-label">Choose Shift</label>
@@ -87,7 +87,7 @@ text/x-generic index.blade.php ( HTML document, ASCII text, with very long lines
 
                                 </select>
 
-                            </div>
+                            </div> --}}
                         {{-- 
                         <div class="col-sm-12 col-md-4">
 
@@ -517,7 +517,7 @@ $(function() {
         searchformsubmit22();
     });
 });
-var input1 = document.getElementById('sender');
+var input1 = document.getElementById('receiver');
        
        input1.addEventListener('change', function() {
 

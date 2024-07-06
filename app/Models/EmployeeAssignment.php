@@ -9,6 +9,9 @@ class EmployeeAssignment extends Model
 {
     use HasFactory;
     protected $guarded = [];
-    protected $table = 'client_employee_shift_site';
+    public function site()
+    {
+        return $this->belongsTo(Site::class);
+    }
 }
 

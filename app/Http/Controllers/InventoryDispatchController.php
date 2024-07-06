@@ -29,12 +29,16 @@ class InventoryDispatchController extends Controller
     public function index(Request $request)
     {
         $search_feild['sendingDate'] = $request->sendingDate; // Assuming $request->date contains the date range "2024-05-01 to 2024-05-24"
-        $search_feild['sender'] = $request->sender;
-         $search_feild['shift_id'] = $request->shift_id;
-        if ($request->shift_id != null) {$users = User::where('shift_id', $request->shift_id)  // Select users where the 'shift_id' column matches the value from the request
-    ->latest()  // Orders the results by the created_at column in descending order
-    ->pluck('name');  // Retrieves an array containing the 'name' column values for the selected users
-}
+        $search_feild['receiver'] = $request->receiver;
+        
+        if($search_feild['receiver']){
+            $receiver_id = User::where('name',$search_feild['receiver'])->first()->id;
+        }
+        //  $search_feild['shift_id'] = $request->shift_id;
+//         if ($request->shift_id != null) {$users = User::where('shift_id', $request->shift_id)  // Select users where the 'shift_id' column matches the value from the request
+//     ->latest()  // Orders the results by the created_at column in descending order
+//     ->pluck('name');  // Retrieves an array containing the 'name' column values for the selected users
+// }
 // dd()
         // Initialize the query
         $query = InventoryDispatch::whereNotNull('sendingDate'); // Ensure date is not null
@@ -49,9 +53,9 @@ class InventoryDispatchController extends Controller
               ->whereDate('sendingDate', '<=', $toDate);
         }
          // Check if a sender is provided in the request
-    if ($request->sendor != null) {
+    if ($request->receiver != null) {
         // Apply the sender filter
-        $query->where('sendor', $request->sendor);
+        $query->where('receiver_id', $receiver_id);
     }
     if($request->shift_id!=null){
     if ($users ) {
@@ -64,23 +68,23 @@ class InventoryDispatchController extends Controller
 $sendingDate = InventoryDispatch::whereNot('sendingDate', "")
 ->where(function ($query) use ($request) {
 })->pluck('sendingDate');
-$sender = InventoryDispatch::whereNot('sender_id', null)
+$receiver = InventoryDispatch::whereNot('receiver_id', null)
 ->where(function ($query) use ($request) {
 })
 
-->pluck('sender_id')->unique();
+->pluck('receiver_id')->unique();
 // dd($sendor);
 
-$senders = [];
-foreach($sender as &$send) { // Use reference to modify the actual array elements
+$receivers = [];
+foreach($receiver as &$send) { // Use reference to modify the actual array elements
     if($send == 0) {
         $send = User::whereId(1)->first()->name;
     } else {
         $send = User::whereId($send)->first()->name;
     }
-    array_push($senders,$send);
+    array_push($receivers,$send);
 }
-$sender = $senders;
+$receiver = $receivers;
         // $data = Inward::latest()->get();
         // $data = RW_Dispatch::latest()->get();
            $shifts=Shift::get();
@@ -96,8 +100,9 @@ $sender = $senders;
             }
             
            }
+        //    dd($receiver);
         //    dd($data);
-        return view('Inventory.Dispatch.index', ['data' => $data, 'count' => 1, 'search_feild' => $search_feild, "sendingDate"=>$sendingDate,'sender'=>$sender,'shifts' => $shifts]);
+        return view('Inventory.Dispatch.index', ['data' => $data, 'count' => 1, 'search_feild' => $search_feild, "sendingDate"=>$sendingDate,'receiver'=>$receiver,'shifts' => $shifts]);
     }
 
     public function create()
@@ -460,16 +465,23 @@ if($filteredSkus->count()){}else{
         $search_feild['client'] = $request->client;
         $search_feild['shift'] = $request->shift;
         $user = null;
-        if($request->client && $request->shift){
+        if($request->client){
             $client_id = $request->client;
                 $shift_id = $request->shift;
                 $roles = User::whereIn('role_id',[2,3])->pluck('id');
-                $user = UserAssignment::where('client_id',$client_id )->where('shift_id',$shift_id)->whereIn('user_id',$roles)->pluck('user_id');
+                if($shift_id){
+                    $user = UserAssignment::where('client_id',$client_id )->where('shift_id',$shift_id)->whereIn('user_id',$roles)->pluck('user_id');
+                }else{
+                    $user = UserAssignment::where('client_id',$client_id )->whereIn('user_id',$roles)->pluck('user_id');
+                    // dd($user);
+                }
+               
                 $user = User::whereIn('id',$user)->select('id','name','role_id')->get();
                 foreach ($user as $use){
                     $use["role_id"] = Roles::whereId($use["role_id"])->first()->name;
                     
                 }
+               
 
                 //working//
                 $inventories = [];
@@ -486,6 +498,7 @@ if($filteredSkus->count()){}else{
                 if($inventories==null){
                     $datareq = true;
                 }
+             
     // Iterate through each collection in the inventories array
     foreach ($inventories as $collection) {
         // Iterate through each item in the collection
